@@ -148,9 +148,8 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 
 }
 
-func extractPackagesSymbols(pkg_infos []*importer.PackageInfo, imp *importer.Importer) {
-	fmt.Println(`
-package repl
+func writePreamble() {
+	fmt.Println(`package repl
 
 import (
 	"reflect"
@@ -165,9 +164,8 @@ func Extract_environment(pkgs pkgType) {
 	var types  map[string] reflect.Type
 	var funcs  map[string] reflect.Value
 `)
-	for _, pkg_info := range pkg_infos {
-		extractPackageSymbols(pkg_info, imp)
-	}
+}
+func writePostamble() {
 	fmt.Println("}")
 }
 
@@ -185,5 +183,24 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	extractPackagesSymbols(pkg_infos, imp)
+
+	pkg_infos = imp.AllPackages()
+	var errpkgs []string
+
+	writePreamble()
+
+	for _, pkg_info := range pkg_infos {
+		if pkg_info.Err != nil {
+			errpkgs = append(errpkgs, pkg_info.Pkg.Path())
+		} else {
+			extractPackageSymbols(pkg_info, imp)
+		}
+	}
+	if errpkgs != nil {
+		log.Fatal("couldn't create these SSA packages due to type errors: %s",
+			strings.Join(errpkgs, ", "))
+	}
+
+	writePostamble()
+
 }
