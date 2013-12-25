@@ -3,16 +3,16 @@
 
 .PHONY: all exports
 
-#: Same as make go-repl
-all: go-repl
+#: Same as make go-fish
+all: go-fish
 
 #: The REPL front-end to the go-interactive evaluator
-go-repl: extracted_imports.go main.go
-	go build -o go-repl main.go
+go-fish: extracted_imports.go main.go
+	go build -o go-fish main.go
 
 main.go: extracted_imports.go
 
-#: Subsidiary program to import packages into go-repl
+#: Subsidiary program to import packages into go-fish
 make_env: make_env.go
 	go build make_env.go
 

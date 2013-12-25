@@ -10,6 +10,7 @@ import (
 	"go/build"
 	"go/token"
 	"log"
+	"sort"
 	"strings"
 	"unicode"
 	"code.google.com/p/go.tools/importer"
@@ -148,13 +149,19 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 
 }
 
-func writePreamble() {
+func writePreamble(pkg_infos []*importer.PackageInfo) {
+	imports := make([]string, len(pkg_infos))
+	for i, pkg_info := range pkg_infos {
+		imports[i] = pkg_info.Pkg.Path()
+	}
+	sort.Strings(imports)
 	fmt.Println(`package repl
 
-import (
-	"reflect"
-	"github.com/0xfaded/go-interactive"
-)
+import (`)
+	for _, import_name := range imports {
+		fmt.Printf("\t\"%s\"\n", import_name)
+	}
+	fmt.Println(`)
 
 type pkgType map[string] interactive.Pkg
 
@@ -187,7 +194,7 @@ func main() {
 	pkg_infos = imp.AllPackages()
 	var errpkgs []string
 
-	writePreamble()
+	writePreamble(pkg_infos)
 
 	for _, pkg_info := range pkg_infos {
 		if pkg_info.Err != nil {

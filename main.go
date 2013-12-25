@@ -18,7 +18,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rocky/go-repl"
+	"github.com/rocky/go-fish"
 	"github.com/0xfaded/go-interactive"
 )
 
@@ -75,9 +75,13 @@ func REPL(env *interactive.Env, results *([]interface{})) {
 		} else if len(*vals) == 1 {
 			value := (*vals)[0]
 			kind := value.Kind().String()
-			fmt.Printf("Kind = %v\n", kind)
 			typ  := value.Type().String()
-			if typ != kind { fmt.Printf("Type = %v\n", typ) }
+			if typ != kind {
+				fmt.Printf("Kind = %v\n", kind)
+				fmt.Printf("Type = %v\n", typ)
+			} else {
+				fmt.Printf("Kind = Type = %v\n", kind)
+			}
 			if kind == "string" {
 				fmt.Printf("results[%d] = %s\n", exprs,
 					strconv.QuoteToASCII(value.String()))
