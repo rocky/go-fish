@@ -32,6 +32,21 @@ func readline(prompt string, in *bufio.Reader) (string, error) {
 	return line, err
 }
 
+func intro_text() {
+	fmt.Printf(`=== A simple Go eval REPL ===
+
+Results of expression are stored in variable slice "results".
+The environment is stored in global variable "env".
+
+Enter expressions to be evaluated at the "go>" prompt.
+
+To see all results, type: "results".
+
+To quit, enter: "quit" or Ctrl-D (EOF).
+`)
+
+}
+
 // The read-eval-print portion
 func REPL(env *interactive.Env, results *([]interface{})) {
 
@@ -85,78 +100,29 @@ func REPL(env *interactive.Env, results *([]interface{})) {
 
 func main() {
 	// Set up the environment and then call REPL
-	var vars   map[string] reflect.Value = make(map[string] reflect.Value)
-	var consts map[string] reflect.Value = make(map[string] reflect.Value)
-	var types  map[string] reflect.Type  = make(map[string] reflect.Type)
-
-	var global_funcs map[string] reflect.Value = make(map[string] reflect.Value)
-	var global_vars map[string]  reflect.Value = make(map[string] reflect.Value)
-
 	// A place to store result values of expressions entered
 	// interactively
 	var results []interface{} = make([] interface{}, 0, 10)
+	var global_vars map[string]  reflect.Value = make(map[string] reflect.Value)
 	global_vars["results"] = reflect.ValueOf(&results)
-	global_vars["arg0"] = reflect.ValueOf(os.Args[0])
-	// global_funcs["Result"] = reflect.ValueOf(
-	// 	func(i int) interface{} { return results[i] } )
 
-	// What we have from the fmt package.
-	var fmt_funcs    map[string] reflect.Value = make(map[string] reflect.Value)
-	fmt_funcs["Println"] = reflect.ValueOf(fmt.Println)
-	fmt_funcs["Printf"] = reflect.ValueOf(fmt.Printf)
-
-	type Alice struct {
-		Bob int
-		Secret string
-	}
-
-	pkgs := map[string] interactive.Pkg {
-			"fmt": &interactive.Env {
-				Name:   "fmt",
-				Vars:   vars,
-				Consts: consts,
-				Funcs:  fmt_funcs,
-				Types:  types,
-				Pkgs:   make(map[string] interactive.Pkg),
-			}, "os": &interactive.Env {
-				Name:   "os",
-				Vars:   map[string] reflect.Value { "Stdout": reflect.ValueOf(&os.Stdout) },
-				Consts: make(map[string] reflect.Value),
-				Funcs:  make(map[string] reflect.Value),
-				Types:  make(map[string] reflect.Type),
-				Pkgs:   make(map[string] interactive.Pkg),
-			},
-		}
-
-
+	var pkgs map[string] interactive.Pkg = make(map[string] interactive.Pkg)
 	repl.Extract_environment(pkgs)
 
 	env := interactive.Env {
 		Name:   ".",
 		Vars:   global_vars,
 		Consts: make(map[string] reflect.Value),
-		Funcs:  global_funcs,
-		Types:  map[string] reflect.Type{ "Alice": reflect.TypeOf(Alice{}) },
+		Funcs:  make(map[string] reflect.Value),
+		Types:  make(map[string] reflect.Type),
 		Pkgs:   pkgs,
 	}
 
 	// Make this truly self-referential
 	global_vars["env"] = reflect.ValueOf(&env)
 
+	intro_text()
 
-	fmt.Printf(`=== A simple Go eval REPL ===
-
-Results of expression are stored in variable slice "results".
-Defined functions are: fmt.Println(), fmt.Printf().
-
-The environment is stored in global variable "env".
-
-Enter expressions to be evaluated at the "go>" prompt.
-
-To see all results, type: "results".
-
-To quit, enter: "quit" or Ctrl-D (EOF).
-`)
 	// And just when you thought we'd never get around to it...
 	REPL(&env, &results)
 }
