@@ -74,10 +74,9 @@ func memberFromDecl(decl ast.Decl, imp *importer.Importer,
 	return consts, funcs, types, vars
 }
 
-func createPackage(pkg_info *importer.PackageInfo, imp *importer.Importer) {
+func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importer) {
 
 	name := pkg_info.Pkg.Name()
-	// Allocate all package members: vars, funcs, consts and types.
 	if len(pkg_info.Files) > 0 {
 		// Go source package.
 		consts := make([]*string, 0, 10)
@@ -90,11 +89,7 @@ func createPackage(pkg_info *importer.PackageInfo, imp *importer.Importer) {
 					memberFromDecl(decl, imp, consts, funcs, types, vars)
 			}
 		}
-		fmt.Println("\tvars = make(map[string] reflect.Value)")
-		for _, v := range vars   {
-			fmt.Printf("\tvars[\"%s\"] = reflect.ValueOf(&%s.%s)\n", *v, name, *v)
-		}
-		fmt.Println("\n\tconsts = make(map[string] reflect.Value)")
+		fmt.Println("\tconsts = make(map[string] reflect.Value)")
 		for _, v := range consts {
 			fmt.Printf("\tconsts[\"%s\"] = reflect.ValueOf(%s.%s)\n", *v, name, *v)
 		}
@@ -107,6 +102,11 @@ func createPackage(pkg_info *importer.PackageInfo, imp *importer.Importer) {
 		fmt.Println("\n\ttypes = make(map[string] reflect.Type)")
 		for _, v := range types {
 			fmt.Printf("\ttypes[\"%s\"] = reflect.TypeOf(%s.%s){}\n", *v, name, *v)
+		}
+
+		fmt.Println("\n\tvars = make(map[string] reflect.Value)")
+		for _, v := range vars   {
+			fmt.Printf("\tvars[\"%s\"] = reflect.ValueOf(&%s.%s)\n", *v, name, *v)
 		}
 
 		/****
@@ -126,7 +126,7 @@ func createPackage(pkg_info *importer.PackageInfo, imp *importer.Importer) {
 		Vars:   vars,
 		Pkgs:   pkgs,
 	}
-}`, name, name)
+`, name, name)
 	}
 
 	// } else {
@@ -148,17 +148,27 @@ func createPackage(pkg_info *importer.PackageInfo, imp *importer.Importer) {
 
 }
 
-func createPackages(pkg_infos []*importer.PackageInfo, imp *importer.Importer) {
+func extractPackagesSymbols(pkg_infos []*importer.PackageInfo, imp *importer.Importer) {
 	fmt.Println(`
-pkgs   = map[string] interactive.Pkg
-vars   = map[string] reflect.Type
-consts = map[string] reflect.Type
-types  = map[string] reflect.Type
-funcs  = map[string] reflect.Type
+package repl
+
+import (
+	"reflect"
+	"github.com/0xfaded/go-interactive"
+)
+
+type pkgType map[string] interactive.Pkg
+
+func Extract_environment(pkgs pkgType) {
+	var consts map[string] reflect.Value
+	var vars   map[string] reflect.Value
+	var types  map[string] reflect.Type
+	var funcs  map[string] reflect.Value
 `)
 	for _, pkg_info := range pkg_infos {
-		createPackage(pkg_info, imp)
+		extractPackageSymbols(pkg_info, imp)
 	}
+	fmt.Println("}")
 }
 
 func main() {
@@ -175,5 +185,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	createPackages(pkg_infos, imp)
+	extractPackagesSymbols(pkg_infos, imp)
 }

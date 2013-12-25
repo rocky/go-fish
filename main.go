@@ -1,14 +1,10 @@
+// +build ignore
+
 package main
 
 // This is a simple REPL (read-eval-print loop) for GO.
 
-// The intent here is to show how more to use the library, rather than
-// be a full-featured REPL.
-//
-// A more complete REPL including command history, tab completion and
-// readline editing will be done as a separate package.
-//
-// My intent (rocky) was also to have something that I can debug in
+// An intent (rocky) was also to have something that I can debug in
 // the ssa-debugger tortoise/gub.sh. Right now that can't handle the
 // unsafe package, pointers, and calls to C code. So that let's out
 // go-gnureadline and lineedit.
@@ -22,6 +18,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/rocky/go-repl"
 	"github.com/0xfaded/go-interactive"
 )
 
@@ -91,7 +88,6 @@ func main() {
 	var vars   map[string] reflect.Value = make(map[string] reflect.Value)
 	var consts map[string] reflect.Value = make(map[string] reflect.Value)
 	var types  map[string] reflect.Type  = make(map[string] reflect.Type)
-	var funcs  map[string] reflect.Value = make(map[string] reflect.Value)
 
 	var global_funcs map[string] reflect.Value = make(map[string] reflect.Value)
 	var global_vars map[string]  reflect.Value = make(map[string] reflect.Value)
@@ -132,56 +128,8 @@ func main() {
 			},
 		}
 
-	/* ------------  automatic creation goes here -----------------*/
-	vars = make(map[string] reflect.Value)
-	vars["ConstInt"] = reflect.ValueOf(&interactive.ConstInt)
-	vars["ConstRune"] = reflect.ValueOf(&interactive.ConstRune)
-	vars["ConstFloat"] = reflect.ValueOf(&interactive.ConstFloat)
-	vars["ConstComplex"] = reflect.ValueOf(&interactive.ConstComplex)
-	vars["ConstString"] = reflect.ValueOf(&interactive.ConstString)
-	vars["ConstNil"] = reflect.ValueOf(&interactive.ConstNil)
-	vars["ConstBool"] = reflect.ValueOf(&interactive.ConstBool)
-	vars["ErrArrayKey"] = reflect.ValueOf(&interactive.ErrArrayKey)
-	vars["RuneType"] = reflect.ValueOf(&interactive.RuneType)
 
-	consts = make(map[string] reflect.Value)
-
-	funcs = make(map[string] reflect.Value)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["CheckExpr"] = reflect.ValueOf(interactive.CheckExpr)
-	funcs["NewConstInteger"] = reflect.ValueOf(interactive.NewConstInteger)
-	funcs["NewConstFloat"] = reflect.ValueOf(interactive.NewConstFloat)
-	funcs["NewConstImag"] = reflect.ValueOf(interactive.NewConstImag)
-	funcs["NewConstRune"] = reflect.ValueOf(interactive.NewConstRune)
-	funcs["NewConstInt64"] = reflect.ValueOf(interactive.NewConstInt64)
-	funcs["NewConstUint64"] = reflect.ValueOf(interactive.NewConstUint64)
-	funcs["NewConstFloat64"] = reflect.ValueOf(interactive.NewConstFloat64)
-	funcs["NewConstComplex128"] = reflect.ValueOf(interactive.NewConstComplex128)
-	funcs["EvalExpr"] = reflect.ValueOf(interactive.EvalExpr)
-	funcs["DerefValue"] = reflect.ValueOf(interactive.DerefValue)
-	funcs["EvalIdentExpr"] = reflect.ValueOf(interactive.EvalIdentExpr)
-	funcs["SetEvalIdentExprCallback"] = reflect.ValueOf(interactive.SetEvalIdentExprCallback)
-	funcs["GetEvalIdentExprCallback"] = reflect.ValueOf(interactive.GetEvalIdentExprCallback)
-	funcs["CannotIndex"] = reflect.ValueOf(interactive.CannotIndex)
-	funcs["EvalSelectorExpr"] = reflect.ValueOf(interactive.EvalSelectorExpr)
-	funcs["SetEvalSelectorExprCallback"] = reflect.ValueOf(interactive.SetEvalSelectorExprCallback)
-	funcs["GetEvalSelectorExprCallback"] = reflect.ValueOf(interactive.GetEvalSelectorExprCallback)
-	funcs["SetUserConversion"] = reflect.ValueOf(interactive.SetUserConversion)
-	funcs["GetUserConversion"] = reflect.ValueOf(interactive.GetUserConversion)
-
-	types = make(map[string] reflect.Type)
-
-	pkgs["interactive"] = &interactive.Env {
-		Name: "interactive",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-
-	/* ------------  end automatic creation -----------------*/
+	repl.Extract_environment(pkgs)
 
 	env := interactive.Env {
 		Name:   ".",
