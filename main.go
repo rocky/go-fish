@@ -9,28 +9,12 @@ package main
 // unsafe package, pointers, and calls to C code. So that let's out
 // go-gnureadline and lineedit.
 import (
-	"bufio"
 	"fmt"
-	"go/parser"
-	"io"
-	"os"
 	"reflect"
-	"strconv"
-	"strings"
 
 	"github.com/rocky/go-fish"
 	"github.com/0xfaded/go-interactive"
 )
-
-// Simple replacement for GNU readline
-func readline(prompt string, in *bufio.Reader) (string, error) {
-	fmt.Printf(prompt)
-	line, err := in.ReadString('\n')
-	if err == nil {
-		line = strings.TrimRight(line, "\r\n")
-	}
-	return line, err
-}
 
 func intro_text() {
 	fmt.Printf(`=== A simple Go eval REPL ===
@@ -45,61 +29,6 @@ To see all results, type: "results".
 To quit, enter: "quit" or Ctrl-D (EOF).
 `)
 
-}
-
-// The read-eval-print portion
-func REPL(env *interactive.Env, results *([]interface{})) {
-
-	var err error
-	exprs := 0
-	in := bufio.NewReader(os.Stdin)
-	line, err := readline("go> ", in)
-	for line != "quit" {
-		if err != nil {
-			if err == io.EOF { break }
-			panic(err)
-		}
-		ctx := &interactive.Ctx{line}
-		if expr, err := parser.ParseExpr(line); err != nil {
-			fmt.Printf("parse error: %s\n", err)
-		} else if cexpr, errs := interactive.CheckExpr(ctx, expr, env); len(errs) != 0 {
-			for _, cerr := range errs {
-				fmt.Printf("%v\n", cerr)
-			}
-		} else if vals, _, err := interactive.EvalExpr(ctx, cexpr, env); err != nil {
-			fmt.Printf("eval error: %s\n", err)
-		} else if vals == nil {
-			fmt.Printf("nil\n")
-		} else if len(*vals) == 0 {
-			fmt.Printf("void\n")
-		} else if len(*vals) == 1 {
-			value := (*vals)[0]
-			kind := value.Kind().String()
-			typ  := value.Type().String()
-			if typ != kind {
-				fmt.Printf("Kind = %v\n", kind)
-				fmt.Printf("Type = %v\n", typ)
-			} else {
-				fmt.Printf("Kind = Type = %v\n", kind)
-			}
-			if kind == "string" {
-				fmt.Printf("results[%d] = %s\n", exprs,
-					strconv.QuoteToASCII(value.String()))
-			} else {
-				fmt.Printf("results[%d] = %v\n", exprs, (value.Interface()))
-			}
-			exprs  += 1
-			*results = append(*results, (*vals)[0].Interface())
-		} else {
-			sep := "("
-			for _, v := range *vals {
-				fmt.Printf("%s%v", sep, v.Interface())
-			}
-			fmt.Printf(")\n")
-		}
-
-		line, err = readline("go> ", in)
-	}
 }
 
 func main() {
@@ -128,5 +57,5 @@ func main() {
 	intro_text()
 
 	// And just when you thought we'd never get around to it...
-	REPL(&env, &results)
+	repl.REPL(&env, &results)
 }

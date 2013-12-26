@@ -7,7 +7,7 @@
 all: go-fish
 
 #: The REPL front-end to the go-interactive evaluator
-go-fish: extracted_imports.go main.go
+go-fish: extracted_imports.go main.go repl.go
 	go build -o go-fish main.go
 
 main.go: extracted_imports.go
