@@ -77,6 +77,37 @@ func memberFromDecl(decl ast.Decl, imp *importer.Importer,
 
 func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importer) {
 
+	var typed_decls = map[string]string {
+		"math.MaxInt64": "int64",
+		"math.MaxUint16": "uint16",
+		"math.MaxUint32": "uint32",
+		"math.MaxUint64": "uint64",
+		"math.MaxUint8": "uint8",
+		"math.MinInt64": "int64",
+		"syscall.CLONE_IO": "uint64",
+		"syscall.IN_CLASSA_NET": "uint64",
+		"syscall.IN_CLASSB_NET": "uint64",
+		"syscall.IN_CLASSC_NET": "uint64",
+		"syscall.IN_ONESHOT": "uint64",
+		"syscall.LINUX_REBOOT_CMD_CAD_ON": "uint64",
+		"syscall.LINUX_REBOOT_CMD_HALT": "uint64",
+		"syscall.LINUX_REBOOT_CMD_RESTART2": "uint64",
+		"syscall.LINUX_REBOOT_CMD_SW_SUSPEND": "uint64",
+		"syscall.LINUX_REBOOT_MAGIC1": "uint64",
+		"syscall.MS_MGC_MSK": "uint64",
+		"syscall.MS_MGC_VAL": "uint64",
+		"syscall.RTF_ADDRCLASSMASK": "uint64",
+		"syscall.RTF_LOCAL": "uint64",
+		"syscall.RT_TABLE_MAX": "uint64",
+		"syscall.TIOCGDEV": "uint64",
+		"syscall.TIOCGPTN": "uint64",
+		"syscall.TUNGETFEATURES": "uint64",
+		"syscall.TUNGETIFF": "uint64",
+		"syscall.TUNGETSNDBUF": "uint64",
+		"syscall.TUNGETVNETHDRSZ": "uint64",
+		"syscall.WCLONE": "uint64",
+	}
+
 	name := pkg_info.Pkg.Name()
 	if len(pkg_info.Files) > 0 {
 		// Go source package.
@@ -92,7 +123,13 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 		}
 		fmt.Println("\tconsts = make(map[string] reflect.Value)")
 		for _, v := range consts {
-			fmt.Printf("\tconsts[\"%s\"] = reflect.ValueOf(%s.%s)\n", *v, name, *v)
+			fullname := name + "." + *v
+			if typename, found := typed_decls[fullname]; found {
+				fmt.Printf("\tconsts[\"%s\"] = reflect.ValueOf(%s(%s))\n",
+					*v, typename, fullname)
+			} else {
+				fmt.Printf("\tconsts[\"%s\"] = reflect.ValueOf(%s)\n", *v, fullname)
+			}
 		}
 
 		fmt.Println("\n\tfuncs = make(map[string] reflect.Value)")
@@ -107,7 +144,8 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 
 		fmt.Println("\n\tvars = make(map[string] reflect.Value)")
 		for _, v := range vars   {
-			fmt.Printf("\tvars[\"%s\"] = reflect.ValueOf(&%s.%s)\n", *v, name, *v)
+			fullname := name + "." + *v
+			fmt.Printf("\tvars[\"%s\"] = reflect.ValueOf(&%s)\n", *v, fullname)
 		}
 
 		/****
@@ -149,17 +187,49 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 
 }
 
-func writePreamble(pkg_infos []*importer.PackageInfo) {
-	imports := make([]string, len(pkg_infos))
-	for i, pkg_info := range pkg_infos {
-		imports[i] = pkg_info.Pkg.Path()
+// By is the type of a "less" function that defines the ordering of its Planet arguments.
+type By func(p1, p2 *importer.PackageInfo) bool
+
+// Sort is a method on the function type, By, that sorts the argument slice according to the function.
+func (by By) Sort(pkg_infos []*importer.PackageInfo) {
+	ps := &packageInfoSorter{
+		pkg_infos: pkg_infos,
+		by:      by, // The Sort method's receiver is the function (closure) that defines the sort order.
 	}
-	sort.Strings(imports)
+	sort.Sort(ps)
+}
+
+// packageInfoSorter joins a By function and a slice of importer.PackageInfos to be sorted.
+type packageInfoSorter struct {
+	pkg_infos []*importer.PackageInfo
+	by      func(p1, p2 *importer.PackageInfo) bool // Closure used in the Less method.
+}
+
+// Len is part of sort.Interface.
+func (s *packageInfoSorter) Len() int {
+	return len(s.pkg_infos)
+}
+
+// Swap is part of sort.Interface.
+func (s *packageInfoSorter) Swap(i, j int) {
+	s.pkg_infos[i], s.pkg_infos[j] = s.pkg_infos[j], s.pkg_infos[i]
+}
+
+// Less is part of sort.Interface. It is implemented by calling the "by" closure in the sorter.
+func (s *packageInfoSorter) Less(i, j int) bool {
+	return s.by(s.pkg_infos[i], s.pkg_infos[j])
+}
+
+func writePreamble(pkg_infos []*importer.PackageInfo) {
+	path := func(p1, p2 *importer.PackageInfo) bool {
+		return p1.Pkg.Path() < p2.Pkg.Path()
+	}
+	By(path).Sort(pkg_infos)
 	fmt.Println(`package repl
 
 import (`)
-	for _, import_name := range imports {
-		fmt.Printf("\t\"%s\"\n", import_name)
+	for _, pkg_info := range pkg_infos {
+		fmt.Printf("\t\"%s\"\n", pkg_info.Pkg.Path())
 	}
 	fmt.Println(`)
 

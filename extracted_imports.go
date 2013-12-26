@@ -45,32 +45,123 @@ func Extract_environment(pkgs pkgType) {
 	var funcs  map[string] reflect.Value
 
 	consts = make(map[string] reflect.Value)
-	consts["RuneError"] = reflect.ValueOf(utf8.RuneError)
-	consts["RuneSelf"] = reflect.ValueOf(utf8.RuneSelf)
-	consts["MaxRune"] = reflect.ValueOf(utf8.MaxRune)
-	consts["UTFMax"] = reflect.ValueOf(utf8.UTFMax)
+	consts["MaxScanTokenSize"] = reflect.ValueOf(bufio.MaxScanTokenSize)
 
 	funcs = make(map[string] reflect.Value)
-	funcs["FullRune"] = reflect.ValueOf(utf8.FullRune)
-	funcs["FullRuneInString"] = reflect.ValueOf(utf8.FullRuneInString)
-	funcs["DecodeRune"] = reflect.ValueOf(utf8.DecodeRune)
-	funcs["DecodeRuneInString"] = reflect.ValueOf(utf8.DecodeRuneInString)
-	funcs["DecodeLastRune"] = reflect.ValueOf(utf8.DecodeLastRune)
-	funcs["DecodeLastRuneInString"] = reflect.ValueOf(utf8.DecodeLastRuneInString)
-	funcs["RuneLen"] = reflect.ValueOf(utf8.RuneLen)
-	funcs["EncodeRune"] = reflect.ValueOf(utf8.EncodeRune)
-	funcs["RuneCount"] = reflect.ValueOf(utf8.RuneCount)
-	funcs["RuneCountInString"] = reflect.ValueOf(utf8.RuneCountInString)
-	funcs["RuneStart"] = reflect.ValueOf(utf8.RuneStart)
-	funcs["Valid"] = reflect.ValueOf(utf8.Valid)
-	funcs["ValidString"] = reflect.ValueOf(utf8.ValidString)
-	funcs["ValidRune"] = reflect.ValueOf(utf8.ValidRune)
+	funcs["NewReaderSize"] = reflect.ValueOf(bufio.NewReaderSize)
+	funcs["NewReader"] = reflect.ValueOf(bufio.NewReader)
+	funcs["NewWriterSize"] = reflect.ValueOf(bufio.NewWriterSize)
+	funcs["NewWriter"] = reflect.ValueOf(bufio.NewWriter)
+	funcs["NewReadWriter"] = reflect.ValueOf(bufio.NewReadWriter)
+	funcs["NewScanner"] = reflect.ValueOf(bufio.NewScanner)
+	funcs["ScanBytes"] = reflect.ValueOf(bufio.ScanBytes)
+	funcs["ScanRunes"] = reflect.ValueOf(bufio.ScanRunes)
+	funcs["ScanLines"] = reflect.ValueOf(bufio.ScanLines)
+	funcs["ScanWords"] = reflect.ValueOf(bufio.ScanWords)
 
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["utf8"] = &interactive.Env {
-		Name: "utf8",
+	vars["ErrInvalidUnreadByte"] = reflect.ValueOf(&bufio.ErrInvalidUnreadByte)
+	vars["ErrInvalidUnreadRune"] = reflect.ValueOf(&bufio.ErrInvalidUnreadRune)
+	vars["ErrBufferFull"] = reflect.ValueOf(&bufio.ErrBufferFull)
+	vars["ErrNegativeCount"] = reflect.ValueOf(&bufio.ErrNegativeCount)
+	vars["ErrTooLong"] = reflect.ValueOf(&bufio.ErrTooLong)
+	vars["ErrNegativeAdvance"] = reflect.ValueOf(&bufio.ErrNegativeAdvance)
+	vars["ErrAdvanceTooFar"] = reflect.ValueOf(&bufio.ErrAdvanceTooFar)
+	pkgs["bufio"] = &interactive.Env {
+		Name: "bufio",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["MinRead"] = reflect.ValueOf(bytes.MinRead)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["NewBuffer"] = reflect.ValueOf(bytes.NewBuffer)
+	funcs["NewBufferString"] = reflect.ValueOf(bytes.NewBufferString)
+	funcs["Count"] = reflect.ValueOf(bytes.Count)
+	funcs["Contains"] = reflect.ValueOf(bytes.Contains)
+	funcs["Index"] = reflect.ValueOf(bytes.Index)
+	funcs["LastIndex"] = reflect.ValueOf(bytes.LastIndex)
+	funcs["IndexRune"] = reflect.ValueOf(bytes.IndexRune)
+	funcs["IndexAny"] = reflect.ValueOf(bytes.IndexAny)
+	funcs["LastIndexAny"] = reflect.ValueOf(bytes.LastIndexAny)
+	funcs["SplitN"] = reflect.ValueOf(bytes.SplitN)
+	funcs["SplitAfterN"] = reflect.ValueOf(bytes.SplitAfterN)
+	funcs["Split"] = reflect.ValueOf(bytes.Split)
+	funcs["SplitAfter"] = reflect.ValueOf(bytes.SplitAfter)
+	funcs["Fields"] = reflect.ValueOf(bytes.Fields)
+	funcs["FieldsFunc"] = reflect.ValueOf(bytes.FieldsFunc)
+	funcs["Join"] = reflect.ValueOf(bytes.Join)
+	funcs["HasPrefix"] = reflect.ValueOf(bytes.HasPrefix)
+	funcs["HasSuffix"] = reflect.ValueOf(bytes.HasSuffix)
+	funcs["Map"] = reflect.ValueOf(bytes.Map)
+	funcs["Repeat"] = reflect.ValueOf(bytes.Repeat)
+	funcs["ToUpper"] = reflect.ValueOf(bytes.ToUpper)
+	funcs["ToLower"] = reflect.ValueOf(bytes.ToLower)
+	funcs["ToTitle"] = reflect.ValueOf(bytes.ToTitle)
+	funcs["ToUpperSpecial"] = reflect.ValueOf(bytes.ToUpperSpecial)
+	funcs["ToLowerSpecial"] = reflect.ValueOf(bytes.ToLowerSpecial)
+	funcs["ToTitleSpecial"] = reflect.ValueOf(bytes.ToTitleSpecial)
+	funcs["Title"] = reflect.ValueOf(bytes.Title)
+	funcs["TrimLeftFunc"] = reflect.ValueOf(bytes.TrimLeftFunc)
+	funcs["TrimRightFunc"] = reflect.ValueOf(bytes.TrimRightFunc)
+	funcs["TrimFunc"] = reflect.ValueOf(bytes.TrimFunc)
+	funcs["TrimPrefix"] = reflect.ValueOf(bytes.TrimPrefix)
+	funcs["TrimSuffix"] = reflect.ValueOf(bytes.TrimSuffix)
+	funcs["IndexFunc"] = reflect.ValueOf(bytes.IndexFunc)
+	funcs["LastIndexFunc"] = reflect.ValueOf(bytes.LastIndexFunc)
+	funcs["Trim"] = reflect.ValueOf(bytes.Trim)
+	funcs["TrimLeft"] = reflect.ValueOf(bytes.TrimLeft)
+	funcs["TrimRight"] = reflect.ValueOf(bytes.TrimRight)
+	funcs["TrimSpace"] = reflect.ValueOf(bytes.TrimSpace)
+	funcs["Runes"] = reflect.ValueOf(bytes.Runes)
+	funcs["Replace"] = reflect.ValueOf(bytes.Replace)
+	funcs["EqualFold"] = reflect.ValueOf(bytes.EqualFold)
+	funcs["IndexByte"] = reflect.ValueOf(bytes.IndexByte)
+	funcs["Equal"] = reflect.ValueOf(bytes.Equal)
+	funcs["Compare"] = reflect.ValueOf(bytes.Compare)
+	funcs["NewReader"] = reflect.ValueOf(bytes.NewReader)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	vars["ErrTooLarge"] = reflect.ValueOf(&bytes.ErrTooLarge)
+	pkgs["bytes"] = &interactive.Env {
+		Name: "bytes",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["MaxVarintLen16"] = reflect.ValueOf(binary.MaxVarintLen16)
+	consts["MaxVarintLen32"] = reflect.ValueOf(binary.MaxVarintLen32)
+	consts["MaxVarintLen64"] = reflect.ValueOf(binary.MaxVarintLen64)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["Read"] = reflect.ValueOf(binary.Read)
+	funcs["Write"] = reflect.ValueOf(binary.Write)
+	funcs["Size"] = reflect.ValueOf(binary.Size)
+	funcs["PutUvarint"] = reflect.ValueOf(binary.PutUvarint)
+	funcs["Uvarint"] = reflect.ValueOf(binary.Uvarint)
+	funcs["PutVarint"] = reflect.ValueOf(binary.PutVarint)
+	funcs["Varint"] = reflect.ValueOf(binary.Varint)
+	funcs["ReadUvarint"] = reflect.ValueOf(binary.ReadUvarint)
+	funcs["ReadVarint"] = reflect.ValueOf(binary.ReadVarint)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	vars["LittleEndian"] = reflect.ValueOf(&binary.LittleEndian)
+	vars["BigEndian"] = reflect.ValueOf(&binary.BigEndian)
+	pkgs["binary"] = &interactive.Env {
+		Name: "binary",
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -94,43 +185,49 @@ func Extract_environment(pkgs pkgType) {
 		Pkgs:   pkgs,
 	}
 	consts = make(map[string] reflect.Value)
+	consts["ContinueOnError"] = reflect.ValueOf(flag.ContinueOnError)
+	consts["ExitOnError"] = reflect.ValueOf(flag.ExitOnError)
+	consts["PanicOnError"] = reflect.ValueOf(flag.PanicOnError)
 
 	funcs = make(map[string] reflect.Value)
-	funcs["SwapInt32"] = reflect.ValueOf(atomic.SwapInt32)
-	funcs["SwapInt64"] = reflect.ValueOf(atomic.SwapInt64)
-	funcs["SwapUint32"] = reflect.ValueOf(atomic.SwapUint32)
-	funcs["SwapUint64"] = reflect.ValueOf(atomic.SwapUint64)
-	funcs["SwapUintptr"] = reflect.ValueOf(atomic.SwapUintptr)
-	funcs["SwapPointer"] = reflect.ValueOf(atomic.SwapPointer)
-	funcs["CompareAndSwapInt32"] = reflect.ValueOf(atomic.CompareAndSwapInt32)
-	funcs["CompareAndSwapInt64"] = reflect.ValueOf(atomic.CompareAndSwapInt64)
-	funcs["CompareAndSwapUint32"] = reflect.ValueOf(atomic.CompareAndSwapUint32)
-	funcs["CompareAndSwapUint64"] = reflect.ValueOf(atomic.CompareAndSwapUint64)
-	funcs["CompareAndSwapUintptr"] = reflect.ValueOf(atomic.CompareAndSwapUintptr)
-	funcs["CompareAndSwapPointer"] = reflect.ValueOf(atomic.CompareAndSwapPointer)
-	funcs["AddInt32"] = reflect.ValueOf(atomic.AddInt32)
-	funcs["AddUint32"] = reflect.ValueOf(atomic.AddUint32)
-	funcs["AddInt64"] = reflect.ValueOf(atomic.AddInt64)
-	funcs["AddUint64"] = reflect.ValueOf(atomic.AddUint64)
-	funcs["AddUintptr"] = reflect.ValueOf(atomic.AddUintptr)
-	funcs["LoadInt32"] = reflect.ValueOf(atomic.LoadInt32)
-	funcs["LoadInt64"] = reflect.ValueOf(atomic.LoadInt64)
-	funcs["LoadUint32"] = reflect.ValueOf(atomic.LoadUint32)
-	funcs["LoadUint64"] = reflect.ValueOf(atomic.LoadUint64)
-	funcs["LoadUintptr"] = reflect.ValueOf(atomic.LoadUintptr)
-	funcs["LoadPointer"] = reflect.ValueOf(atomic.LoadPointer)
-	funcs["StoreInt32"] = reflect.ValueOf(atomic.StoreInt32)
-	funcs["StoreInt64"] = reflect.ValueOf(atomic.StoreInt64)
-	funcs["StoreUint32"] = reflect.ValueOf(atomic.StoreUint32)
-	funcs["StoreUint64"] = reflect.ValueOf(atomic.StoreUint64)
-	funcs["StoreUintptr"] = reflect.ValueOf(atomic.StoreUintptr)
-	funcs["StorePointer"] = reflect.ValueOf(atomic.StorePointer)
+	funcs["VisitAll"] = reflect.ValueOf(flag.VisitAll)
+	funcs["Visit"] = reflect.ValueOf(flag.Visit)
+	funcs["Lookup"] = reflect.ValueOf(flag.Lookup)
+	funcs["Set"] = reflect.ValueOf(flag.Set)
+	funcs["PrintDefaults"] = reflect.ValueOf(flag.PrintDefaults)
+	funcs["NFlag"] = reflect.ValueOf(flag.NFlag)
+	funcs["Arg"] = reflect.ValueOf(flag.Arg)
+	funcs["NArg"] = reflect.ValueOf(flag.NArg)
+	funcs["Args"] = reflect.ValueOf(flag.Args)
+	funcs["BoolVar"] = reflect.ValueOf(flag.BoolVar)
+	funcs["Bool"] = reflect.ValueOf(flag.Bool)
+	funcs["IntVar"] = reflect.ValueOf(flag.IntVar)
+	funcs["Int"] = reflect.ValueOf(flag.Int)
+	funcs["Int64Var"] = reflect.ValueOf(flag.Int64Var)
+	funcs["Int64"] = reflect.ValueOf(flag.Int64)
+	funcs["UintVar"] = reflect.ValueOf(flag.UintVar)
+	funcs["Uint"] = reflect.ValueOf(flag.Uint)
+	funcs["Uint64Var"] = reflect.ValueOf(flag.Uint64Var)
+	funcs["Uint64"] = reflect.ValueOf(flag.Uint64)
+	funcs["StringVar"] = reflect.ValueOf(flag.StringVar)
+	funcs["String"] = reflect.ValueOf(flag.String)
+	funcs["Float64Var"] = reflect.ValueOf(flag.Float64Var)
+	funcs["Float64"] = reflect.ValueOf(flag.Float64)
+	funcs["DurationVar"] = reflect.ValueOf(flag.DurationVar)
+	funcs["Duration"] = reflect.ValueOf(flag.Duration)
+	funcs["Var"] = reflect.ValueOf(flag.Var)
+	funcs["Parse"] = reflect.ValueOf(flag.Parse)
+	funcs["Parsed"] = reflect.ValueOf(flag.Parsed)
+	funcs["NewFlagSet"] = reflect.ValueOf(flag.NewFlagSet)
 
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["atomic"] = &interactive.Env {
-		Name: "atomic",
+	vars["ErrHelp"] = reflect.ValueOf(&flag.ErrHelp)
+	vars["Usage"] = reflect.ValueOf(&flag.Usage)
+	vars["CommandLine"] = reflect.ValueOf(&flag.CommandLine)
+	pkgs["flag"] = &interactive.Env {
+		Name: "flag",
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -140,13 +237,264 @@ func Extract_environment(pkgs pkgType) {
 	consts = make(map[string] reflect.Value)
 
 	funcs = make(map[string] reflect.Value)
-	funcs["NewCond"] = reflect.ValueOf(sync.NewCond)
+	funcs["Fprintf"] = reflect.ValueOf(fmt.Fprintf)
+	funcs["Printf"] = reflect.ValueOf(fmt.Printf)
+	funcs["Sprintf"] = reflect.ValueOf(fmt.Sprintf)
+	funcs["Errorf"] = reflect.ValueOf(fmt.Errorf)
+	funcs["Fprint"] = reflect.ValueOf(fmt.Fprint)
+	funcs["Print"] = reflect.ValueOf(fmt.Print)
+	funcs["Sprint"] = reflect.ValueOf(fmt.Sprint)
+	funcs["Fprintln"] = reflect.ValueOf(fmt.Fprintln)
+	funcs["Println"] = reflect.ValueOf(fmt.Println)
+	funcs["Sprintln"] = reflect.ValueOf(fmt.Sprintln)
+	funcs["Scan"] = reflect.ValueOf(fmt.Scan)
+	funcs["Scanln"] = reflect.ValueOf(fmt.Scanln)
+	funcs["Scanf"] = reflect.ValueOf(fmt.Scanf)
+	funcs["Sscan"] = reflect.ValueOf(fmt.Sscan)
+	funcs["Sscanln"] = reflect.ValueOf(fmt.Sscanln)
+	funcs["Sscanf"] = reflect.ValueOf(fmt.Sscanf)
+	funcs["Fscan"] = reflect.ValueOf(fmt.Fscan)
+	funcs["Fscanln"] = reflect.ValueOf(fmt.Fscanln)
+	funcs["Fscanf"] = reflect.ValueOf(fmt.Fscanf)
 
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["sync"] = &interactive.Env {
-		Name: "sync",
+	pkgs["fmt"] = &interactive.Env {
+		Name: "fmt",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["CheckExpr"] = reflect.ValueOf(interactive.CheckExpr)
+	funcs["NewConstInteger"] = reflect.ValueOf(interactive.NewConstInteger)
+	funcs["NewConstFloat"] = reflect.ValueOf(interactive.NewConstFloat)
+	funcs["NewConstImag"] = reflect.ValueOf(interactive.NewConstImag)
+	funcs["NewConstRune"] = reflect.ValueOf(interactive.NewConstRune)
+	funcs["NewConstInt64"] = reflect.ValueOf(interactive.NewConstInt64)
+	funcs["NewConstUint64"] = reflect.ValueOf(interactive.NewConstUint64)
+	funcs["NewConstFloat64"] = reflect.ValueOf(interactive.NewConstFloat64)
+	funcs["NewConstComplex128"] = reflect.ValueOf(interactive.NewConstComplex128)
+	funcs["EvalExpr"] = reflect.ValueOf(interactive.EvalExpr)
+	funcs["DerefValue"] = reflect.ValueOf(interactive.DerefValue)
+	funcs["EvalIdentExpr"] = reflect.ValueOf(interactive.EvalIdentExpr)
+	funcs["SetEvalIdentExprCallback"] = reflect.ValueOf(interactive.SetEvalIdentExprCallback)
+	funcs["GetEvalIdentExprCallback"] = reflect.ValueOf(interactive.GetEvalIdentExprCallback)
+	funcs["CannotIndex"] = reflect.ValueOf(interactive.CannotIndex)
+	funcs["EvalSelectorExpr"] = reflect.ValueOf(interactive.EvalSelectorExpr)
+	funcs["SetEvalSelectorExprCallback"] = reflect.ValueOf(interactive.SetEvalSelectorExprCallback)
+	funcs["GetEvalSelectorExprCallback"] = reflect.ValueOf(interactive.GetEvalSelectorExprCallback)
+	funcs["SetUserConversion"] = reflect.ValueOf(interactive.SetUserConversion)
+	funcs["GetUserConversion"] = reflect.ValueOf(interactive.GetUserConversion)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	vars["ConstInt"] = reflect.ValueOf(&interactive.ConstInt)
+	vars["ConstRune"] = reflect.ValueOf(&interactive.ConstRune)
+	vars["ConstFloat"] = reflect.ValueOf(&interactive.ConstFloat)
+	vars["ConstComplex"] = reflect.ValueOf(&interactive.ConstComplex)
+	vars["ConstString"] = reflect.ValueOf(&interactive.ConstString)
+	vars["ConstNil"] = reflect.ValueOf(&interactive.ConstNil)
+	vars["ConstBool"] = reflect.ValueOf(&interactive.ConstBool)
+	vars["ErrArrayKey"] = reflect.ValueOf(&interactive.ErrArrayKey)
+	vars["RuneType"] = reflect.ValueOf(&interactive.RuneType)
+	pkgs["interactive"] = &interactive.Env {
+		Name: "interactive",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["SEND"] = reflect.ValueOf(ast.SEND)
+	consts["RECV"] = reflect.ValueOf(ast.RECV)
+	consts["FilterFuncDuplicates"] = reflect.ValueOf(ast.FilterFuncDuplicates)
+	consts["FilterUnassociatedComments"] = reflect.ValueOf(ast.FilterUnassociatedComments)
+	consts["FilterImportDuplicates"] = reflect.ValueOf(ast.FilterImportDuplicates)
+	consts["Bad"] = reflect.ValueOf(ast.Bad)
+	consts["Pkg"] = reflect.ValueOf(ast.Pkg)
+	consts["Con"] = reflect.ValueOf(ast.Con)
+	consts["Typ"] = reflect.ValueOf(ast.Typ)
+	consts["Var"] = reflect.ValueOf(ast.Var)
+	consts["Fun"] = reflect.ValueOf(ast.Fun)
+	consts["Lbl"] = reflect.ValueOf(ast.Lbl)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["NewIdent"] = reflect.ValueOf(ast.NewIdent)
+	funcs["IsExported"] = reflect.ValueOf(ast.IsExported)
+	funcs["NewCommentMap"] = reflect.ValueOf(ast.NewCommentMap)
+	funcs["FileExports"] = reflect.ValueOf(ast.FileExports)
+	funcs["PackageExports"] = reflect.ValueOf(ast.PackageExports)
+	funcs["FilterDecl"] = reflect.ValueOf(ast.FilterDecl)
+	funcs["FilterFile"] = reflect.ValueOf(ast.FilterFile)
+	funcs["FilterPackage"] = reflect.ValueOf(ast.FilterPackage)
+	funcs["MergePackageFiles"] = reflect.ValueOf(ast.MergePackageFiles)
+	funcs["SortImports"] = reflect.ValueOf(ast.SortImports)
+	funcs["NotNilFilter"] = reflect.ValueOf(ast.NotNilFilter)
+	funcs["Fprint"] = reflect.ValueOf(ast.Fprint)
+	funcs["Print"] = reflect.ValueOf(ast.Print)
+	funcs["NewPackage"] = reflect.ValueOf(ast.NewPackage)
+	funcs["NewScope"] = reflect.ValueOf(ast.NewScope)
+	funcs["NewObj"] = reflect.ValueOf(ast.NewObj)
+	funcs["Walk"] = reflect.ValueOf(ast.Walk)
+	funcs["Inspect"] = reflect.ValueOf(ast.Inspect)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["ast"] = &interactive.Env {
+		Name: "ast",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["PackageClauseOnly"] = reflect.ValueOf(parser.PackageClauseOnly)
+	consts["ImportsOnly"] = reflect.ValueOf(parser.ImportsOnly)
+	consts["ParseComments"] = reflect.ValueOf(parser.ParseComments)
+	consts["Trace"] = reflect.ValueOf(parser.Trace)
+	consts["DeclarationErrors"] = reflect.ValueOf(parser.DeclarationErrors)
+	consts["SpuriousErrors"] = reflect.ValueOf(parser.SpuriousErrors)
+	consts["AllErrors"] = reflect.ValueOf(parser.AllErrors)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["ParseFile"] = reflect.ValueOf(parser.ParseFile)
+	funcs["ParseDir"] = reflect.ValueOf(parser.ParseDir)
+	funcs["ParseExpr"] = reflect.ValueOf(parser.ParseExpr)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["parser"] = &interactive.Env {
+		Name: "parser",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["ScanComments"] = reflect.ValueOf(scanner.ScanComments)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["PrintError"] = reflect.ValueOf(scanner.PrintError)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["scanner"] = &interactive.Env {
+		Name: "scanner",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["NoPos"] = reflect.ValueOf(token.NoPos)
+	consts["ILLEGAL"] = reflect.ValueOf(token.ILLEGAL)
+	consts["EOF"] = reflect.ValueOf(token.EOF)
+	consts["COMMENT"] = reflect.ValueOf(token.COMMENT)
+	consts["IDENT"] = reflect.ValueOf(token.IDENT)
+	consts["INT"] = reflect.ValueOf(token.INT)
+	consts["FLOAT"] = reflect.ValueOf(token.FLOAT)
+	consts["IMAG"] = reflect.ValueOf(token.IMAG)
+	consts["CHAR"] = reflect.ValueOf(token.CHAR)
+	consts["STRING"] = reflect.ValueOf(token.STRING)
+	consts["ADD"] = reflect.ValueOf(token.ADD)
+	consts["SUB"] = reflect.ValueOf(token.SUB)
+	consts["MUL"] = reflect.ValueOf(token.MUL)
+	consts["QUO"] = reflect.ValueOf(token.QUO)
+	consts["REM"] = reflect.ValueOf(token.REM)
+	consts["AND"] = reflect.ValueOf(token.AND)
+	consts["OR"] = reflect.ValueOf(token.OR)
+	consts["XOR"] = reflect.ValueOf(token.XOR)
+	consts["SHL"] = reflect.ValueOf(token.SHL)
+	consts["SHR"] = reflect.ValueOf(token.SHR)
+	consts["AND_NOT"] = reflect.ValueOf(token.AND_NOT)
+	consts["ADD_ASSIGN"] = reflect.ValueOf(token.ADD_ASSIGN)
+	consts["SUB_ASSIGN"] = reflect.ValueOf(token.SUB_ASSIGN)
+	consts["MUL_ASSIGN"] = reflect.ValueOf(token.MUL_ASSIGN)
+	consts["QUO_ASSIGN"] = reflect.ValueOf(token.QUO_ASSIGN)
+	consts["REM_ASSIGN"] = reflect.ValueOf(token.REM_ASSIGN)
+	consts["AND_ASSIGN"] = reflect.ValueOf(token.AND_ASSIGN)
+	consts["OR_ASSIGN"] = reflect.ValueOf(token.OR_ASSIGN)
+	consts["XOR_ASSIGN"] = reflect.ValueOf(token.XOR_ASSIGN)
+	consts["SHL_ASSIGN"] = reflect.ValueOf(token.SHL_ASSIGN)
+	consts["SHR_ASSIGN"] = reflect.ValueOf(token.SHR_ASSIGN)
+	consts["AND_NOT_ASSIGN"] = reflect.ValueOf(token.AND_NOT_ASSIGN)
+	consts["LAND"] = reflect.ValueOf(token.LAND)
+	consts["LOR"] = reflect.ValueOf(token.LOR)
+	consts["ARROW"] = reflect.ValueOf(token.ARROW)
+	consts["INC"] = reflect.ValueOf(token.INC)
+	consts["DEC"] = reflect.ValueOf(token.DEC)
+	consts["EQL"] = reflect.ValueOf(token.EQL)
+	consts["LSS"] = reflect.ValueOf(token.LSS)
+	consts["GTR"] = reflect.ValueOf(token.GTR)
+	consts["ASSIGN"] = reflect.ValueOf(token.ASSIGN)
+	consts["NOT"] = reflect.ValueOf(token.NOT)
+	consts["NEQ"] = reflect.ValueOf(token.NEQ)
+	consts["LEQ"] = reflect.ValueOf(token.LEQ)
+	consts["GEQ"] = reflect.ValueOf(token.GEQ)
+	consts["DEFINE"] = reflect.ValueOf(token.DEFINE)
+	consts["ELLIPSIS"] = reflect.ValueOf(token.ELLIPSIS)
+	consts["LPAREN"] = reflect.ValueOf(token.LPAREN)
+	consts["LBRACK"] = reflect.ValueOf(token.LBRACK)
+	consts["LBRACE"] = reflect.ValueOf(token.LBRACE)
+	consts["COMMA"] = reflect.ValueOf(token.COMMA)
+	consts["PERIOD"] = reflect.ValueOf(token.PERIOD)
+	consts["RPAREN"] = reflect.ValueOf(token.RPAREN)
+	consts["RBRACK"] = reflect.ValueOf(token.RBRACK)
+	consts["RBRACE"] = reflect.ValueOf(token.RBRACE)
+	consts["SEMICOLON"] = reflect.ValueOf(token.SEMICOLON)
+	consts["COLON"] = reflect.ValueOf(token.COLON)
+	consts["BREAK"] = reflect.ValueOf(token.BREAK)
+	consts["CASE"] = reflect.ValueOf(token.CASE)
+	consts["CHAN"] = reflect.ValueOf(token.CHAN)
+	consts["CONST"] = reflect.ValueOf(token.CONST)
+	consts["CONTINUE"] = reflect.ValueOf(token.CONTINUE)
+	consts["DEFAULT"] = reflect.ValueOf(token.DEFAULT)
+	consts["DEFER"] = reflect.ValueOf(token.DEFER)
+	consts["ELSE"] = reflect.ValueOf(token.ELSE)
+	consts["FALLTHROUGH"] = reflect.ValueOf(token.FALLTHROUGH)
+	consts["FOR"] = reflect.ValueOf(token.FOR)
+	consts["FUNC"] = reflect.ValueOf(token.FUNC)
+	consts["GO"] = reflect.ValueOf(token.GO)
+	consts["GOTO"] = reflect.ValueOf(token.GOTO)
+	consts["IF"] = reflect.ValueOf(token.IF)
+	consts["IMPORT"] = reflect.ValueOf(token.IMPORT)
+	consts["INTERFACE"] = reflect.ValueOf(token.INTERFACE)
+	consts["MAP"] = reflect.ValueOf(token.MAP)
+	consts["PACKAGE"] = reflect.ValueOf(token.PACKAGE)
+	consts["RANGE"] = reflect.ValueOf(token.RANGE)
+	consts["RETURN"] = reflect.ValueOf(token.RETURN)
+	consts["SELECT"] = reflect.ValueOf(token.SELECT)
+	consts["STRUCT"] = reflect.ValueOf(token.STRUCT)
+	consts["SWITCH"] = reflect.ValueOf(token.SWITCH)
+	consts["TYPE"] = reflect.ValueOf(token.TYPE)
+	consts["VAR"] = reflect.ValueOf(token.VAR)
+	consts["LowestPrec"] = reflect.ValueOf(token.LowestPrec)
+	consts["UnaryPrec"] = reflect.ValueOf(token.UnaryPrec)
+	consts["HighestPrec"] = reflect.ValueOf(token.HighestPrec)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["NewFileSet"] = reflect.ValueOf(token.NewFileSet)
+	funcs["Lookup"] = reflect.ValueOf(token.Lookup)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["token"] = &interactive.Env {
+		Name: "token",
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -186,6 +534,65 @@ func Extract_environment(pkgs pkgType) {
 		Pkgs:   pkgs,
 	}
 	consts = make(map[string] reflect.Value)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["ReadAll"] = reflect.ValueOf(ioutil.ReadAll)
+	funcs["ReadFile"] = reflect.ValueOf(ioutil.ReadFile)
+	funcs["WriteFile"] = reflect.ValueOf(ioutil.WriteFile)
+	funcs["ReadDir"] = reflect.ValueOf(ioutil.ReadDir)
+	funcs["NopCloser"] = reflect.ValueOf(ioutil.NopCloser)
+	funcs["TempFile"] = reflect.ValueOf(ioutil.TempFile)
+	funcs["TempDir"] = reflect.ValueOf(ioutil.TempDir)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	vars["Discard"] = reflect.ValueOf(&ioutil.Discard)
+	pkgs["ioutil"] = &interactive.Env {
+		Name: "ioutil",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["Ldate"] = reflect.ValueOf(log.Ldate)
+	consts["Ltime"] = reflect.ValueOf(log.Ltime)
+	consts["Lmicroseconds"] = reflect.ValueOf(log.Lmicroseconds)
+	consts["Llongfile"] = reflect.ValueOf(log.Llongfile)
+	consts["Lshortfile"] = reflect.ValueOf(log.Lshortfile)
+	consts["LstdFlags"] = reflect.ValueOf(log.LstdFlags)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["New"] = reflect.ValueOf(log.New)
+	funcs["SetOutput"] = reflect.ValueOf(log.SetOutput)
+	funcs["Flags"] = reflect.ValueOf(log.Flags)
+	funcs["SetFlags"] = reflect.ValueOf(log.SetFlags)
+	funcs["Prefix"] = reflect.ValueOf(log.Prefix)
+	funcs["SetPrefix"] = reflect.ValueOf(log.SetPrefix)
+	funcs["Print"] = reflect.ValueOf(log.Print)
+	funcs["Printf"] = reflect.ValueOf(log.Printf)
+	funcs["Println"] = reflect.ValueOf(log.Println)
+	funcs["Fatal"] = reflect.ValueOf(log.Fatal)
+	funcs["Fatalf"] = reflect.ValueOf(log.Fatalf)
+	funcs["Fatalln"] = reflect.ValueOf(log.Fatalln)
+	funcs["Panic"] = reflect.ValueOf(log.Panic)
+	funcs["Panicf"] = reflect.ValueOf(log.Panicf)
+	funcs["Panicln"] = reflect.ValueOf(log.Panicln)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["log"] = &interactive.Env {
+		Name: "log",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
 	consts["E"] = reflect.ValueOf(math.E)
 	consts["Pi"] = reflect.ValueOf(math.Pi)
 	consts["Phi"] = reflect.ValueOf(math.Phi)
@@ -207,7 +614,12 @@ func Extract_environment(pkgs pkgType) {
 	consts["MinInt16"] = reflect.ValueOf(math.MinInt16)
 	consts["MaxInt32"] = reflect.ValueOf(math.MaxInt32)
 	consts["MinInt32"] = reflect.ValueOf(math.MinInt32)
-	consts["MaxUint8"] = reflect.ValueOf(math.MaxUint8)
+	consts["MaxInt64"] = reflect.ValueOf(int64(math.MaxInt64))
+	consts["MinInt64"] = reflect.ValueOf(int64(math.MinInt64))
+	consts["MaxUint8"] = reflect.ValueOf(uint8(math.MaxUint8))
+	consts["MaxUint16"] = reflect.ValueOf(uint16(math.MaxUint16))
+	consts["MaxUint32"] = reflect.ValueOf(uint32(math.MaxUint32))
+	consts["MaxUint64"] = reflect.ValueOf(uint64(math.MaxUint64))
 
 	funcs = make(map[string] reflect.Value)
 	funcs["Abs"] = reflect.ValueOf(math.Abs)
@@ -277,6 +689,324 @@ func Extract_environment(pkgs pkgType) {
 	vars = make(map[string] reflect.Value)
 	pkgs["math"] = &interactive.Env {
 		Name: "math",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["MaxBase"] = reflect.ValueOf(big.MaxBase)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["NewInt"] = reflect.ValueOf(big.NewInt)
+	funcs["NewRat"] = reflect.ValueOf(big.NewRat)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["big"] = &interactive.Env {
+		Name: "big",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["NewSource"] = reflect.ValueOf(rand.NewSource)
+	funcs["New"] = reflect.ValueOf(rand.New)
+	funcs["Seed"] = reflect.ValueOf(rand.Seed)
+	funcs["Int63"] = reflect.ValueOf(rand.Int63)
+	funcs["Uint32"] = reflect.ValueOf(rand.Uint32)
+	funcs["Int31"] = reflect.ValueOf(rand.Int31)
+	funcs["Int"] = reflect.ValueOf(rand.Int)
+	funcs["Int63n"] = reflect.ValueOf(rand.Int63n)
+	funcs["Int31n"] = reflect.ValueOf(rand.Int31n)
+	funcs["Intn"] = reflect.ValueOf(rand.Intn)
+	funcs["Float64"] = reflect.ValueOf(rand.Float64)
+	funcs["Float32"] = reflect.ValueOf(rand.Float32)
+	funcs["Perm"] = reflect.ValueOf(rand.Perm)
+	funcs["NormFloat64"] = reflect.ValueOf(rand.NormFloat64)
+	funcs["ExpFloat64"] = reflect.ValueOf(rand.ExpFloat64)
+	funcs["NewZipf"] = reflect.ValueOf(rand.NewZipf)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["rand"] = &interactive.Env {
+		Name: "rand",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["O_RDONLY"] = reflect.ValueOf(os.O_RDONLY)
+	consts["O_WRONLY"] = reflect.ValueOf(os.O_WRONLY)
+	consts["O_RDWR"] = reflect.ValueOf(os.O_RDWR)
+	consts["O_APPEND"] = reflect.ValueOf(os.O_APPEND)
+	consts["O_CREATE"] = reflect.ValueOf(os.O_CREATE)
+	consts["O_EXCL"] = reflect.ValueOf(os.O_EXCL)
+	consts["O_SYNC"] = reflect.ValueOf(os.O_SYNC)
+	consts["O_TRUNC"] = reflect.ValueOf(os.O_TRUNC)
+	consts["SEEK_SET"] = reflect.ValueOf(os.SEEK_SET)
+	consts["SEEK_CUR"] = reflect.ValueOf(os.SEEK_CUR)
+	consts["SEEK_END"] = reflect.ValueOf(os.SEEK_END)
+	consts["DevNull"] = reflect.ValueOf(os.DevNull)
+	consts["PathSeparator"] = reflect.ValueOf(os.PathSeparator)
+	consts["PathListSeparator"] = reflect.ValueOf(os.PathListSeparator)
+	consts["ModeDir"] = reflect.ValueOf(os.ModeDir)
+	consts["ModeAppend"] = reflect.ValueOf(os.ModeAppend)
+	consts["ModeExclusive"] = reflect.ValueOf(os.ModeExclusive)
+	consts["ModeTemporary"] = reflect.ValueOf(os.ModeTemporary)
+	consts["ModeSymlink"] = reflect.ValueOf(os.ModeSymlink)
+	consts["ModeDevice"] = reflect.ValueOf(os.ModeDevice)
+	consts["ModeNamedPipe"] = reflect.ValueOf(os.ModeNamedPipe)
+	consts["ModeSocket"] = reflect.ValueOf(os.ModeSocket)
+	consts["ModeSetuid"] = reflect.ValueOf(os.ModeSetuid)
+	consts["ModeSetgid"] = reflect.ValueOf(os.ModeSetgid)
+	consts["ModeCharDevice"] = reflect.ValueOf(os.ModeCharDevice)
+	consts["ModeSticky"] = reflect.ValueOf(os.ModeSticky)
+	consts["ModeType"] = reflect.ValueOf(os.ModeType)
+	consts["ModePerm"] = reflect.ValueOf(os.ModePerm)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["FindProcess"] = reflect.ValueOf(os.FindProcess)
+	funcs["StartProcess"] = reflect.ValueOf(os.StartProcess)
+	funcs["Hostname"] = reflect.ValueOf(os.Hostname)
+	funcs["Expand"] = reflect.ValueOf(os.Expand)
+	funcs["ExpandEnv"] = reflect.ValueOf(os.ExpandEnv)
+	funcs["Getenv"] = reflect.ValueOf(os.Getenv)
+	funcs["Setenv"] = reflect.ValueOf(os.Setenv)
+	funcs["Clearenv"] = reflect.ValueOf(os.Clearenv)
+	funcs["Environ"] = reflect.ValueOf(os.Environ)
+	funcs["NewSyscallError"] = reflect.ValueOf(os.NewSyscallError)
+	funcs["IsExist"] = reflect.ValueOf(os.IsExist)
+	funcs["IsNotExist"] = reflect.ValueOf(os.IsNotExist)
+	funcs["IsPermission"] = reflect.ValueOf(os.IsPermission)
+	funcs["Getpid"] = reflect.ValueOf(os.Getpid)
+	funcs["Getppid"] = reflect.ValueOf(os.Getppid)
+	funcs["Mkdir"] = reflect.ValueOf(os.Mkdir)
+	funcs["Chdir"] = reflect.ValueOf(os.Chdir)
+	funcs["Open"] = reflect.ValueOf(os.Open)
+	funcs["Create"] = reflect.ValueOf(os.Create)
+	funcs["Link"] = reflect.ValueOf(os.Link)
+	funcs["Symlink"] = reflect.ValueOf(os.Symlink)
+	funcs["Readlink"] = reflect.ValueOf(os.Readlink)
+	funcs["Rename"] = reflect.ValueOf(os.Rename)
+	funcs["Chmod"] = reflect.ValueOf(os.Chmod)
+	funcs["Chown"] = reflect.ValueOf(os.Chown)
+	funcs["Lchown"] = reflect.ValueOf(os.Lchown)
+	funcs["Chtimes"] = reflect.ValueOf(os.Chtimes)
+	funcs["NewFile"] = reflect.ValueOf(os.NewFile)
+	funcs["OpenFile"] = reflect.ValueOf(os.OpenFile)
+	funcs["Stat"] = reflect.ValueOf(os.Stat)
+	funcs["Lstat"] = reflect.ValueOf(os.Lstat)
+	funcs["Truncate"] = reflect.ValueOf(os.Truncate)
+	funcs["Remove"] = reflect.ValueOf(os.Remove)
+	funcs["TempDir"] = reflect.ValueOf(os.TempDir)
+	funcs["Getwd"] = reflect.ValueOf(os.Getwd)
+	funcs["MkdirAll"] = reflect.ValueOf(os.MkdirAll)
+	funcs["RemoveAll"] = reflect.ValueOf(os.RemoveAll)
+	funcs["IsPathSeparator"] = reflect.ValueOf(os.IsPathSeparator)
+	funcs["Pipe"] = reflect.ValueOf(os.Pipe)
+	funcs["Getuid"] = reflect.ValueOf(os.Getuid)
+	funcs["Geteuid"] = reflect.ValueOf(os.Geteuid)
+	funcs["Getgid"] = reflect.ValueOf(os.Getgid)
+	funcs["Getegid"] = reflect.ValueOf(os.Getegid)
+	funcs["Getgroups"] = reflect.ValueOf(os.Getgroups)
+	funcs["Exit"] = reflect.ValueOf(os.Exit)
+	funcs["Getpagesize"] = reflect.ValueOf(os.Getpagesize)
+	funcs["SameFile"] = reflect.ValueOf(os.SameFile)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	vars["ErrInvalid"] = reflect.ValueOf(&os.ErrInvalid)
+	vars["ErrPermission"] = reflect.ValueOf(&os.ErrPermission)
+	vars["ErrExist"] = reflect.ValueOf(&os.ErrExist)
+	vars["ErrNotExist"] = reflect.ValueOf(&os.ErrNotExist)
+	vars["Interrupt"] = reflect.ValueOf(&os.Interrupt)
+	vars["Kill"] = reflect.ValueOf(&os.Kill)
+	vars["Stdin"] = reflect.ValueOf(&os.Stdin)
+	vars["Stdout"] = reflect.ValueOf(&os.Stdout)
+	vars["Stderr"] = reflect.ValueOf(&os.Stderr)
+	vars["Args"] = reflect.ValueOf(&os.Args)
+	pkgs["os"] = &interactive.Env {
+		Name: "os",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["Separator"] = reflect.ValueOf(filepath.Separator)
+	consts["ListSeparator"] = reflect.ValueOf(filepath.ListSeparator)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["Match"] = reflect.ValueOf(filepath.Match)
+	funcs["Glob"] = reflect.ValueOf(filepath.Glob)
+	funcs["Clean"] = reflect.ValueOf(filepath.Clean)
+	funcs["ToSlash"] = reflect.ValueOf(filepath.ToSlash)
+	funcs["FromSlash"] = reflect.ValueOf(filepath.FromSlash)
+	funcs["SplitList"] = reflect.ValueOf(filepath.SplitList)
+	funcs["Split"] = reflect.ValueOf(filepath.Split)
+	funcs["Join"] = reflect.ValueOf(filepath.Join)
+	funcs["Ext"] = reflect.ValueOf(filepath.Ext)
+	funcs["EvalSymlinks"] = reflect.ValueOf(filepath.EvalSymlinks)
+	funcs["Abs"] = reflect.ValueOf(filepath.Abs)
+	funcs["Rel"] = reflect.ValueOf(filepath.Rel)
+	funcs["Walk"] = reflect.ValueOf(filepath.Walk)
+	funcs["Base"] = reflect.ValueOf(filepath.Base)
+	funcs["Dir"] = reflect.ValueOf(filepath.Dir)
+	funcs["VolumeName"] = reflect.ValueOf(filepath.VolumeName)
+	funcs["IsAbs"] = reflect.ValueOf(filepath.IsAbs)
+	funcs["HasPrefix"] = reflect.ValueOf(filepath.HasPrefix)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	vars["ErrBadPattern"] = reflect.ValueOf(&filepath.ErrBadPattern)
+	vars["SkipDir"] = reflect.ValueOf(&filepath.SkipDir)
+	pkgs["filepath"] = &interactive.Env {
+		Name: "filepath",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["Invalid"] = reflect.ValueOf(reflect.Invalid)
+	consts["Bool"] = reflect.ValueOf(reflect.Bool)
+	consts["Int"] = reflect.ValueOf(reflect.Int)
+	consts["Int8"] = reflect.ValueOf(reflect.Int8)
+	consts["Int16"] = reflect.ValueOf(reflect.Int16)
+	consts["Int32"] = reflect.ValueOf(reflect.Int32)
+	consts["Int64"] = reflect.ValueOf(reflect.Int64)
+	consts["Uint"] = reflect.ValueOf(reflect.Uint)
+	consts["Uint8"] = reflect.ValueOf(reflect.Uint8)
+	consts["Uint16"] = reflect.ValueOf(reflect.Uint16)
+	consts["Uint32"] = reflect.ValueOf(reflect.Uint32)
+	consts["Uint64"] = reflect.ValueOf(reflect.Uint64)
+	consts["Uintptr"] = reflect.ValueOf(reflect.Uintptr)
+	consts["Float32"] = reflect.ValueOf(reflect.Float32)
+	consts["Float64"] = reflect.ValueOf(reflect.Float64)
+	consts["Complex64"] = reflect.ValueOf(reflect.Complex64)
+	consts["Complex128"] = reflect.ValueOf(reflect.Complex128)
+	consts["Array"] = reflect.ValueOf(reflect.Array)
+	consts["Chan"] = reflect.ValueOf(reflect.Chan)
+	consts["Func"] = reflect.ValueOf(reflect.Func)
+	consts["Interface"] = reflect.ValueOf(reflect.Interface)
+	consts["Map"] = reflect.ValueOf(reflect.Map)
+	consts["Ptr"] = reflect.ValueOf(reflect.Ptr)
+	consts["Slice"] = reflect.ValueOf(reflect.Slice)
+	consts["String"] = reflect.ValueOf(reflect.String)
+	consts["Struct"] = reflect.ValueOf(reflect.Struct)
+	consts["UnsafePointer"] = reflect.ValueOf(reflect.UnsafePointer)
+	consts["RecvDir"] = reflect.ValueOf(reflect.RecvDir)
+	consts["SendDir"] = reflect.ValueOf(reflect.SendDir)
+	consts["BothDir"] = reflect.ValueOf(reflect.BothDir)
+	consts["SelectSend"] = reflect.ValueOf(reflect.SelectSend)
+	consts["SelectRecv"] = reflect.ValueOf(reflect.SelectRecv)
+	consts["SelectDefault"] = reflect.ValueOf(reflect.SelectDefault)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["DeepEqual"] = reflect.ValueOf(reflect.DeepEqual)
+	funcs["MakeFunc"] = reflect.ValueOf(reflect.MakeFunc)
+	funcs["TypeOf"] = reflect.ValueOf(reflect.TypeOf)
+	funcs["PtrTo"] = reflect.ValueOf(reflect.PtrTo)
+	funcs["ChanOf"] = reflect.ValueOf(reflect.ChanOf)
+	funcs["MapOf"] = reflect.ValueOf(reflect.MapOf)
+	funcs["SliceOf"] = reflect.ValueOf(reflect.SliceOf)
+	funcs["Append"] = reflect.ValueOf(reflect.Append)
+	funcs["AppendSlice"] = reflect.ValueOf(reflect.AppendSlice)
+	funcs["Copy"] = reflect.ValueOf(reflect.Copy)
+	funcs["Select"] = reflect.ValueOf(reflect.Select)
+	funcs["MakeSlice"] = reflect.ValueOf(reflect.MakeSlice)
+	funcs["MakeChan"] = reflect.ValueOf(reflect.MakeChan)
+	funcs["MakeMap"] = reflect.ValueOf(reflect.MakeMap)
+	funcs["Indirect"] = reflect.ValueOf(reflect.Indirect)
+	funcs["ValueOf"] = reflect.ValueOf(reflect.ValueOf)
+	funcs["Zero"] = reflect.ValueOf(reflect.Zero)
+	funcs["New"] = reflect.ValueOf(reflect.New)
+	funcs["NewAt"] = reflect.ValueOf(reflect.NewAt)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["reflect"] = &interactive.Env {
+		Name: "reflect",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["Compiler"] = reflect.ValueOf(runtime.Compiler)
+	consts["GOOS"] = reflect.ValueOf(runtime.GOOS)
+	consts["GOARCH"] = reflect.ValueOf(runtime.GOARCH)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["Breakpoint"] = reflect.ValueOf(runtime.Breakpoint)
+	funcs["LockOSThread"] = reflect.ValueOf(runtime.LockOSThread)
+	funcs["UnlockOSThread"] = reflect.ValueOf(runtime.UnlockOSThread)
+	funcs["GOMAXPROCS"] = reflect.ValueOf(runtime.GOMAXPROCS)
+	funcs["NumCPU"] = reflect.ValueOf(runtime.NumCPU)
+	funcs["NumCgoCall"] = reflect.ValueOf(runtime.NumCgoCall)
+	funcs["NumGoroutine"] = reflect.ValueOf(runtime.NumGoroutine)
+	funcs["MemProfile"] = reflect.ValueOf(runtime.MemProfile)
+	funcs["ThreadCreateProfile"] = reflect.ValueOf(runtime.ThreadCreateProfile)
+	funcs["GoroutineProfile"] = reflect.ValueOf(runtime.GoroutineProfile)
+	funcs["CPUProfile"] = reflect.ValueOf(runtime.CPUProfile)
+	funcs["SetCPUProfileRate"] = reflect.ValueOf(runtime.SetCPUProfileRate)
+	funcs["SetBlockProfileRate"] = reflect.ValueOf(runtime.SetBlockProfileRate)
+	funcs["BlockProfile"] = reflect.ValueOf(runtime.BlockProfile)
+	funcs["Stack"] = reflect.ValueOf(runtime.Stack)
+	funcs["Gosched"] = reflect.ValueOf(runtime.Gosched)
+	funcs["Goexit"] = reflect.ValueOf(runtime.Goexit)
+	funcs["Caller"] = reflect.ValueOf(runtime.Caller)
+	funcs["Callers"] = reflect.ValueOf(runtime.Callers)
+	funcs["FuncForPC"] = reflect.ValueOf(runtime.FuncForPC)
+	funcs["SetFinalizer"] = reflect.ValueOf(runtime.SetFinalizer)
+	funcs["GOROOT"] = reflect.ValueOf(runtime.GOROOT)
+	funcs["Version"] = reflect.ValueOf(runtime.Version)
+	funcs["ReadMemStats"] = reflect.ValueOf(runtime.ReadMemStats)
+	funcs["GC"] = reflect.ValueOf(runtime.GC)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	vars["MemProfileRate"] = reflect.ValueOf(&runtime.MemProfileRate)
+	pkgs["runtime"] = &interactive.Env {
+		Name: "runtime",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["NewProfile"] = reflect.ValueOf(pprof.NewProfile)
+	funcs["Lookup"] = reflect.ValueOf(pprof.Lookup)
+	funcs["Profiles"] = reflect.ValueOf(pprof.Profiles)
+	funcs["WriteHeapProfile"] = reflect.ValueOf(pprof.WriteHeapProfile)
+	funcs["StartCPUProfile"] = reflect.ValueOf(pprof.StartCPUProfile)
+	funcs["StopCPUProfile"] = reflect.ValueOf(pprof.StopCPUProfile)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["pprof"] = &interactive.Env {
+		Name: "pprof",
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -357,243 +1087,6 @@ func Extract_environment(pkgs pkgType) {
 		Pkgs:   pkgs,
 	}
 	consts = make(map[string] reflect.Value)
-	consts["MaxRune"] = reflect.ValueOf(unicode.MaxRune)
-	consts["ReplacementChar"] = reflect.ValueOf(unicode.ReplacementChar)
-	consts["MaxASCII"] = reflect.ValueOf(unicode.MaxASCII)
-	consts["MaxLatin1"] = reflect.ValueOf(unicode.MaxLatin1)
-	consts["UpperCase"] = reflect.ValueOf(unicode.UpperCase)
-	consts["LowerCase"] = reflect.ValueOf(unicode.LowerCase)
-	consts["TitleCase"] = reflect.ValueOf(unicode.TitleCase)
-	consts["MaxCase"] = reflect.ValueOf(unicode.MaxCase)
-	consts["UpperLower"] = reflect.ValueOf(unicode.UpperLower)
-	consts["Version"] = reflect.ValueOf(unicode.Version)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["IsDigit"] = reflect.ValueOf(unicode.IsDigit)
-	funcs["IsGraphic"] = reflect.ValueOf(unicode.IsGraphic)
-	funcs["IsPrint"] = reflect.ValueOf(unicode.IsPrint)
-	funcs["IsOneOf"] = reflect.ValueOf(unicode.IsOneOf)
-	funcs["In"] = reflect.ValueOf(unicode.In)
-	funcs["IsControl"] = reflect.ValueOf(unicode.IsControl)
-	funcs["IsLetter"] = reflect.ValueOf(unicode.IsLetter)
-	funcs["IsMark"] = reflect.ValueOf(unicode.IsMark)
-	funcs["IsNumber"] = reflect.ValueOf(unicode.IsNumber)
-	funcs["IsPunct"] = reflect.ValueOf(unicode.IsPunct)
-	funcs["IsSpace"] = reflect.ValueOf(unicode.IsSpace)
-	funcs["IsSymbol"] = reflect.ValueOf(unicode.IsSymbol)
-	funcs["Is"] = reflect.ValueOf(unicode.Is)
-	funcs["IsUpper"] = reflect.ValueOf(unicode.IsUpper)
-	funcs["IsLower"] = reflect.ValueOf(unicode.IsLower)
-	funcs["IsTitle"] = reflect.ValueOf(unicode.IsTitle)
-	funcs["To"] = reflect.ValueOf(unicode.To)
-	funcs["ToUpper"] = reflect.ValueOf(unicode.ToUpper)
-	funcs["ToLower"] = reflect.ValueOf(unicode.ToLower)
-	funcs["ToTitle"] = reflect.ValueOf(unicode.ToTitle)
-	funcs["SimpleFold"] = reflect.ValueOf(unicode.SimpleFold)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	vars["TurkishCase"] = reflect.ValueOf(&unicode.TurkishCase)
-	vars["AzeriCase"] = reflect.ValueOf(&unicode.AzeriCase)
-	vars["GraphicRanges"] = reflect.ValueOf(&unicode.GraphicRanges)
-	vars["PrintRanges"] = reflect.ValueOf(&unicode.PrintRanges)
-	vars["Categories"] = reflect.ValueOf(&unicode.Categories)
-	vars["Cc"] = reflect.ValueOf(&unicode.Cc)
-	vars["Cf"] = reflect.ValueOf(&unicode.Cf)
-	vars["Co"] = reflect.ValueOf(&unicode.Co)
-	vars["Cs"] = reflect.ValueOf(&unicode.Cs)
-	vars["Digit"] = reflect.ValueOf(&unicode.Digit)
-	vars["Nd"] = reflect.ValueOf(&unicode.Nd)
-	vars["Letter"] = reflect.ValueOf(&unicode.Letter)
-	vars["L"] = reflect.ValueOf(&unicode.L)
-	vars["Lm"] = reflect.ValueOf(&unicode.Lm)
-	vars["Lo"] = reflect.ValueOf(&unicode.Lo)
-	vars["Lower"] = reflect.ValueOf(&unicode.Lower)
-	vars["Ll"] = reflect.ValueOf(&unicode.Ll)
-	vars["Mark"] = reflect.ValueOf(&unicode.Mark)
-	vars["M"] = reflect.ValueOf(&unicode.M)
-	vars["Mc"] = reflect.ValueOf(&unicode.Mc)
-	vars["Me"] = reflect.ValueOf(&unicode.Me)
-	vars["Mn"] = reflect.ValueOf(&unicode.Mn)
-	vars["Nl"] = reflect.ValueOf(&unicode.Nl)
-	vars["No"] = reflect.ValueOf(&unicode.No)
-	vars["Number"] = reflect.ValueOf(&unicode.Number)
-	vars["N"] = reflect.ValueOf(&unicode.N)
-	vars["Other"] = reflect.ValueOf(&unicode.Other)
-	vars["C"] = reflect.ValueOf(&unicode.C)
-	vars["Pc"] = reflect.ValueOf(&unicode.Pc)
-	vars["Pd"] = reflect.ValueOf(&unicode.Pd)
-	vars["Pe"] = reflect.ValueOf(&unicode.Pe)
-	vars["Pf"] = reflect.ValueOf(&unicode.Pf)
-	vars["Pi"] = reflect.ValueOf(&unicode.Pi)
-	vars["Po"] = reflect.ValueOf(&unicode.Po)
-	vars["Ps"] = reflect.ValueOf(&unicode.Ps)
-	vars["Punct"] = reflect.ValueOf(&unicode.Punct)
-	vars["P"] = reflect.ValueOf(&unicode.P)
-	vars["Sc"] = reflect.ValueOf(&unicode.Sc)
-	vars["Sk"] = reflect.ValueOf(&unicode.Sk)
-	vars["Sm"] = reflect.ValueOf(&unicode.Sm)
-	vars["So"] = reflect.ValueOf(&unicode.So)
-	vars["Space"] = reflect.ValueOf(&unicode.Space)
-	vars["Z"] = reflect.ValueOf(&unicode.Z)
-	vars["Symbol"] = reflect.ValueOf(&unicode.Symbol)
-	vars["S"] = reflect.ValueOf(&unicode.S)
-	vars["Title"] = reflect.ValueOf(&unicode.Title)
-	vars["Lt"] = reflect.ValueOf(&unicode.Lt)
-	vars["Upper"] = reflect.ValueOf(&unicode.Upper)
-	vars["Lu"] = reflect.ValueOf(&unicode.Lu)
-	vars["Zl"] = reflect.ValueOf(&unicode.Zl)
-	vars["Zp"] = reflect.ValueOf(&unicode.Zp)
-	vars["Zs"] = reflect.ValueOf(&unicode.Zs)
-	vars["Scripts"] = reflect.ValueOf(&unicode.Scripts)
-	vars["Arabic"] = reflect.ValueOf(&unicode.Arabic)
-	vars["Armenian"] = reflect.ValueOf(&unicode.Armenian)
-	vars["Avestan"] = reflect.ValueOf(&unicode.Avestan)
-	vars["Balinese"] = reflect.ValueOf(&unicode.Balinese)
-	vars["Bamum"] = reflect.ValueOf(&unicode.Bamum)
-	vars["Batak"] = reflect.ValueOf(&unicode.Batak)
-	vars["Bengali"] = reflect.ValueOf(&unicode.Bengali)
-	vars["Bopomofo"] = reflect.ValueOf(&unicode.Bopomofo)
-	vars["Brahmi"] = reflect.ValueOf(&unicode.Brahmi)
-	vars["Braille"] = reflect.ValueOf(&unicode.Braille)
-	vars["Buginese"] = reflect.ValueOf(&unicode.Buginese)
-	vars["Buhid"] = reflect.ValueOf(&unicode.Buhid)
-	vars["Canadian_Aboriginal"] = reflect.ValueOf(&unicode.Canadian_Aboriginal)
-	vars["Carian"] = reflect.ValueOf(&unicode.Carian)
-	vars["Chakma"] = reflect.ValueOf(&unicode.Chakma)
-	vars["Cham"] = reflect.ValueOf(&unicode.Cham)
-	vars["Cherokee"] = reflect.ValueOf(&unicode.Cherokee)
-	vars["Common"] = reflect.ValueOf(&unicode.Common)
-	vars["Coptic"] = reflect.ValueOf(&unicode.Coptic)
-	vars["Cuneiform"] = reflect.ValueOf(&unicode.Cuneiform)
-	vars["Cypriot"] = reflect.ValueOf(&unicode.Cypriot)
-	vars["Cyrillic"] = reflect.ValueOf(&unicode.Cyrillic)
-	vars["Deseret"] = reflect.ValueOf(&unicode.Deseret)
-	vars["Devanagari"] = reflect.ValueOf(&unicode.Devanagari)
-	vars["Egyptian_Hieroglyphs"] = reflect.ValueOf(&unicode.Egyptian_Hieroglyphs)
-	vars["Ethiopic"] = reflect.ValueOf(&unicode.Ethiopic)
-	vars["Georgian"] = reflect.ValueOf(&unicode.Georgian)
-	vars["Glagolitic"] = reflect.ValueOf(&unicode.Glagolitic)
-	vars["Gothic"] = reflect.ValueOf(&unicode.Gothic)
-	vars["Greek"] = reflect.ValueOf(&unicode.Greek)
-	vars["Gujarati"] = reflect.ValueOf(&unicode.Gujarati)
-	vars["Gurmukhi"] = reflect.ValueOf(&unicode.Gurmukhi)
-	vars["Han"] = reflect.ValueOf(&unicode.Han)
-	vars["Hangul"] = reflect.ValueOf(&unicode.Hangul)
-	vars["Hanunoo"] = reflect.ValueOf(&unicode.Hanunoo)
-	vars["Hebrew"] = reflect.ValueOf(&unicode.Hebrew)
-	vars["Hiragana"] = reflect.ValueOf(&unicode.Hiragana)
-	vars["Imperial_Aramaic"] = reflect.ValueOf(&unicode.Imperial_Aramaic)
-	vars["Inherited"] = reflect.ValueOf(&unicode.Inherited)
-	vars["Inscriptional_Pahlavi"] = reflect.ValueOf(&unicode.Inscriptional_Pahlavi)
-	vars["Inscriptional_Parthian"] = reflect.ValueOf(&unicode.Inscriptional_Parthian)
-	vars["Javanese"] = reflect.ValueOf(&unicode.Javanese)
-	vars["Kaithi"] = reflect.ValueOf(&unicode.Kaithi)
-	vars["Kannada"] = reflect.ValueOf(&unicode.Kannada)
-	vars["Katakana"] = reflect.ValueOf(&unicode.Katakana)
-	vars["Kayah_Li"] = reflect.ValueOf(&unicode.Kayah_Li)
-	vars["Kharoshthi"] = reflect.ValueOf(&unicode.Kharoshthi)
-	vars["Khmer"] = reflect.ValueOf(&unicode.Khmer)
-	vars["Lao"] = reflect.ValueOf(&unicode.Lao)
-	vars["Latin"] = reflect.ValueOf(&unicode.Latin)
-	vars["Lepcha"] = reflect.ValueOf(&unicode.Lepcha)
-	vars["Limbu"] = reflect.ValueOf(&unicode.Limbu)
-	vars["Linear_B"] = reflect.ValueOf(&unicode.Linear_B)
-	vars["Lisu"] = reflect.ValueOf(&unicode.Lisu)
-	vars["Lycian"] = reflect.ValueOf(&unicode.Lycian)
-	vars["Lydian"] = reflect.ValueOf(&unicode.Lydian)
-	vars["Malayalam"] = reflect.ValueOf(&unicode.Malayalam)
-	vars["Mandaic"] = reflect.ValueOf(&unicode.Mandaic)
-	vars["Meetei_Mayek"] = reflect.ValueOf(&unicode.Meetei_Mayek)
-	vars["Meroitic_Cursive"] = reflect.ValueOf(&unicode.Meroitic_Cursive)
-	vars["Meroitic_Hieroglyphs"] = reflect.ValueOf(&unicode.Meroitic_Hieroglyphs)
-	vars["Miao"] = reflect.ValueOf(&unicode.Miao)
-	vars["Mongolian"] = reflect.ValueOf(&unicode.Mongolian)
-	vars["Myanmar"] = reflect.ValueOf(&unicode.Myanmar)
-	vars["New_Tai_Lue"] = reflect.ValueOf(&unicode.New_Tai_Lue)
-	vars["Nko"] = reflect.ValueOf(&unicode.Nko)
-	vars["Ogham"] = reflect.ValueOf(&unicode.Ogham)
-	vars["Ol_Chiki"] = reflect.ValueOf(&unicode.Ol_Chiki)
-	vars["Old_Italic"] = reflect.ValueOf(&unicode.Old_Italic)
-	vars["Old_Persian"] = reflect.ValueOf(&unicode.Old_Persian)
-	vars["Old_South_Arabian"] = reflect.ValueOf(&unicode.Old_South_Arabian)
-	vars["Old_Turkic"] = reflect.ValueOf(&unicode.Old_Turkic)
-	vars["Oriya"] = reflect.ValueOf(&unicode.Oriya)
-	vars["Osmanya"] = reflect.ValueOf(&unicode.Osmanya)
-	vars["Phags_Pa"] = reflect.ValueOf(&unicode.Phags_Pa)
-	vars["Phoenician"] = reflect.ValueOf(&unicode.Phoenician)
-	vars["Rejang"] = reflect.ValueOf(&unicode.Rejang)
-	vars["Runic"] = reflect.ValueOf(&unicode.Runic)
-	vars["Samaritan"] = reflect.ValueOf(&unicode.Samaritan)
-	vars["Saurashtra"] = reflect.ValueOf(&unicode.Saurashtra)
-	vars["Sharada"] = reflect.ValueOf(&unicode.Sharada)
-	vars["Shavian"] = reflect.ValueOf(&unicode.Shavian)
-	vars["Sinhala"] = reflect.ValueOf(&unicode.Sinhala)
-	vars["Sora_Sompeng"] = reflect.ValueOf(&unicode.Sora_Sompeng)
-	vars["Sundanese"] = reflect.ValueOf(&unicode.Sundanese)
-	vars["Syloti_Nagri"] = reflect.ValueOf(&unicode.Syloti_Nagri)
-	vars["Syriac"] = reflect.ValueOf(&unicode.Syriac)
-	vars["Tagalog"] = reflect.ValueOf(&unicode.Tagalog)
-	vars["Tagbanwa"] = reflect.ValueOf(&unicode.Tagbanwa)
-	vars["Tai_Le"] = reflect.ValueOf(&unicode.Tai_Le)
-	vars["Tai_Tham"] = reflect.ValueOf(&unicode.Tai_Tham)
-	vars["Tai_Viet"] = reflect.ValueOf(&unicode.Tai_Viet)
-	vars["Takri"] = reflect.ValueOf(&unicode.Takri)
-	vars["Tamil"] = reflect.ValueOf(&unicode.Tamil)
-	vars["Telugu"] = reflect.ValueOf(&unicode.Telugu)
-	vars["Thaana"] = reflect.ValueOf(&unicode.Thaana)
-	vars["Thai"] = reflect.ValueOf(&unicode.Thai)
-	vars["Tibetan"] = reflect.ValueOf(&unicode.Tibetan)
-	vars["Tifinagh"] = reflect.ValueOf(&unicode.Tifinagh)
-	vars["Ugaritic"] = reflect.ValueOf(&unicode.Ugaritic)
-	vars["Vai"] = reflect.ValueOf(&unicode.Vai)
-	vars["Yi"] = reflect.ValueOf(&unicode.Yi)
-	vars["Properties"] = reflect.ValueOf(&unicode.Properties)
-	vars["ASCII_Hex_Digit"] = reflect.ValueOf(&unicode.ASCII_Hex_Digit)
-	vars["Bidi_Control"] = reflect.ValueOf(&unicode.Bidi_Control)
-	vars["Dash"] = reflect.ValueOf(&unicode.Dash)
-	vars["Deprecated"] = reflect.ValueOf(&unicode.Deprecated)
-	vars["Diacritic"] = reflect.ValueOf(&unicode.Diacritic)
-	vars["Extender"] = reflect.ValueOf(&unicode.Extender)
-	vars["Hex_Digit"] = reflect.ValueOf(&unicode.Hex_Digit)
-	vars["Hyphen"] = reflect.ValueOf(&unicode.Hyphen)
-	vars["IDS_Binary_Operator"] = reflect.ValueOf(&unicode.IDS_Binary_Operator)
-	vars["IDS_Trinary_Operator"] = reflect.ValueOf(&unicode.IDS_Trinary_Operator)
-	vars["Ideographic"] = reflect.ValueOf(&unicode.Ideographic)
-	vars["Join_Control"] = reflect.ValueOf(&unicode.Join_Control)
-	vars["Logical_Order_Exception"] = reflect.ValueOf(&unicode.Logical_Order_Exception)
-	vars["Noncharacter_Code_Point"] = reflect.ValueOf(&unicode.Noncharacter_Code_Point)
-	vars["Other_Alphabetic"] = reflect.ValueOf(&unicode.Other_Alphabetic)
-	vars["Other_Default_Ignorable_Code_Point"] = reflect.ValueOf(&unicode.Other_Default_Ignorable_Code_Point)
-	vars["Other_Grapheme_Extend"] = reflect.ValueOf(&unicode.Other_Grapheme_Extend)
-	vars["Other_ID_Continue"] = reflect.ValueOf(&unicode.Other_ID_Continue)
-	vars["Other_ID_Start"] = reflect.ValueOf(&unicode.Other_ID_Start)
-	vars["Other_Lowercase"] = reflect.ValueOf(&unicode.Other_Lowercase)
-	vars["Other_Math"] = reflect.ValueOf(&unicode.Other_Math)
-	vars["Other_Uppercase"] = reflect.ValueOf(&unicode.Other_Uppercase)
-	vars["Pattern_Syntax"] = reflect.ValueOf(&unicode.Pattern_Syntax)
-	vars["Pattern_White_Space"] = reflect.ValueOf(&unicode.Pattern_White_Space)
-	vars["Quotation_Mark"] = reflect.ValueOf(&unicode.Quotation_Mark)
-	vars["Radical"] = reflect.ValueOf(&unicode.Radical)
-	vars["STerm"] = reflect.ValueOf(&unicode.STerm)
-	vars["Soft_Dotted"] = reflect.ValueOf(&unicode.Soft_Dotted)
-	vars["Terminal_Punctuation"] = reflect.ValueOf(&unicode.Terminal_Punctuation)
-	vars["Unified_Ideograph"] = reflect.ValueOf(&unicode.Unified_Ideograph)
-	vars["Variation_Selector"] = reflect.ValueOf(&unicode.Variation_Selector)
-	vars["White_Space"] = reflect.ValueOf(&unicode.White_Space)
-	vars["CaseRanges"] = reflect.ValueOf(&unicode.CaseRanges)
-	vars["FoldCategory"] = reflect.ValueOf(&unicode.FoldCategory)
-	vars["FoldScript"] = reflect.ValueOf(&unicode.FoldScript)
-	pkgs["unicode"] = &interactive.Env {
-		Name: "unicode",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
 
 	funcs = make(map[string] reflect.Value)
 	funcs["NewReader"] = reflect.ValueOf(strings.NewReader)
@@ -652,43 +1145,15 @@ func Extract_environment(pkgs pkgType) {
 		Pkgs:   pkgs,
 	}
 	consts = make(map[string] reflect.Value)
-	consts["Compiler"] = reflect.ValueOf(runtime.Compiler)
-	consts["GOOS"] = reflect.ValueOf(runtime.GOOS)
-	consts["GOARCH"] = reflect.ValueOf(runtime.GOARCH)
 
 	funcs = make(map[string] reflect.Value)
-	funcs["Breakpoint"] = reflect.ValueOf(runtime.Breakpoint)
-	funcs["LockOSThread"] = reflect.ValueOf(runtime.LockOSThread)
-	funcs["UnlockOSThread"] = reflect.ValueOf(runtime.UnlockOSThread)
-	funcs["GOMAXPROCS"] = reflect.ValueOf(runtime.GOMAXPROCS)
-	funcs["NumCPU"] = reflect.ValueOf(runtime.NumCPU)
-	funcs["NumCgoCall"] = reflect.ValueOf(runtime.NumCgoCall)
-	funcs["NumGoroutine"] = reflect.ValueOf(runtime.NumGoroutine)
-	funcs["MemProfile"] = reflect.ValueOf(runtime.MemProfile)
-	funcs["ThreadCreateProfile"] = reflect.ValueOf(runtime.ThreadCreateProfile)
-	funcs["GoroutineProfile"] = reflect.ValueOf(runtime.GoroutineProfile)
-	funcs["CPUProfile"] = reflect.ValueOf(runtime.CPUProfile)
-	funcs["SetCPUProfileRate"] = reflect.ValueOf(runtime.SetCPUProfileRate)
-	funcs["SetBlockProfileRate"] = reflect.ValueOf(runtime.SetBlockProfileRate)
-	funcs["BlockProfile"] = reflect.ValueOf(runtime.BlockProfile)
-	funcs["Stack"] = reflect.ValueOf(runtime.Stack)
-	funcs["Gosched"] = reflect.ValueOf(runtime.Gosched)
-	funcs["Goexit"] = reflect.ValueOf(runtime.Goexit)
-	funcs["Caller"] = reflect.ValueOf(runtime.Caller)
-	funcs["Callers"] = reflect.ValueOf(runtime.Callers)
-	funcs["FuncForPC"] = reflect.ValueOf(runtime.FuncForPC)
-	funcs["SetFinalizer"] = reflect.ValueOf(runtime.SetFinalizer)
-	funcs["GOROOT"] = reflect.ValueOf(runtime.GOROOT)
-	funcs["Version"] = reflect.ValueOf(runtime.Version)
-	funcs["ReadMemStats"] = reflect.ValueOf(runtime.ReadMemStats)
-	funcs["GC"] = reflect.ValueOf(runtime.GC)
+	funcs["NewCond"] = reflect.ValueOf(sync.NewCond)
 
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	vars["MemProfileRate"] = reflect.ValueOf(&runtime.MemProfileRate)
-	pkgs["runtime"] = &interactive.Env {
-		Name: "runtime",
+	pkgs["sync"] = &interactive.Env {
+		Name: "sync",
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -696,66 +1161,43 @@ func Extract_environment(pkgs pkgType) {
 		Pkgs:   pkgs,
 	}
 	consts = make(map[string] reflect.Value)
-	consts["Invalid"] = reflect.ValueOf(reflect.Invalid)
-	consts["Bool"] = reflect.ValueOf(reflect.Bool)
-	consts["Int"] = reflect.ValueOf(reflect.Int)
-	consts["Int8"] = reflect.ValueOf(reflect.Int8)
-	consts["Int16"] = reflect.ValueOf(reflect.Int16)
-	consts["Int32"] = reflect.ValueOf(reflect.Int32)
-	consts["Int64"] = reflect.ValueOf(reflect.Int64)
-	consts["Uint"] = reflect.ValueOf(reflect.Uint)
-	consts["Uint8"] = reflect.ValueOf(reflect.Uint8)
-	consts["Uint16"] = reflect.ValueOf(reflect.Uint16)
-	consts["Uint32"] = reflect.ValueOf(reflect.Uint32)
-	consts["Uint64"] = reflect.ValueOf(reflect.Uint64)
-	consts["Uintptr"] = reflect.ValueOf(reflect.Uintptr)
-	consts["Float32"] = reflect.ValueOf(reflect.Float32)
-	consts["Float64"] = reflect.ValueOf(reflect.Float64)
-	consts["Complex64"] = reflect.ValueOf(reflect.Complex64)
-	consts["Complex128"] = reflect.ValueOf(reflect.Complex128)
-	consts["Array"] = reflect.ValueOf(reflect.Array)
-	consts["Chan"] = reflect.ValueOf(reflect.Chan)
-	consts["Func"] = reflect.ValueOf(reflect.Func)
-	consts["Interface"] = reflect.ValueOf(reflect.Interface)
-	consts["Map"] = reflect.ValueOf(reflect.Map)
-	consts["Ptr"] = reflect.ValueOf(reflect.Ptr)
-	consts["Slice"] = reflect.ValueOf(reflect.Slice)
-	consts["String"] = reflect.ValueOf(reflect.String)
-	consts["Struct"] = reflect.ValueOf(reflect.Struct)
-	consts["UnsafePointer"] = reflect.ValueOf(reflect.UnsafePointer)
-	consts["RecvDir"] = reflect.ValueOf(reflect.RecvDir)
-	consts["SendDir"] = reflect.ValueOf(reflect.SendDir)
-	consts["BothDir"] = reflect.ValueOf(reflect.BothDir)
-	consts["SelectSend"] = reflect.ValueOf(reflect.SelectSend)
-	consts["SelectRecv"] = reflect.ValueOf(reflect.SelectRecv)
-	consts["SelectDefault"] = reflect.ValueOf(reflect.SelectDefault)
 
 	funcs = make(map[string] reflect.Value)
-	funcs["DeepEqual"] = reflect.ValueOf(reflect.DeepEqual)
-	funcs["MakeFunc"] = reflect.ValueOf(reflect.MakeFunc)
-	funcs["TypeOf"] = reflect.ValueOf(reflect.TypeOf)
-	funcs["PtrTo"] = reflect.ValueOf(reflect.PtrTo)
-	funcs["ChanOf"] = reflect.ValueOf(reflect.ChanOf)
-	funcs["MapOf"] = reflect.ValueOf(reflect.MapOf)
-	funcs["SliceOf"] = reflect.ValueOf(reflect.SliceOf)
-	funcs["Append"] = reflect.ValueOf(reflect.Append)
-	funcs["AppendSlice"] = reflect.ValueOf(reflect.AppendSlice)
-	funcs["Copy"] = reflect.ValueOf(reflect.Copy)
-	funcs["Select"] = reflect.ValueOf(reflect.Select)
-	funcs["MakeSlice"] = reflect.ValueOf(reflect.MakeSlice)
-	funcs["MakeChan"] = reflect.ValueOf(reflect.MakeChan)
-	funcs["MakeMap"] = reflect.ValueOf(reflect.MakeMap)
-	funcs["Indirect"] = reflect.ValueOf(reflect.Indirect)
-	funcs["ValueOf"] = reflect.ValueOf(reflect.ValueOf)
-	funcs["Zero"] = reflect.ValueOf(reflect.Zero)
-	funcs["New"] = reflect.ValueOf(reflect.New)
-	funcs["NewAt"] = reflect.ValueOf(reflect.NewAt)
+	funcs["SwapInt32"] = reflect.ValueOf(atomic.SwapInt32)
+	funcs["SwapInt64"] = reflect.ValueOf(atomic.SwapInt64)
+	funcs["SwapUint32"] = reflect.ValueOf(atomic.SwapUint32)
+	funcs["SwapUint64"] = reflect.ValueOf(atomic.SwapUint64)
+	funcs["SwapUintptr"] = reflect.ValueOf(atomic.SwapUintptr)
+	funcs["SwapPointer"] = reflect.ValueOf(atomic.SwapPointer)
+	funcs["CompareAndSwapInt32"] = reflect.ValueOf(atomic.CompareAndSwapInt32)
+	funcs["CompareAndSwapInt64"] = reflect.ValueOf(atomic.CompareAndSwapInt64)
+	funcs["CompareAndSwapUint32"] = reflect.ValueOf(atomic.CompareAndSwapUint32)
+	funcs["CompareAndSwapUint64"] = reflect.ValueOf(atomic.CompareAndSwapUint64)
+	funcs["CompareAndSwapUintptr"] = reflect.ValueOf(atomic.CompareAndSwapUintptr)
+	funcs["CompareAndSwapPointer"] = reflect.ValueOf(atomic.CompareAndSwapPointer)
+	funcs["AddInt32"] = reflect.ValueOf(atomic.AddInt32)
+	funcs["AddUint32"] = reflect.ValueOf(atomic.AddUint32)
+	funcs["AddInt64"] = reflect.ValueOf(atomic.AddInt64)
+	funcs["AddUint64"] = reflect.ValueOf(atomic.AddUint64)
+	funcs["AddUintptr"] = reflect.ValueOf(atomic.AddUintptr)
+	funcs["LoadInt32"] = reflect.ValueOf(atomic.LoadInt32)
+	funcs["LoadInt64"] = reflect.ValueOf(atomic.LoadInt64)
+	funcs["LoadUint32"] = reflect.ValueOf(atomic.LoadUint32)
+	funcs["LoadUint64"] = reflect.ValueOf(atomic.LoadUint64)
+	funcs["LoadUintptr"] = reflect.ValueOf(atomic.LoadUintptr)
+	funcs["LoadPointer"] = reflect.ValueOf(atomic.LoadPointer)
+	funcs["StoreInt32"] = reflect.ValueOf(atomic.StoreInt32)
+	funcs["StoreInt64"] = reflect.ValueOf(atomic.StoreInt64)
+	funcs["StoreUint32"] = reflect.ValueOf(atomic.StoreUint32)
+	funcs["StoreUint64"] = reflect.ValueOf(atomic.StoreUint64)
+	funcs["StoreUintptr"] = reflect.ValueOf(atomic.StoreUintptr)
+	funcs["StorePointer"] = reflect.ValueOf(atomic.StorePointer)
 
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["reflect"] = &interactive.Env {
-		Name: "reflect",
+	pkgs["atomic"] = &interactive.Env {
+		Name: "atomic",
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -908,6 +1350,7 @@ func Extract_environment(pkgs pkgType) {
 	consts["CLONE_DETACHED"] = reflect.ValueOf(syscall.CLONE_DETACHED)
 	consts["CLONE_FILES"] = reflect.ValueOf(syscall.CLONE_FILES)
 	consts["CLONE_FS"] = reflect.ValueOf(syscall.CLONE_FS)
+	consts["CLONE_IO"] = reflect.ValueOf(uint64(syscall.CLONE_IO))
 	consts["CLONE_NEWIPC"] = reflect.ValueOf(syscall.CLONE_NEWIPC)
 	consts["CLONE_NEWNET"] = reflect.ValueOf(syscall.CLONE_NEWNET)
 	consts["CLONE_NEWNS"] = reflect.ValueOf(syscall.CLONE_NEWNS)
@@ -1089,10 +1532,15 @@ func Extract_environment(pkgs pkgType) {
 	consts["IN_ATTRIB"] = reflect.ValueOf(syscall.IN_ATTRIB)
 	consts["IN_CLASSA_HOST"] = reflect.ValueOf(syscall.IN_CLASSA_HOST)
 	consts["IN_CLASSA_MAX"] = reflect.ValueOf(syscall.IN_CLASSA_MAX)
+	consts["IN_CLASSA_NET"] = reflect.ValueOf(uint64(syscall.IN_CLASSA_NET))
+	consts["IN_CLASSA_NSHIFT"] = reflect.ValueOf(syscall.IN_CLASSA_NSHIFT)
 	consts["IN_CLASSB_HOST"] = reflect.ValueOf(syscall.IN_CLASSB_HOST)
 	consts["IN_CLASSB_MAX"] = reflect.ValueOf(syscall.IN_CLASSB_MAX)
+	consts["IN_CLASSB_NET"] = reflect.ValueOf(uint64(syscall.IN_CLASSB_NET))
 	consts["IN_CLASSB_NSHIFT"] = reflect.ValueOf(syscall.IN_CLASSB_NSHIFT)
 	consts["IN_CLASSC_HOST"] = reflect.ValueOf(syscall.IN_CLASSC_HOST)
+	consts["IN_CLASSC_NET"] = reflect.ValueOf(uint64(syscall.IN_CLASSC_NET))
+	consts["IN_CLASSC_NSHIFT"] = reflect.ValueOf(syscall.IN_CLASSC_NSHIFT)
 	consts["IN_CLOEXEC"] = reflect.ValueOf(syscall.IN_CLOEXEC)
 	consts["IN_CLOSE"] = reflect.ValueOf(syscall.IN_CLOSE)
 	consts["IN_CLOSE_NOWRITE"] = reflect.ValueOf(syscall.IN_CLOSE_NOWRITE)
@@ -1112,6 +1560,7 @@ func Extract_environment(pkgs pkgType) {
 	consts["IN_MOVED_TO"] = reflect.ValueOf(syscall.IN_MOVED_TO)
 	consts["IN_MOVE_SELF"] = reflect.ValueOf(syscall.IN_MOVE_SELF)
 	consts["IN_NONBLOCK"] = reflect.ValueOf(syscall.IN_NONBLOCK)
+	consts["IN_ONESHOT"] = reflect.ValueOf(uint64(syscall.IN_ONESHOT))
 	consts["IN_ONLYDIR"] = reflect.ValueOf(syscall.IN_ONLYDIR)
 	consts["IN_OPEN"] = reflect.ValueOf(syscall.IN_OPEN)
 	consts["IN_Q_OVERFLOW"] = reflect.ValueOf(syscall.IN_Q_OVERFLOW)
@@ -1242,9 +1691,14 @@ func Extract_environment(pkgs pkgType) {
 	consts["IP_UNBLOCK_SOURCE"] = reflect.ValueOf(syscall.IP_UNBLOCK_SOURCE)
 	consts["IP_XFRM_POLICY"] = reflect.ValueOf(syscall.IP_XFRM_POLICY)
 	consts["LINUX_REBOOT_CMD_CAD_OFF"] = reflect.ValueOf(syscall.LINUX_REBOOT_CMD_CAD_OFF)
-		consts["LINUX_REBOOT_CMD_KEXEC"] = reflect.ValueOf(syscall.LINUX_REBOOT_CMD_KEXEC)
+	consts["LINUX_REBOOT_CMD_CAD_ON"] = reflect.ValueOf(uint64(syscall.LINUX_REBOOT_CMD_CAD_ON))
+	consts["LINUX_REBOOT_CMD_HALT"] = reflect.ValueOf(uint64(syscall.LINUX_REBOOT_CMD_HALT))
+	consts["LINUX_REBOOT_CMD_KEXEC"] = reflect.ValueOf(syscall.LINUX_REBOOT_CMD_KEXEC)
 	consts["LINUX_REBOOT_CMD_POWER_OFF"] = reflect.ValueOf(syscall.LINUX_REBOOT_CMD_POWER_OFF)
 	consts["LINUX_REBOOT_CMD_RESTART"] = reflect.ValueOf(syscall.LINUX_REBOOT_CMD_RESTART)
+	consts["LINUX_REBOOT_CMD_RESTART2"] = reflect.ValueOf(uint64(syscall.LINUX_REBOOT_CMD_RESTART2))
+	consts["LINUX_REBOOT_CMD_SW_SUSPEND"] = reflect.ValueOf(uint64(syscall.LINUX_REBOOT_CMD_SW_SUSPEND))
+	consts["LINUX_REBOOT_MAGIC1"] = reflect.ValueOf(uint64(syscall.LINUX_REBOOT_MAGIC1))
 	consts["LINUX_REBOOT_MAGIC2"] = reflect.ValueOf(syscall.LINUX_REBOOT_MAGIC2)
 	consts["LOCK_EX"] = reflect.ValueOf(syscall.LOCK_EX)
 	consts["LOCK_NB"] = reflect.ValueOf(syscall.LOCK_NB)
@@ -1312,6 +1766,9 @@ func Extract_environment(pkgs pkgType) {
 	consts["MS_INVALIDATE"] = reflect.ValueOf(syscall.MS_INVALIDATE)
 	consts["MS_I_VERSION"] = reflect.ValueOf(syscall.MS_I_VERSION)
 	consts["MS_KERNMOUNT"] = reflect.ValueOf(syscall.MS_KERNMOUNT)
+	consts["MS_MANDLOCK"] = reflect.ValueOf(syscall.MS_MANDLOCK)
+	consts["MS_MGC_MSK"] = reflect.ValueOf(uint64(syscall.MS_MGC_MSK))
+	consts["MS_MGC_VAL"] = reflect.ValueOf(uint64(syscall.MS_MGC_VAL))
 	consts["MS_MOVE"] = reflect.ValueOf(syscall.MS_MOVE)
 	consts["MS_NOATIME"] = reflect.ValueOf(syscall.MS_NOATIME)
 	consts["MS_NODEV"] = reflect.ValueOf(syscall.MS_NODEV)
@@ -1567,6 +2024,7 @@ func Extract_environment(pkgs pkgType) {
 	consts["RTCF_MASQ"] = reflect.ValueOf(syscall.RTCF_MASQ)
 	consts["RTCF_NAT"] = reflect.ValueOf(syscall.RTCF_NAT)
 	consts["RTCF_VALVE"] = reflect.ValueOf(syscall.RTCF_VALVE)
+	consts["RTF_ADDRCLASSMASK"] = reflect.ValueOf(uint64(syscall.RTF_ADDRCLASSMASK))
 	consts["RTF_ADDRCONF"] = reflect.ValueOf(syscall.RTF_ADDRCONF)
 	consts["RTF_ALLONLINK"] = reflect.ValueOf(syscall.RTF_ALLONLINK)
 	consts["RTF_BROADCAST"] = reflect.ValueOf(syscall.RTF_BROADCAST)
@@ -1579,6 +2037,7 @@ func Extract_environment(pkgs pkgType) {
 	consts["RTF_INTERFACE"] = reflect.ValueOf(syscall.RTF_INTERFACE)
 	consts["RTF_IRTT"] = reflect.ValueOf(syscall.RTF_IRTT)
 	consts["RTF_LINKRT"] = reflect.ValueOf(syscall.RTF_LINKRT)
+	consts["RTF_LOCAL"] = reflect.ValueOf(uint64(syscall.RTF_LOCAL))
 	consts["RTF_MODIFIED"] = reflect.ValueOf(syscall.RTF_MODIFIED)
 	consts["RTF_MSS"] = reflect.ValueOf(syscall.RTF_MSS)
 	consts["RTF_MTU"] = reflect.ValueOf(syscall.RTF_MTU)
@@ -1848,9 +2307,12 @@ func Extract_environment(pkgs pkgType) {
 	consts["TIOCCBRK"] = reflect.ValueOf(syscall.TIOCCBRK)
 	consts["TIOCCONS"] = reflect.ValueOf(syscall.TIOCCONS)
 	consts["TIOCEXCL"] = reflect.ValueOf(syscall.TIOCEXCL)
+	consts["TIOCGDEV"] = reflect.ValueOf(uint64(syscall.TIOCGDEV))
 	consts["TIOCGETD"] = reflect.ValueOf(syscall.TIOCGETD)
 	consts["TIOCGICOUNT"] = reflect.ValueOf(syscall.TIOCGICOUNT)
 	consts["TIOCGLCKTRMIOS"] = reflect.ValueOf(syscall.TIOCGLCKTRMIOS)
+	consts["TIOCGPGRP"] = reflect.ValueOf(syscall.TIOCGPGRP)
+	consts["TIOCGPTN"] = reflect.ValueOf(uint64(syscall.TIOCGPTN))
 	consts["TIOCGRS485"] = reflect.ValueOf(syscall.TIOCGRS485)
 	consts["TIOCGSERIAL"] = reflect.ValueOf(syscall.TIOCGSERIAL)
 	consts["TIOCGSID"] = reflect.ValueOf(syscall.TIOCGSID)
@@ -1908,6 +2370,10 @@ func Extract_environment(pkgs pkgType) {
 	consts["TIOCSWINSZ"] = reflect.ValueOf(syscall.TIOCSWINSZ)
 	consts["TUNATTACHFILTER"] = reflect.ValueOf(syscall.TUNATTACHFILTER)
 	consts["TUNDETACHFILTER"] = reflect.ValueOf(syscall.TUNDETACHFILTER)
+	consts["TUNGETFEATURES"] = reflect.ValueOf(uint64(syscall.TUNGETFEATURES))
+	consts["TUNGETIFF"] = reflect.ValueOf(uint64(syscall.TUNGETIFF))
+	consts["TUNGETSNDBUF"] = reflect.ValueOf(uint64(syscall.TUNGETSNDBUF))
+	consts["TUNGETVNETHDRSZ"] = reflect.ValueOf(uint64(syscall.TUNGETVNETHDRSZ))
 	consts["TUNSETDEBUG"] = reflect.ValueOf(syscall.TUNSETDEBUG)
 	consts["TUNSETGROUP"] = reflect.ValueOf(syscall.TUNSETGROUP)
 	consts["TUNSETIFF"] = reflect.ValueOf(syscall.TUNSETIFF)
@@ -1920,6 +2386,7 @@ func Extract_environment(pkgs pkgType) {
 	consts["TUNSETTXFILTER"] = reflect.ValueOf(syscall.TUNSETTXFILTER)
 	consts["TUNSETVNETHDRSZ"] = reflect.ValueOf(syscall.TUNSETVNETHDRSZ)
 	consts["WALL"] = reflect.ValueOf(syscall.WALL)
+	consts["WCLONE"] = reflect.ValueOf(uint64(syscall.WCLONE))
 	consts["WCONTINUED"] = reflect.ValueOf(syscall.WCONTINUED)
 	consts["WEXITED"] = reflect.ValueOf(syscall.WEXITED)
 	consts["WNOHANG"] = reflect.ValueOf(syscall.WNOHANG)
@@ -2493,6 +2960,7 @@ func Extract_environment(pkgs pkgType) {
 	consts["RT_TABLE_DEFAULT"] = reflect.ValueOf(syscall.RT_TABLE_DEFAULT)
 	consts["RT_TABLE_MAIN"] = reflect.ValueOf(syscall.RT_TABLE_MAIN)
 	consts["RT_TABLE_LOCAL"] = reflect.ValueOf(syscall.RT_TABLE_LOCAL)
+	consts["RT_TABLE_MAX"] = reflect.ValueOf(uint64(syscall.RT_TABLE_MAX))
 	consts["RTA_UNSPEC"] = reflect.ValueOf(syscall.RTA_UNSPEC)
 	consts["RTA_DST"] = reflect.ValueOf(syscall.RTA_DST)
 	consts["RTA_SRC"] = reflect.ValueOf(syscall.RTA_SRC)
@@ -2889,6 +3357,53 @@ func Extract_environment(pkgs pkgType) {
 		Pkgs:   pkgs,
 	}
 	consts = make(map[string] reflect.Value)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["AllocsPerRun"] = reflect.ValueOf(testing.AllocsPerRun)
+	funcs["RunBenchmarks"] = reflect.ValueOf(testing.RunBenchmarks)
+	funcs["Benchmark"] = reflect.ValueOf(testing.Benchmark)
+	funcs["RegisterCover"] = reflect.ValueOf(testing.RegisterCover)
+	funcs["RunExamples"] = reflect.ValueOf(testing.RunExamples)
+	funcs["Short"] = reflect.ValueOf(testing.Short)
+	funcs["Verbose"] = reflect.ValueOf(testing.Verbose)
+	funcs["Main"] = reflect.ValueOf(testing.Main)
+	funcs["RunTests"] = reflect.ValueOf(testing.RunTests)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["testing"] = &interactive.Env {
+		Name: "testing",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["FilterHTML"] = reflect.ValueOf(tabwriter.FilterHTML)
+	consts["StripEscape"] = reflect.ValueOf(tabwriter.StripEscape)
+	consts["AlignRight"] = reflect.ValueOf(tabwriter.AlignRight)
+	consts["DiscardEmptyColumns"] = reflect.ValueOf(tabwriter.DiscardEmptyColumns)
+	consts["TabIndent"] = reflect.ValueOf(tabwriter.TabIndent)
+	consts["Debug"] = reflect.ValueOf(tabwriter.Debug)
+	consts["Escape"] = reflect.ValueOf(tabwriter.Escape)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["NewWriter"] = reflect.ValueOf(tabwriter.NewWriter)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["tabwriter"] = &interactive.Env {
+		Name: "tabwriter",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
 	consts["ANSIC"] = reflect.ValueOf(time.ANSIC)
 	consts["UnixDate"] = reflect.ValueOf(time.UnixDate)
 	consts["RubyDate"] = reflect.ValueOf(time.RubyDate)
@@ -2961,99 +3476,236 @@ func Extract_environment(pkgs pkgType) {
 		Pkgs:   pkgs,
 	}
 	consts = make(map[string] reflect.Value)
-	consts["O_RDONLY"] = reflect.ValueOf(os.O_RDONLY)
-	consts["O_WRONLY"] = reflect.ValueOf(os.O_WRONLY)
-	consts["O_RDWR"] = reflect.ValueOf(os.O_RDWR)
-	consts["O_APPEND"] = reflect.ValueOf(os.O_APPEND)
-	consts["O_CREATE"] = reflect.ValueOf(os.O_CREATE)
-	consts["O_EXCL"] = reflect.ValueOf(os.O_EXCL)
-	consts["O_SYNC"] = reflect.ValueOf(os.O_SYNC)
-	consts["O_TRUNC"] = reflect.ValueOf(os.O_TRUNC)
-	consts["SEEK_SET"] = reflect.ValueOf(os.SEEK_SET)
-	consts["SEEK_CUR"] = reflect.ValueOf(os.SEEK_CUR)
-	consts["SEEK_END"] = reflect.ValueOf(os.SEEK_END)
-	consts["DevNull"] = reflect.ValueOf(os.DevNull)
-	consts["PathSeparator"] = reflect.ValueOf(os.PathSeparator)
-	consts["PathListSeparator"] = reflect.ValueOf(os.PathListSeparator)
-	consts["ModeDir"] = reflect.ValueOf(os.ModeDir)
-	consts["ModeAppend"] = reflect.ValueOf(os.ModeAppend)
-	consts["ModeExclusive"] = reflect.ValueOf(os.ModeExclusive)
-	consts["ModeTemporary"] = reflect.ValueOf(os.ModeTemporary)
-	consts["ModeSymlink"] = reflect.ValueOf(os.ModeSymlink)
-	consts["ModeDevice"] = reflect.ValueOf(os.ModeDevice)
-	consts["ModeNamedPipe"] = reflect.ValueOf(os.ModeNamedPipe)
-	consts["ModeSocket"] = reflect.ValueOf(os.ModeSocket)
-	consts["ModeSetuid"] = reflect.ValueOf(os.ModeSetuid)
-	consts["ModeSetgid"] = reflect.ValueOf(os.ModeSetgid)
-	consts["ModeCharDevice"] = reflect.ValueOf(os.ModeCharDevice)
-	consts["ModeSticky"] = reflect.ValueOf(os.ModeSticky)
-	consts["ModeType"] = reflect.ValueOf(os.ModeType)
-	consts["ModePerm"] = reflect.ValueOf(os.ModePerm)
+	consts["MaxRune"] = reflect.ValueOf(unicode.MaxRune)
+	consts["ReplacementChar"] = reflect.ValueOf(unicode.ReplacementChar)
+	consts["MaxASCII"] = reflect.ValueOf(unicode.MaxASCII)
+	consts["MaxLatin1"] = reflect.ValueOf(unicode.MaxLatin1)
+	consts["UpperCase"] = reflect.ValueOf(unicode.UpperCase)
+	consts["LowerCase"] = reflect.ValueOf(unicode.LowerCase)
+	consts["TitleCase"] = reflect.ValueOf(unicode.TitleCase)
+	consts["MaxCase"] = reflect.ValueOf(unicode.MaxCase)
+	consts["UpperLower"] = reflect.ValueOf(unicode.UpperLower)
+	consts["Version"] = reflect.ValueOf(unicode.Version)
 
 	funcs = make(map[string] reflect.Value)
-	funcs["FindProcess"] = reflect.ValueOf(os.FindProcess)
-	funcs["StartProcess"] = reflect.ValueOf(os.StartProcess)
-	funcs["Hostname"] = reflect.ValueOf(os.Hostname)
-	funcs["Expand"] = reflect.ValueOf(os.Expand)
-	funcs["ExpandEnv"] = reflect.ValueOf(os.ExpandEnv)
-	funcs["Getenv"] = reflect.ValueOf(os.Getenv)
-	funcs["Setenv"] = reflect.ValueOf(os.Setenv)
-	funcs["Clearenv"] = reflect.ValueOf(os.Clearenv)
-	funcs["Environ"] = reflect.ValueOf(os.Environ)
-	funcs["NewSyscallError"] = reflect.ValueOf(os.NewSyscallError)
-	funcs["IsExist"] = reflect.ValueOf(os.IsExist)
-	funcs["IsNotExist"] = reflect.ValueOf(os.IsNotExist)
-	funcs["IsPermission"] = reflect.ValueOf(os.IsPermission)
-	funcs["Getpid"] = reflect.ValueOf(os.Getpid)
-	funcs["Getppid"] = reflect.ValueOf(os.Getppid)
-	funcs["Mkdir"] = reflect.ValueOf(os.Mkdir)
-	funcs["Chdir"] = reflect.ValueOf(os.Chdir)
-	funcs["Open"] = reflect.ValueOf(os.Open)
-	funcs["Create"] = reflect.ValueOf(os.Create)
-	funcs["Link"] = reflect.ValueOf(os.Link)
-	funcs["Symlink"] = reflect.ValueOf(os.Symlink)
-	funcs["Readlink"] = reflect.ValueOf(os.Readlink)
-	funcs["Rename"] = reflect.ValueOf(os.Rename)
-	funcs["Chmod"] = reflect.ValueOf(os.Chmod)
-	funcs["Chown"] = reflect.ValueOf(os.Chown)
-	funcs["Lchown"] = reflect.ValueOf(os.Lchown)
-	funcs["Chtimes"] = reflect.ValueOf(os.Chtimes)
-	funcs["NewFile"] = reflect.ValueOf(os.NewFile)
-	funcs["OpenFile"] = reflect.ValueOf(os.OpenFile)
-	funcs["Stat"] = reflect.ValueOf(os.Stat)
-	funcs["Lstat"] = reflect.ValueOf(os.Lstat)
-	funcs["Truncate"] = reflect.ValueOf(os.Truncate)
-	funcs["Remove"] = reflect.ValueOf(os.Remove)
-	funcs["TempDir"] = reflect.ValueOf(os.TempDir)
-	funcs["Getwd"] = reflect.ValueOf(os.Getwd)
-	funcs["MkdirAll"] = reflect.ValueOf(os.MkdirAll)
-	funcs["RemoveAll"] = reflect.ValueOf(os.RemoveAll)
-	funcs["IsPathSeparator"] = reflect.ValueOf(os.IsPathSeparator)
-	funcs["Pipe"] = reflect.ValueOf(os.Pipe)
-	funcs["Getuid"] = reflect.ValueOf(os.Getuid)
-	funcs["Geteuid"] = reflect.ValueOf(os.Geteuid)
-	funcs["Getgid"] = reflect.ValueOf(os.Getgid)
-	funcs["Getegid"] = reflect.ValueOf(os.Getegid)
-	funcs["Getgroups"] = reflect.ValueOf(os.Getgroups)
-	funcs["Exit"] = reflect.ValueOf(os.Exit)
-	funcs["Getpagesize"] = reflect.ValueOf(os.Getpagesize)
-	funcs["SameFile"] = reflect.ValueOf(os.SameFile)
+	funcs["IsDigit"] = reflect.ValueOf(unicode.IsDigit)
+	funcs["IsGraphic"] = reflect.ValueOf(unicode.IsGraphic)
+	funcs["IsPrint"] = reflect.ValueOf(unicode.IsPrint)
+	funcs["IsOneOf"] = reflect.ValueOf(unicode.IsOneOf)
+	funcs["In"] = reflect.ValueOf(unicode.In)
+	funcs["IsControl"] = reflect.ValueOf(unicode.IsControl)
+	funcs["IsLetter"] = reflect.ValueOf(unicode.IsLetter)
+	funcs["IsMark"] = reflect.ValueOf(unicode.IsMark)
+	funcs["IsNumber"] = reflect.ValueOf(unicode.IsNumber)
+	funcs["IsPunct"] = reflect.ValueOf(unicode.IsPunct)
+	funcs["IsSpace"] = reflect.ValueOf(unicode.IsSpace)
+	funcs["IsSymbol"] = reflect.ValueOf(unicode.IsSymbol)
+	funcs["Is"] = reflect.ValueOf(unicode.Is)
+	funcs["IsUpper"] = reflect.ValueOf(unicode.IsUpper)
+	funcs["IsLower"] = reflect.ValueOf(unicode.IsLower)
+	funcs["IsTitle"] = reflect.ValueOf(unicode.IsTitle)
+	funcs["To"] = reflect.ValueOf(unicode.To)
+	funcs["ToUpper"] = reflect.ValueOf(unicode.ToUpper)
+	funcs["ToLower"] = reflect.ValueOf(unicode.ToLower)
+	funcs["ToTitle"] = reflect.ValueOf(unicode.ToTitle)
+	funcs["SimpleFold"] = reflect.ValueOf(unicode.SimpleFold)
 
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	vars["ErrInvalid"] = reflect.ValueOf(&os.ErrInvalid)
-	vars["ErrPermission"] = reflect.ValueOf(&os.ErrPermission)
-	vars["ErrExist"] = reflect.ValueOf(&os.ErrExist)
-	vars["ErrNotExist"] = reflect.ValueOf(&os.ErrNotExist)
-	vars["Interrupt"] = reflect.ValueOf(&os.Interrupt)
-	vars["Kill"] = reflect.ValueOf(&os.Kill)
-	vars["Stdin"] = reflect.ValueOf(&os.Stdin)
-	vars["Stdout"] = reflect.ValueOf(&os.Stdout)
-	vars["Stderr"] = reflect.ValueOf(&os.Stderr)
-	vars["Args"] = reflect.ValueOf(&os.Args)
-	pkgs["os"] = &interactive.Env {
-		Name: "os",
+	vars["TurkishCase"] = reflect.ValueOf(&unicode.TurkishCase)
+	vars["AzeriCase"] = reflect.ValueOf(&unicode.AzeriCase)
+	vars["GraphicRanges"] = reflect.ValueOf(&unicode.GraphicRanges)
+	vars["PrintRanges"] = reflect.ValueOf(&unicode.PrintRanges)
+	vars["Categories"] = reflect.ValueOf(&unicode.Categories)
+	vars["Cc"] = reflect.ValueOf(&unicode.Cc)
+	vars["Cf"] = reflect.ValueOf(&unicode.Cf)
+	vars["Co"] = reflect.ValueOf(&unicode.Co)
+	vars["Cs"] = reflect.ValueOf(&unicode.Cs)
+	vars["Digit"] = reflect.ValueOf(&unicode.Digit)
+	vars["Nd"] = reflect.ValueOf(&unicode.Nd)
+	vars["Letter"] = reflect.ValueOf(&unicode.Letter)
+	vars["L"] = reflect.ValueOf(&unicode.L)
+	vars["Lm"] = reflect.ValueOf(&unicode.Lm)
+	vars["Lo"] = reflect.ValueOf(&unicode.Lo)
+	vars["Lower"] = reflect.ValueOf(&unicode.Lower)
+	vars["Ll"] = reflect.ValueOf(&unicode.Ll)
+	vars["Mark"] = reflect.ValueOf(&unicode.Mark)
+	vars["M"] = reflect.ValueOf(&unicode.M)
+	vars["Mc"] = reflect.ValueOf(&unicode.Mc)
+	vars["Me"] = reflect.ValueOf(&unicode.Me)
+	vars["Mn"] = reflect.ValueOf(&unicode.Mn)
+	vars["Nl"] = reflect.ValueOf(&unicode.Nl)
+	vars["No"] = reflect.ValueOf(&unicode.No)
+	vars["Number"] = reflect.ValueOf(&unicode.Number)
+	vars["N"] = reflect.ValueOf(&unicode.N)
+	vars["Other"] = reflect.ValueOf(&unicode.Other)
+	vars["C"] = reflect.ValueOf(&unicode.C)
+	vars["Pc"] = reflect.ValueOf(&unicode.Pc)
+	vars["Pd"] = reflect.ValueOf(&unicode.Pd)
+	vars["Pe"] = reflect.ValueOf(&unicode.Pe)
+	vars["Pf"] = reflect.ValueOf(&unicode.Pf)
+	vars["Pi"] = reflect.ValueOf(&unicode.Pi)
+	vars["Po"] = reflect.ValueOf(&unicode.Po)
+	vars["Ps"] = reflect.ValueOf(&unicode.Ps)
+	vars["Punct"] = reflect.ValueOf(&unicode.Punct)
+	vars["P"] = reflect.ValueOf(&unicode.P)
+	vars["Sc"] = reflect.ValueOf(&unicode.Sc)
+	vars["Sk"] = reflect.ValueOf(&unicode.Sk)
+	vars["Sm"] = reflect.ValueOf(&unicode.Sm)
+	vars["So"] = reflect.ValueOf(&unicode.So)
+	vars["Space"] = reflect.ValueOf(&unicode.Space)
+	vars["Z"] = reflect.ValueOf(&unicode.Z)
+	vars["Symbol"] = reflect.ValueOf(&unicode.Symbol)
+	vars["S"] = reflect.ValueOf(&unicode.S)
+	vars["Title"] = reflect.ValueOf(&unicode.Title)
+	vars["Lt"] = reflect.ValueOf(&unicode.Lt)
+	vars["Upper"] = reflect.ValueOf(&unicode.Upper)
+	vars["Lu"] = reflect.ValueOf(&unicode.Lu)
+	vars["Zl"] = reflect.ValueOf(&unicode.Zl)
+	vars["Zp"] = reflect.ValueOf(&unicode.Zp)
+	vars["Zs"] = reflect.ValueOf(&unicode.Zs)
+	vars["Scripts"] = reflect.ValueOf(&unicode.Scripts)
+	vars["Arabic"] = reflect.ValueOf(&unicode.Arabic)
+	vars["Armenian"] = reflect.ValueOf(&unicode.Armenian)
+	vars["Avestan"] = reflect.ValueOf(&unicode.Avestan)
+	vars["Balinese"] = reflect.ValueOf(&unicode.Balinese)
+	vars["Bamum"] = reflect.ValueOf(&unicode.Bamum)
+	vars["Batak"] = reflect.ValueOf(&unicode.Batak)
+	vars["Bengali"] = reflect.ValueOf(&unicode.Bengali)
+	vars["Bopomofo"] = reflect.ValueOf(&unicode.Bopomofo)
+	vars["Brahmi"] = reflect.ValueOf(&unicode.Brahmi)
+	vars["Braille"] = reflect.ValueOf(&unicode.Braille)
+	vars["Buginese"] = reflect.ValueOf(&unicode.Buginese)
+	vars["Buhid"] = reflect.ValueOf(&unicode.Buhid)
+	vars["Canadian_Aboriginal"] = reflect.ValueOf(&unicode.Canadian_Aboriginal)
+	vars["Carian"] = reflect.ValueOf(&unicode.Carian)
+	vars["Chakma"] = reflect.ValueOf(&unicode.Chakma)
+	vars["Cham"] = reflect.ValueOf(&unicode.Cham)
+	vars["Cherokee"] = reflect.ValueOf(&unicode.Cherokee)
+	vars["Common"] = reflect.ValueOf(&unicode.Common)
+	vars["Coptic"] = reflect.ValueOf(&unicode.Coptic)
+	vars["Cuneiform"] = reflect.ValueOf(&unicode.Cuneiform)
+	vars["Cypriot"] = reflect.ValueOf(&unicode.Cypriot)
+	vars["Cyrillic"] = reflect.ValueOf(&unicode.Cyrillic)
+	vars["Deseret"] = reflect.ValueOf(&unicode.Deseret)
+	vars["Devanagari"] = reflect.ValueOf(&unicode.Devanagari)
+	vars["Egyptian_Hieroglyphs"] = reflect.ValueOf(&unicode.Egyptian_Hieroglyphs)
+	vars["Ethiopic"] = reflect.ValueOf(&unicode.Ethiopic)
+	vars["Georgian"] = reflect.ValueOf(&unicode.Georgian)
+	vars["Glagolitic"] = reflect.ValueOf(&unicode.Glagolitic)
+	vars["Gothic"] = reflect.ValueOf(&unicode.Gothic)
+	vars["Greek"] = reflect.ValueOf(&unicode.Greek)
+	vars["Gujarati"] = reflect.ValueOf(&unicode.Gujarati)
+	vars["Gurmukhi"] = reflect.ValueOf(&unicode.Gurmukhi)
+	vars["Han"] = reflect.ValueOf(&unicode.Han)
+	vars["Hangul"] = reflect.ValueOf(&unicode.Hangul)
+	vars["Hanunoo"] = reflect.ValueOf(&unicode.Hanunoo)
+	vars["Hebrew"] = reflect.ValueOf(&unicode.Hebrew)
+	vars["Hiragana"] = reflect.ValueOf(&unicode.Hiragana)
+	vars["Imperial_Aramaic"] = reflect.ValueOf(&unicode.Imperial_Aramaic)
+	vars["Inherited"] = reflect.ValueOf(&unicode.Inherited)
+	vars["Inscriptional_Pahlavi"] = reflect.ValueOf(&unicode.Inscriptional_Pahlavi)
+	vars["Inscriptional_Parthian"] = reflect.ValueOf(&unicode.Inscriptional_Parthian)
+	vars["Javanese"] = reflect.ValueOf(&unicode.Javanese)
+	vars["Kaithi"] = reflect.ValueOf(&unicode.Kaithi)
+	vars["Kannada"] = reflect.ValueOf(&unicode.Kannada)
+	vars["Katakana"] = reflect.ValueOf(&unicode.Katakana)
+	vars["Kayah_Li"] = reflect.ValueOf(&unicode.Kayah_Li)
+	vars["Kharoshthi"] = reflect.ValueOf(&unicode.Kharoshthi)
+	vars["Khmer"] = reflect.ValueOf(&unicode.Khmer)
+	vars["Lao"] = reflect.ValueOf(&unicode.Lao)
+	vars["Latin"] = reflect.ValueOf(&unicode.Latin)
+	vars["Lepcha"] = reflect.ValueOf(&unicode.Lepcha)
+	vars["Limbu"] = reflect.ValueOf(&unicode.Limbu)
+	vars["Linear_B"] = reflect.ValueOf(&unicode.Linear_B)
+	vars["Lisu"] = reflect.ValueOf(&unicode.Lisu)
+	vars["Lycian"] = reflect.ValueOf(&unicode.Lycian)
+	vars["Lydian"] = reflect.ValueOf(&unicode.Lydian)
+	vars["Malayalam"] = reflect.ValueOf(&unicode.Malayalam)
+	vars["Mandaic"] = reflect.ValueOf(&unicode.Mandaic)
+	vars["Meetei_Mayek"] = reflect.ValueOf(&unicode.Meetei_Mayek)
+	vars["Meroitic_Cursive"] = reflect.ValueOf(&unicode.Meroitic_Cursive)
+	vars["Meroitic_Hieroglyphs"] = reflect.ValueOf(&unicode.Meroitic_Hieroglyphs)
+	vars["Miao"] = reflect.ValueOf(&unicode.Miao)
+	vars["Mongolian"] = reflect.ValueOf(&unicode.Mongolian)
+	vars["Myanmar"] = reflect.ValueOf(&unicode.Myanmar)
+	vars["New_Tai_Lue"] = reflect.ValueOf(&unicode.New_Tai_Lue)
+	vars["Nko"] = reflect.ValueOf(&unicode.Nko)
+	vars["Ogham"] = reflect.ValueOf(&unicode.Ogham)
+	vars["Ol_Chiki"] = reflect.ValueOf(&unicode.Ol_Chiki)
+	vars["Old_Italic"] = reflect.ValueOf(&unicode.Old_Italic)
+	vars["Old_Persian"] = reflect.ValueOf(&unicode.Old_Persian)
+	vars["Old_South_Arabian"] = reflect.ValueOf(&unicode.Old_South_Arabian)
+	vars["Old_Turkic"] = reflect.ValueOf(&unicode.Old_Turkic)
+	vars["Oriya"] = reflect.ValueOf(&unicode.Oriya)
+	vars["Osmanya"] = reflect.ValueOf(&unicode.Osmanya)
+	vars["Phags_Pa"] = reflect.ValueOf(&unicode.Phags_Pa)
+	vars["Phoenician"] = reflect.ValueOf(&unicode.Phoenician)
+	vars["Rejang"] = reflect.ValueOf(&unicode.Rejang)
+	vars["Runic"] = reflect.ValueOf(&unicode.Runic)
+	vars["Samaritan"] = reflect.ValueOf(&unicode.Samaritan)
+	vars["Saurashtra"] = reflect.ValueOf(&unicode.Saurashtra)
+	vars["Sharada"] = reflect.ValueOf(&unicode.Sharada)
+	vars["Shavian"] = reflect.ValueOf(&unicode.Shavian)
+	vars["Sinhala"] = reflect.ValueOf(&unicode.Sinhala)
+	vars["Sora_Sompeng"] = reflect.ValueOf(&unicode.Sora_Sompeng)
+	vars["Sundanese"] = reflect.ValueOf(&unicode.Sundanese)
+	vars["Syloti_Nagri"] = reflect.ValueOf(&unicode.Syloti_Nagri)
+	vars["Syriac"] = reflect.ValueOf(&unicode.Syriac)
+	vars["Tagalog"] = reflect.ValueOf(&unicode.Tagalog)
+	vars["Tagbanwa"] = reflect.ValueOf(&unicode.Tagbanwa)
+	vars["Tai_Le"] = reflect.ValueOf(&unicode.Tai_Le)
+	vars["Tai_Tham"] = reflect.ValueOf(&unicode.Tai_Tham)
+	vars["Tai_Viet"] = reflect.ValueOf(&unicode.Tai_Viet)
+	vars["Takri"] = reflect.ValueOf(&unicode.Takri)
+	vars["Tamil"] = reflect.ValueOf(&unicode.Tamil)
+	vars["Telugu"] = reflect.ValueOf(&unicode.Telugu)
+	vars["Thaana"] = reflect.ValueOf(&unicode.Thaana)
+	vars["Thai"] = reflect.ValueOf(&unicode.Thai)
+	vars["Tibetan"] = reflect.ValueOf(&unicode.Tibetan)
+	vars["Tifinagh"] = reflect.ValueOf(&unicode.Tifinagh)
+	vars["Ugaritic"] = reflect.ValueOf(&unicode.Ugaritic)
+	vars["Vai"] = reflect.ValueOf(&unicode.Vai)
+	vars["Yi"] = reflect.ValueOf(&unicode.Yi)
+	vars["Properties"] = reflect.ValueOf(&unicode.Properties)
+	vars["ASCII_Hex_Digit"] = reflect.ValueOf(&unicode.ASCII_Hex_Digit)
+	vars["Bidi_Control"] = reflect.ValueOf(&unicode.Bidi_Control)
+	vars["Dash"] = reflect.ValueOf(&unicode.Dash)
+	vars["Deprecated"] = reflect.ValueOf(&unicode.Deprecated)
+	vars["Diacritic"] = reflect.ValueOf(&unicode.Diacritic)
+	vars["Extender"] = reflect.ValueOf(&unicode.Extender)
+	vars["Hex_Digit"] = reflect.ValueOf(&unicode.Hex_Digit)
+	vars["Hyphen"] = reflect.ValueOf(&unicode.Hyphen)
+	vars["IDS_Binary_Operator"] = reflect.ValueOf(&unicode.IDS_Binary_Operator)
+	vars["IDS_Trinary_Operator"] = reflect.ValueOf(&unicode.IDS_Trinary_Operator)
+	vars["Ideographic"] = reflect.ValueOf(&unicode.Ideographic)
+	vars["Join_Control"] = reflect.ValueOf(&unicode.Join_Control)
+	vars["Logical_Order_Exception"] = reflect.ValueOf(&unicode.Logical_Order_Exception)
+	vars["Noncharacter_Code_Point"] = reflect.ValueOf(&unicode.Noncharacter_Code_Point)
+	vars["Other_Alphabetic"] = reflect.ValueOf(&unicode.Other_Alphabetic)
+	vars["Other_Default_Ignorable_Code_Point"] = reflect.ValueOf(&unicode.Other_Default_Ignorable_Code_Point)
+	vars["Other_Grapheme_Extend"] = reflect.ValueOf(&unicode.Other_Grapheme_Extend)
+	vars["Other_ID_Continue"] = reflect.ValueOf(&unicode.Other_ID_Continue)
+	vars["Other_ID_Start"] = reflect.ValueOf(&unicode.Other_ID_Start)
+	vars["Other_Lowercase"] = reflect.ValueOf(&unicode.Other_Lowercase)
+	vars["Other_Math"] = reflect.ValueOf(&unicode.Other_Math)
+	vars["Other_Uppercase"] = reflect.ValueOf(&unicode.Other_Uppercase)
+	vars["Pattern_Syntax"] = reflect.ValueOf(&unicode.Pattern_Syntax)
+	vars["Pattern_White_Space"] = reflect.ValueOf(&unicode.Pattern_White_Space)
+	vars["Quotation_Mark"] = reflect.ValueOf(&unicode.Quotation_Mark)
+	vars["Radical"] = reflect.ValueOf(&unicode.Radical)
+	vars["STerm"] = reflect.ValueOf(&unicode.STerm)
+	vars["Soft_Dotted"] = reflect.ValueOf(&unicode.Soft_Dotted)
+	vars["Terminal_Punctuation"] = reflect.ValueOf(&unicode.Terminal_Punctuation)
+	vars["Unified_Ideograph"] = reflect.ValueOf(&unicode.Unified_Ideograph)
+	vars["Variation_Selector"] = reflect.ValueOf(&unicode.Variation_Selector)
+	vars["White_Space"] = reflect.ValueOf(&unicode.White_Space)
+	vars["CaseRanges"] = reflect.ValueOf(&unicode.CaseRanges)
+	vars["FoldCategory"] = reflect.ValueOf(&unicode.FoldCategory)
+	vars["FoldScript"] = reflect.ValueOf(&unicode.FoldScript)
+	pkgs["unicode"] = &interactive.Env {
+		Name: "unicode",
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -3061,653 +3713,32 @@ func Extract_environment(pkgs pkgType) {
 		Pkgs:   pkgs,
 	}
 	consts = make(map[string] reflect.Value)
+	consts["RuneError"] = reflect.ValueOf(utf8.RuneError)
+	consts["RuneSelf"] = reflect.ValueOf(utf8.RuneSelf)
+	consts["MaxRune"] = reflect.ValueOf(utf8.MaxRune)
+	consts["UTFMax"] = reflect.ValueOf(utf8.UTFMax)
 
 	funcs = make(map[string] reflect.Value)
-	funcs["Fprintf"] = reflect.ValueOf(fmt.Fprintf)
-	funcs["Printf"] = reflect.ValueOf(fmt.Printf)
-	funcs["Sprintf"] = reflect.ValueOf(fmt.Sprintf)
-	funcs["Errorf"] = reflect.ValueOf(fmt.Errorf)
-	funcs["Fprint"] = reflect.ValueOf(fmt.Fprint)
-	funcs["Print"] = reflect.ValueOf(fmt.Print)
-	funcs["Sprint"] = reflect.ValueOf(fmt.Sprint)
-	funcs["Fprintln"] = reflect.ValueOf(fmt.Fprintln)
-	funcs["Println"] = reflect.ValueOf(fmt.Println)
-	funcs["Sprintln"] = reflect.ValueOf(fmt.Sprintln)
-	funcs["Scan"] = reflect.ValueOf(fmt.Scan)
-	funcs["Scanln"] = reflect.ValueOf(fmt.Scanln)
-	funcs["Scanf"] = reflect.ValueOf(fmt.Scanf)
-	funcs["Sscan"] = reflect.ValueOf(fmt.Sscan)
-	funcs["Sscanln"] = reflect.ValueOf(fmt.Sscanln)
-	funcs["Sscanf"] = reflect.ValueOf(fmt.Sscanf)
-	funcs["Fscan"] = reflect.ValueOf(fmt.Fscan)
-	funcs["Fscanln"] = reflect.ValueOf(fmt.Fscanln)
-	funcs["Fscanf"] = reflect.ValueOf(fmt.Fscanf)
+	funcs["FullRune"] = reflect.ValueOf(utf8.FullRune)
+	funcs["FullRuneInString"] = reflect.ValueOf(utf8.FullRuneInString)
+	funcs["DecodeRune"] = reflect.ValueOf(utf8.DecodeRune)
+	funcs["DecodeRuneInString"] = reflect.ValueOf(utf8.DecodeRuneInString)
+	funcs["DecodeLastRune"] = reflect.ValueOf(utf8.DecodeLastRune)
+	funcs["DecodeLastRuneInString"] = reflect.ValueOf(utf8.DecodeLastRuneInString)
+	funcs["RuneLen"] = reflect.ValueOf(utf8.RuneLen)
+	funcs["EncodeRune"] = reflect.ValueOf(utf8.EncodeRune)
+	funcs["RuneCount"] = reflect.ValueOf(utf8.RuneCount)
+	funcs["RuneCountInString"] = reflect.ValueOf(utf8.RuneCountInString)
+	funcs["RuneStart"] = reflect.ValueOf(utf8.RuneStart)
+	funcs["Valid"] = reflect.ValueOf(utf8.Valid)
+	funcs["ValidString"] = reflect.ValueOf(utf8.ValidString)
+	funcs["ValidRune"] = reflect.ValueOf(utf8.ValidRune)
 
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["fmt"] = &interactive.Env {
-		Name: "fmt",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["NoPos"] = reflect.ValueOf(token.NoPos)
-	consts["ILLEGAL"] = reflect.ValueOf(token.ILLEGAL)
-	consts["EOF"] = reflect.ValueOf(token.EOF)
-	consts["COMMENT"] = reflect.ValueOf(token.COMMENT)
-	consts["IDENT"] = reflect.ValueOf(token.IDENT)
-	consts["INT"] = reflect.ValueOf(token.INT)
-	consts["FLOAT"] = reflect.ValueOf(token.FLOAT)
-	consts["IMAG"] = reflect.ValueOf(token.IMAG)
-	consts["CHAR"] = reflect.ValueOf(token.CHAR)
-	consts["STRING"] = reflect.ValueOf(token.STRING)
-	consts["ADD"] = reflect.ValueOf(token.ADD)
-	consts["SUB"] = reflect.ValueOf(token.SUB)
-	consts["MUL"] = reflect.ValueOf(token.MUL)
-	consts["QUO"] = reflect.ValueOf(token.QUO)
-	consts["REM"] = reflect.ValueOf(token.REM)
-	consts["AND"] = reflect.ValueOf(token.AND)
-	consts["OR"] = reflect.ValueOf(token.OR)
-	consts["XOR"] = reflect.ValueOf(token.XOR)
-	consts["SHL"] = reflect.ValueOf(token.SHL)
-	consts["SHR"] = reflect.ValueOf(token.SHR)
-	consts["AND_NOT"] = reflect.ValueOf(token.AND_NOT)
-	consts["ADD_ASSIGN"] = reflect.ValueOf(token.ADD_ASSIGN)
-	consts["SUB_ASSIGN"] = reflect.ValueOf(token.SUB_ASSIGN)
-	consts["MUL_ASSIGN"] = reflect.ValueOf(token.MUL_ASSIGN)
-	consts["QUO_ASSIGN"] = reflect.ValueOf(token.QUO_ASSIGN)
-	consts["REM_ASSIGN"] = reflect.ValueOf(token.REM_ASSIGN)
-	consts["AND_ASSIGN"] = reflect.ValueOf(token.AND_ASSIGN)
-	consts["OR_ASSIGN"] = reflect.ValueOf(token.OR_ASSIGN)
-	consts["XOR_ASSIGN"] = reflect.ValueOf(token.XOR_ASSIGN)
-	consts["SHL_ASSIGN"] = reflect.ValueOf(token.SHL_ASSIGN)
-	consts["SHR_ASSIGN"] = reflect.ValueOf(token.SHR_ASSIGN)
-	consts["AND_NOT_ASSIGN"] = reflect.ValueOf(token.AND_NOT_ASSIGN)
-	consts["LAND"] = reflect.ValueOf(token.LAND)
-	consts["LOR"] = reflect.ValueOf(token.LOR)
-	consts["ARROW"] = reflect.ValueOf(token.ARROW)
-	consts["INC"] = reflect.ValueOf(token.INC)
-	consts["DEC"] = reflect.ValueOf(token.DEC)
-	consts["EQL"] = reflect.ValueOf(token.EQL)
-	consts["LSS"] = reflect.ValueOf(token.LSS)
-	consts["GTR"] = reflect.ValueOf(token.GTR)
-	consts["ASSIGN"] = reflect.ValueOf(token.ASSIGN)
-	consts["NOT"] = reflect.ValueOf(token.NOT)
-	consts["NEQ"] = reflect.ValueOf(token.NEQ)
-	consts["LEQ"] = reflect.ValueOf(token.LEQ)
-	consts["GEQ"] = reflect.ValueOf(token.GEQ)
-	consts["DEFINE"] = reflect.ValueOf(token.DEFINE)
-	consts["ELLIPSIS"] = reflect.ValueOf(token.ELLIPSIS)
-	consts["LPAREN"] = reflect.ValueOf(token.LPAREN)
-	consts["LBRACK"] = reflect.ValueOf(token.LBRACK)
-	consts["LBRACE"] = reflect.ValueOf(token.LBRACE)
-	consts["COMMA"] = reflect.ValueOf(token.COMMA)
-	consts["PERIOD"] = reflect.ValueOf(token.PERIOD)
-	consts["RPAREN"] = reflect.ValueOf(token.RPAREN)
-	consts["RBRACK"] = reflect.ValueOf(token.RBRACK)
-	consts["RBRACE"] = reflect.ValueOf(token.RBRACE)
-	consts["SEMICOLON"] = reflect.ValueOf(token.SEMICOLON)
-	consts["COLON"] = reflect.ValueOf(token.COLON)
-	consts["BREAK"] = reflect.ValueOf(token.BREAK)
-	consts["CASE"] = reflect.ValueOf(token.CASE)
-	consts["CHAN"] = reflect.ValueOf(token.CHAN)
-	consts["CONST"] = reflect.ValueOf(token.CONST)
-	consts["CONTINUE"] = reflect.ValueOf(token.CONTINUE)
-	consts["DEFAULT"] = reflect.ValueOf(token.DEFAULT)
-	consts["DEFER"] = reflect.ValueOf(token.DEFER)
-	consts["ELSE"] = reflect.ValueOf(token.ELSE)
-	consts["FALLTHROUGH"] = reflect.ValueOf(token.FALLTHROUGH)
-	consts["FOR"] = reflect.ValueOf(token.FOR)
-	consts["FUNC"] = reflect.ValueOf(token.FUNC)
-	consts["GO"] = reflect.ValueOf(token.GO)
-	consts["GOTO"] = reflect.ValueOf(token.GOTO)
-	consts["IF"] = reflect.ValueOf(token.IF)
-	consts["IMPORT"] = reflect.ValueOf(token.IMPORT)
-	consts["INTERFACE"] = reflect.ValueOf(token.INTERFACE)
-	consts["MAP"] = reflect.ValueOf(token.MAP)
-	consts["PACKAGE"] = reflect.ValueOf(token.PACKAGE)
-	consts["RANGE"] = reflect.ValueOf(token.RANGE)
-	consts["RETURN"] = reflect.ValueOf(token.RETURN)
-	consts["SELECT"] = reflect.ValueOf(token.SELECT)
-	consts["STRUCT"] = reflect.ValueOf(token.STRUCT)
-	consts["SWITCH"] = reflect.ValueOf(token.SWITCH)
-	consts["TYPE"] = reflect.ValueOf(token.TYPE)
-	consts["VAR"] = reflect.ValueOf(token.VAR)
-	consts["LowestPrec"] = reflect.ValueOf(token.LowestPrec)
-	consts["UnaryPrec"] = reflect.ValueOf(token.UnaryPrec)
-	consts["HighestPrec"] = reflect.ValueOf(token.HighestPrec)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["NewFileSet"] = reflect.ValueOf(token.NewFileSet)
-	funcs["Lookup"] = reflect.ValueOf(token.Lookup)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	pkgs["token"] = &interactive.Env {
-		Name: "token",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["MinRead"] = reflect.ValueOf(bytes.MinRead)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["NewBuffer"] = reflect.ValueOf(bytes.NewBuffer)
-	funcs["NewBufferString"] = reflect.ValueOf(bytes.NewBufferString)
-	funcs["Count"] = reflect.ValueOf(bytes.Count)
-	funcs["Contains"] = reflect.ValueOf(bytes.Contains)
-	funcs["Index"] = reflect.ValueOf(bytes.Index)
-	funcs["LastIndex"] = reflect.ValueOf(bytes.LastIndex)
-	funcs["IndexRune"] = reflect.ValueOf(bytes.IndexRune)
-	funcs["IndexAny"] = reflect.ValueOf(bytes.IndexAny)
-	funcs["LastIndexAny"] = reflect.ValueOf(bytes.LastIndexAny)
-	funcs["SplitN"] = reflect.ValueOf(bytes.SplitN)
-	funcs["SplitAfterN"] = reflect.ValueOf(bytes.SplitAfterN)
-	funcs["Split"] = reflect.ValueOf(bytes.Split)
-	funcs["SplitAfter"] = reflect.ValueOf(bytes.SplitAfter)
-	funcs["Fields"] = reflect.ValueOf(bytes.Fields)
-	funcs["FieldsFunc"] = reflect.ValueOf(bytes.FieldsFunc)
-	funcs["Join"] = reflect.ValueOf(bytes.Join)
-	funcs["HasPrefix"] = reflect.ValueOf(bytes.HasPrefix)
-	funcs["HasSuffix"] = reflect.ValueOf(bytes.HasSuffix)
-	funcs["Map"] = reflect.ValueOf(bytes.Map)
-	funcs["Repeat"] = reflect.ValueOf(bytes.Repeat)
-	funcs["ToUpper"] = reflect.ValueOf(bytes.ToUpper)
-	funcs["ToLower"] = reflect.ValueOf(bytes.ToLower)
-	funcs["ToTitle"] = reflect.ValueOf(bytes.ToTitle)
-	funcs["ToUpperSpecial"] = reflect.ValueOf(bytes.ToUpperSpecial)
-	funcs["ToLowerSpecial"] = reflect.ValueOf(bytes.ToLowerSpecial)
-	funcs["ToTitleSpecial"] = reflect.ValueOf(bytes.ToTitleSpecial)
-	funcs["Title"] = reflect.ValueOf(bytes.Title)
-	funcs["TrimLeftFunc"] = reflect.ValueOf(bytes.TrimLeftFunc)
-	funcs["TrimRightFunc"] = reflect.ValueOf(bytes.TrimRightFunc)
-	funcs["TrimFunc"] = reflect.ValueOf(bytes.TrimFunc)
-	funcs["TrimPrefix"] = reflect.ValueOf(bytes.TrimPrefix)
-	funcs["TrimSuffix"] = reflect.ValueOf(bytes.TrimSuffix)
-	funcs["IndexFunc"] = reflect.ValueOf(bytes.IndexFunc)
-	funcs["LastIndexFunc"] = reflect.ValueOf(bytes.LastIndexFunc)
-	funcs["Trim"] = reflect.ValueOf(bytes.Trim)
-	funcs["TrimLeft"] = reflect.ValueOf(bytes.TrimLeft)
-	funcs["TrimRight"] = reflect.ValueOf(bytes.TrimRight)
-	funcs["TrimSpace"] = reflect.ValueOf(bytes.TrimSpace)
-	funcs["Runes"] = reflect.ValueOf(bytes.Runes)
-	funcs["Replace"] = reflect.ValueOf(bytes.Replace)
-	funcs["EqualFold"] = reflect.ValueOf(bytes.EqualFold)
-	funcs["IndexByte"] = reflect.ValueOf(bytes.IndexByte)
-	funcs["Equal"] = reflect.ValueOf(bytes.Equal)
-	funcs["Compare"] = reflect.ValueOf(bytes.Compare)
-	funcs["NewReader"] = reflect.ValueOf(bytes.NewReader)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	vars["ErrTooLarge"] = reflect.ValueOf(&bytes.ErrTooLarge)
-	pkgs["bytes"] = &interactive.Env {
-		Name: "bytes",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["Separator"] = reflect.ValueOf(filepath.Separator)
-	consts["ListSeparator"] = reflect.ValueOf(filepath.ListSeparator)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["Match"] = reflect.ValueOf(filepath.Match)
-	funcs["Glob"] = reflect.ValueOf(filepath.Glob)
-	funcs["Clean"] = reflect.ValueOf(filepath.Clean)
-	funcs["ToSlash"] = reflect.ValueOf(filepath.ToSlash)
-	funcs["FromSlash"] = reflect.ValueOf(filepath.FromSlash)
-	funcs["SplitList"] = reflect.ValueOf(filepath.SplitList)
-	funcs["Split"] = reflect.ValueOf(filepath.Split)
-	funcs["Join"] = reflect.ValueOf(filepath.Join)
-	funcs["Ext"] = reflect.ValueOf(filepath.Ext)
-	funcs["EvalSymlinks"] = reflect.ValueOf(filepath.EvalSymlinks)
-	funcs["Abs"] = reflect.ValueOf(filepath.Abs)
-	funcs["Rel"] = reflect.ValueOf(filepath.Rel)
-	funcs["Walk"] = reflect.ValueOf(filepath.Walk)
-	funcs["Base"] = reflect.ValueOf(filepath.Base)
-	funcs["Dir"] = reflect.ValueOf(filepath.Dir)
-	funcs["VolumeName"] = reflect.ValueOf(filepath.VolumeName)
-	funcs["IsAbs"] = reflect.ValueOf(filepath.IsAbs)
-	funcs["HasPrefix"] = reflect.ValueOf(filepath.HasPrefix)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	vars["ErrBadPattern"] = reflect.ValueOf(&filepath.ErrBadPattern)
-	vars["SkipDir"] = reflect.ValueOf(&filepath.SkipDir)
-	pkgs["filepath"] = &interactive.Env {
-		Name: "filepath",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["ScanComments"] = reflect.ValueOf(scanner.ScanComments)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["PrintError"] = reflect.ValueOf(scanner.PrintError)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	pkgs["scanner"] = &interactive.Env {
-		Name: "scanner",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["SEND"] = reflect.ValueOf(ast.SEND)
-	consts["RECV"] = reflect.ValueOf(ast.RECV)
-	consts["FilterFuncDuplicates"] = reflect.ValueOf(ast.FilterFuncDuplicates)
-	consts["FilterUnassociatedComments"] = reflect.ValueOf(ast.FilterUnassociatedComments)
-	consts["FilterImportDuplicates"] = reflect.ValueOf(ast.FilterImportDuplicates)
-	consts["Bad"] = reflect.ValueOf(ast.Bad)
-	consts["Pkg"] = reflect.ValueOf(ast.Pkg)
-	consts["Con"] = reflect.ValueOf(ast.Con)
-	consts["Typ"] = reflect.ValueOf(ast.Typ)
-	consts["Var"] = reflect.ValueOf(ast.Var)
-	consts["Fun"] = reflect.ValueOf(ast.Fun)
-	consts["Lbl"] = reflect.ValueOf(ast.Lbl)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["NewIdent"] = reflect.ValueOf(ast.NewIdent)
-	funcs["IsExported"] = reflect.ValueOf(ast.IsExported)
-	funcs["NewCommentMap"] = reflect.ValueOf(ast.NewCommentMap)
-	funcs["FileExports"] = reflect.ValueOf(ast.FileExports)
-	funcs["PackageExports"] = reflect.ValueOf(ast.PackageExports)
-	funcs["FilterDecl"] = reflect.ValueOf(ast.FilterDecl)
-	funcs["FilterFile"] = reflect.ValueOf(ast.FilterFile)
-	funcs["FilterPackage"] = reflect.ValueOf(ast.FilterPackage)
-	funcs["MergePackageFiles"] = reflect.ValueOf(ast.MergePackageFiles)
-	funcs["SortImports"] = reflect.ValueOf(ast.SortImports)
-	funcs["NotNilFilter"] = reflect.ValueOf(ast.NotNilFilter)
-	funcs["Fprint"] = reflect.ValueOf(ast.Fprint)
-	funcs["Print"] = reflect.ValueOf(ast.Print)
-	funcs["NewPackage"] = reflect.ValueOf(ast.NewPackage)
-	funcs["NewScope"] = reflect.ValueOf(ast.NewScope)
-	funcs["NewObj"] = reflect.ValueOf(ast.NewObj)
-	funcs["Walk"] = reflect.ValueOf(ast.Walk)
-	funcs["Inspect"] = reflect.ValueOf(ast.Inspect)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	pkgs["ast"] = &interactive.Env {
-		Name: "ast",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["NewSource"] = reflect.ValueOf(rand.NewSource)
-	funcs["New"] = reflect.ValueOf(rand.New)
-	funcs["Seed"] = reflect.ValueOf(rand.Seed)
-	funcs["Int63"] = reflect.ValueOf(rand.Int63)
-	funcs["Uint32"] = reflect.ValueOf(rand.Uint32)
-	funcs["Int31"] = reflect.ValueOf(rand.Int31)
-	funcs["Int"] = reflect.ValueOf(rand.Int)
-	funcs["Int63n"] = reflect.ValueOf(rand.Int63n)
-	funcs["Int31n"] = reflect.ValueOf(rand.Int31n)
-	funcs["Intn"] = reflect.ValueOf(rand.Intn)
-	funcs["Float64"] = reflect.ValueOf(rand.Float64)
-	funcs["Float32"] = reflect.ValueOf(rand.Float32)
-	funcs["Perm"] = reflect.ValueOf(rand.Perm)
-	funcs["NormFloat64"] = reflect.ValueOf(rand.NormFloat64)
-	funcs["ExpFloat64"] = reflect.ValueOf(rand.ExpFloat64)
-	funcs["NewZipf"] = reflect.ValueOf(rand.NewZipf)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	pkgs["rand"] = &interactive.Env {
-		Name: "rand",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["MaxVarintLen16"] = reflect.ValueOf(binary.MaxVarintLen16)
-	consts["MaxVarintLen32"] = reflect.ValueOf(binary.MaxVarintLen32)
-	consts["MaxVarintLen64"] = reflect.ValueOf(binary.MaxVarintLen64)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["Read"] = reflect.ValueOf(binary.Read)
-	funcs["Write"] = reflect.ValueOf(binary.Write)
-	funcs["Size"] = reflect.ValueOf(binary.Size)
-	funcs["PutUvarint"] = reflect.ValueOf(binary.PutUvarint)
-	funcs["Uvarint"] = reflect.ValueOf(binary.Uvarint)
-	funcs["PutVarint"] = reflect.ValueOf(binary.PutVarint)
-	funcs["Varint"] = reflect.ValueOf(binary.Varint)
-	funcs["ReadUvarint"] = reflect.ValueOf(binary.ReadUvarint)
-	funcs["ReadVarint"] = reflect.ValueOf(binary.ReadVarint)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	vars["LittleEndian"] = reflect.ValueOf(&binary.LittleEndian)
-	vars["BigEndian"] = reflect.ValueOf(&binary.BigEndian)
-	pkgs["binary"] = &interactive.Env {
-		Name: "binary",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["MaxBase"] = reflect.ValueOf(big.MaxBase)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["NewInt"] = reflect.ValueOf(big.NewInt)
-	funcs["NewRat"] = reflect.ValueOf(big.NewRat)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	pkgs["big"] = &interactive.Env {
-		Name: "big",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["ContinueOnError"] = reflect.ValueOf(flag.ContinueOnError)
-	consts["ExitOnError"] = reflect.ValueOf(flag.ExitOnError)
-	consts["PanicOnError"] = reflect.ValueOf(flag.PanicOnError)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["VisitAll"] = reflect.ValueOf(flag.VisitAll)
-	funcs["Visit"] = reflect.ValueOf(flag.Visit)
-	funcs["Lookup"] = reflect.ValueOf(flag.Lookup)
-	funcs["Set"] = reflect.ValueOf(flag.Set)
-	funcs["PrintDefaults"] = reflect.ValueOf(flag.PrintDefaults)
-	funcs["NFlag"] = reflect.ValueOf(flag.NFlag)
-	funcs["Arg"] = reflect.ValueOf(flag.Arg)
-	funcs["NArg"] = reflect.ValueOf(flag.NArg)
-	funcs["Args"] = reflect.ValueOf(flag.Args)
-	funcs["BoolVar"] = reflect.ValueOf(flag.BoolVar)
-	funcs["Bool"] = reflect.ValueOf(flag.Bool)
-	funcs["IntVar"] = reflect.ValueOf(flag.IntVar)
-	funcs["Int"] = reflect.ValueOf(flag.Int)
-	funcs["Int64Var"] = reflect.ValueOf(flag.Int64Var)
-	funcs["Int64"] = reflect.ValueOf(flag.Int64)
-	funcs["UintVar"] = reflect.ValueOf(flag.UintVar)
-	funcs["Uint"] = reflect.ValueOf(flag.Uint)
-	funcs["Uint64Var"] = reflect.ValueOf(flag.Uint64Var)
-	funcs["Uint64"] = reflect.ValueOf(flag.Uint64)
-	funcs["StringVar"] = reflect.ValueOf(flag.StringVar)
-	funcs["String"] = reflect.ValueOf(flag.String)
-	funcs["Float64Var"] = reflect.ValueOf(flag.Float64Var)
-	funcs["Float64"] = reflect.ValueOf(flag.Float64)
-	funcs["DurationVar"] = reflect.ValueOf(flag.DurationVar)
-	funcs["Duration"] = reflect.ValueOf(flag.Duration)
-	funcs["Var"] = reflect.ValueOf(flag.Var)
-	funcs["Parse"] = reflect.ValueOf(flag.Parse)
-	funcs["Parsed"] = reflect.ValueOf(flag.Parsed)
-	funcs["NewFlagSet"] = reflect.ValueOf(flag.NewFlagSet)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	vars["ErrHelp"] = reflect.ValueOf(&flag.ErrHelp)
-	vars["Usage"] = reflect.ValueOf(&flag.Usage)
-	vars["CommandLine"] = reflect.ValueOf(&flag.CommandLine)
-	pkgs["flag"] = &interactive.Env {
-		Name: "flag",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["MaxScanTokenSize"] = reflect.ValueOf(bufio.MaxScanTokenSize)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["NewReaderSize"] = reflect.ValueOf(bufio.NewReaderSize)
-	funcs["NewReader"] = reflect.ValueOf(bufio.NewReader)
-	funcs["NewWriterSize"] = reflect.ValueOf(bufio.NewWriterSize)
-	funcs["NewWriter"] = reflect.ValueOf(bufio.NewWriter)
-	funcs["NewReadWriter"] = reflect.ValueOf(bufio.NewReadWriter)
-	funcs["NewScanner"] = reflect.ValueOf(bufio.NewScanner)
-	funcs["ScanBytes"] = reflect.ValueOf(bufio.ScanBytes)
-	funcs["ScanRunes"] = reflect.ValueOf(bufio.ScanRunes)
-	funcs["ScanLines"] = reflect.ValueOf(bufio.ScanLines)
-	funcs["ScanWords"] = reflect.ValueOf(bufio.ScanWords)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	vars["ErrInvalidUnreadByte"] = reflect.ValueOf(&bufio.ErrInvalidUnreadByte)
-	vars["ErrInvalidUnreadRune"] = reflect.ValueOf(&bufio.ErrInvalidUnreadRune)
-	vars["ErrBufferFull"] = reflect.ValueOf(&bufio.ErrBufferFull)
-	vars["ErrNegativeCount"] = reflect.ValueOf(&bufio.ErrNegativeCount)
-	vars["ErrTooLong"] = reflect.ValueOf(&bufio.ErrTooLong)
-	vars["ErrNegativeAdvance"] = reflect.ValueOf(&bufio.ErrNegativeAdvance)
-	vars["ErrAdvanceTooFar"] = reflect.ValueOf(&bufio.ErrAdvanceTooFar)
-	pkgs["bufio"] = &interactive.Env {
-		Name: "bufio",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["FilterHTML"] = reflect.ValueOf(tabwriter.FilterHTML)
-	consts["StripEscape"] = reflect.ValueOf(tabwriter.StripEscape)
-	consts["AlignRight"] = reflect.ValueOf(tabwriter.AlignRight)
-	consts["DiscardEmptyColumns"] = reflect.ValueOf(tabwriter.DiscardEmptyColumns)
-	consts["TabIndent"] = reflect.ValueOf(tabwriter.TabIndent)
-	consts["Debug"] = reflect.ValueOf(tabwriter.Debug)
-	consts["Escape"] = reflect.ValueOf(tabwriter.Escape)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["NewWriter"] = reflect.ValueOf(tabwriter.NewWriter)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	pkgs["tabwriter"] = &interactive.Env {
-		Name: "tabwriter",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["NewProfile"] = reflect.ValueOf(pprof.NewProfile)
-	funcs["Lookup"] = reflect.ValueOf(pprof.Lookup)
-	funcs["Profiles"] = reflect.ValueOf(pprof.Profiles)
-	funcs["WriteHeapProfile"] = reflect.ValueOf(pprof.WriteHeapProfile)
-	funcs["StartCPUProfile"] = reflect.ValueOf(pprof.StartCPUProfile)
-	funcs["StopCPUProfile"] = reflect.ValueOf(pprof.StopCPUProfile)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	pkgs["pprof"] = &interactive.Env {
-		Name: "pprof",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["AllocsPerRun"] = reflect.ValueOf(testing.AllocsPerRun)
-	funcs["RunBenchmarks"] = reflect.ValueOf(testing.RunBenchmarks)
-	funcs["Benchmark"] = reflect.ValueOf(testing.Benchmark)
-	funcs["RegisterCover"] = reflect.ValueOf(testing.RegisterCover)
-	funcs["RunExamples"] = reflect.ValueOf(testing.RunExamples)
-	funcs["Short"] = reflect.ValueOf(testing.Short)
-	funcs["Verbose"] = reflect.ValueOf(testing.Verbose)
-	funcs["Main"] = reflect.ValueOf(testing.Main)
-	funcs["RunTests"] = reflect.ValueOf(testing.RunTests)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	pkgs["testing"] = &interactive.Env {
-		Name: "testing",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["Ldate"] = reflect.ValueOf(log.Ldate)
-	consts["Ltime"] = reflect.ValueOf(log.Ltime)
-	consts["Lmicroseconds"] = reflect.ValueOf(log.Lmicroseconds)
-	consts["Llongfile"] = reflect.ValueOf(log.Llongfile)
-	consts["Lshortfile"] = reflect.ValueOf(log.Lshortfile)
-	consts["LstdFlags"] = reflect.ValueOf(log.LstdFlags)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["New"] = reflect.ValueOf(log.New)
-	funcs["SetOutput"] = reflect.ValueOf(log.SetOutput)
-	funcs["Flags"] = reflect.ValueOf(log.Flags)
-	funcs["SetFlags"] = reflect.ValueOf(log.SetFlags)
-	funcs["Prefix"] = reflect.ValueOf(log.Prefix)
-	funcs["SetPrefix"] = reflect.ValueOf(log.SetPrefix)
-	funcs["Print"] = reflect.ValueOf(log.Print)
-	funcs["Printf"] = reflect.ValueOf(log.Printf)
-	funcs["Println"] = reflect.ValueOf(log.Println)
-	funcs["Fatal"] = reflect.ValueOf(log.Fatal)
-	funcs["Fatalf"] = reflect.ValueOf(log.Fatalf)
-	funcs["Fatalln"] = reflect.ValueOf(log.Fatalln)
-	funcs["Panic"] = reflect.ValueOf(log.Panic)
-	funcs["Panicf"] = reflect.ValueOf(log.Panicf)
-	funcs["Panicln"] = reflect.ValueOf(log.Panicln)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	pkgs["log"] = &interactive.Env {
-		Name: "log",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["ReadAll"] = reflect.ValueOf(ioutil.ReadAll)
-	funcs["ReadFile"] = reflect.ValueOf(ioutil.ReadFile)
-	funcs["WriteFile"] = reflect.ValueOf(ioutil.WriteFile)
-	funcs["ReadDir"] = reflect.ValueOf(ioutil.ReadDir)
-	funcs["NopCloser"] = reflect.ValueOf(ioutil.NopCloser)
-	funcs["TempFile"] = reflect.ValueOf(ioutil.TempFile)
-	funcs["TempDir"] = reflect.ValueOf(ioutil.TempDir)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	vars["Discard"] = reflect.ValueOf(&ioutil.Discard)
-	pkgs["ioutil"] = &interactive.Env {
-		Name: "ioutil",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["PackageClauseOnly"] = reflect.ValueOf(parser.PackageClauseOnly)
-	consts["ImportsOnly"] = reflect.ValueOf(parser.ImportsOnly)
-	consts["ParseComments"] = reflect.ValueOf(parser.ParseComments)
-	consts["Trace"] = reflect.ValueOf(parser.Trace)
-	consts["DeclarationErrors"] = reflect.ValueOf(parser.DeclarationErrors)
-	consts["SpuriousErrors"] = reflect.ValueOf(parser.SpuriousErrors)
-	consts["AllErrors"] = reflect.ValueOf(parser.AllErrors)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["ParseFile"] = reflect.ValueOf(parser.ParseFile)
-	funcs["ParseDir"] = reflect.ValueOf(parser.ParseDir)
-	funcs["ParseExpr"] = reflect.ValueOf(parser.ParseExpr)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	pkgs["parser"] = &interactive.Env {
-		Name: "parser",
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["CheckExpr"] = reflect.ValueOf(interactive.CheckExpr)
-	funcs["NewConstInteger"] = reflect.ValueOf(interactive.NewConstInteger)
-	funcs["NewConstFloat"] = reflect.ValueOf(interactive.NewConstFloat)
-	funcs["NewConstImag"] = reflect.ValueOf(interactive.NewConstImag)
-	funcs["NewConstRune"] = reflect.ValueOf(interactive.NewConstRune)
-	funcs["NewConstInt64"] = reflect.ValueOf(interactive.NewConstInt64)
-	funcs["NewConstUint64"] = reflect.ValueOf(interactive.NewConstUint64)
-	funcs["NewConstFloat64"] = reflect.ValueOf(interactive.NewConstFloat64)
-	funcs["NewConstComplex128"] = reflect.ValueOf(interactive.NewConstComplex128)
-	funcs["EvalExpr"] = reflect.ValueOf(interactive.EvalExpr)
-	funcs["DerefValue"] = reflect.ValueOf(interactive.DerefValue)
-	funcs["EvalIdentExpr"] = reflect.ValueOf(interactive.EvalIdentExpr)
-	funcs["SetEvalIdentExprCallback"] = reflect.ValueOf(interactive.SetEvalIdentExprCallback)
-	funcs["GetEvalIdentExprCallback"] = reflect.ValueOf(interactive.GetEvalIdentExprCallback)
-	funcs["CannotIndex"] = reflect.ValueOf(interactive.CannotIndex)
-	funcs["EvalSelectorExpr"] = reflect.ValueOf(interactive.EvalSelectorExpr)
-	funcs["SetEvalSelectorExprCallback"] = reflect.ValueOf(interactive.SetEvalSelectorExprCallback)
-	funcs["GetEvalSelectorExprCallback"] = reflect.ValueOf(interactive.GetEvalSelectorExprCallback)
-	funcs["SetUserConversion"] = reflect.ValueOf(interactive.SetUserConversion)
-	funcs["GetUserConversion"] = reflect.ValueOf(interactive.GetUserConversion)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	vars["ConstInt"] = reflect.ValueOf(&interactive.ConstInt)
-	vars["ConstRune"] = reflect.ValueOf(&interactive.ConstRune)
-	vars["ConstFloat"] = reflect.ValueOf(&interactive.ConstFloat)
-	vars["ConstComplex"] = reflect.ValueOf(&interactive.ConstComplex)
-	vars["ConstString"] = reflect.ValueOf(&interactive.ConstString)
-	vars["ConstNil"] = reflect.ValueOf(&interactive.ConstNil)
-	vars["ConstBool"] = reflect.ValueOf(&interactive.ConstBool)
-	vars["ErrArrayKey"] = reflect.ValueOf(&interactive.ErrArrayKey)
-	vars["RuneType"] = reflect.ValueOf(&interactive.RuneType)
-	pkgs["interactive"] = &interactive.Env {
-		Name: "interactive",
+	pkgs["utf8"] = &interactive.Env {
+		Name: "utf8",
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
