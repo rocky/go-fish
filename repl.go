@@ -10,14 +10,13 @@ import (
 	"fmt"
 	"go/parser"
 	"io"
-	"os"
 	"strconv"
 	"strings"
 
 	"github.com/0xfaded/go-interactive"
 )
 
-type ReadLineFnType func(prompt string, in *bufio.Reader) (string, error)
+type ReadLineFnType func(prompt string, add_history ... bool) (string, error)
 var  readLineFn ReadLineFnType
 
 func SetReadLineFn(fn ReadLineFnType) {
@@ -28,10 +27,15 @@ func GetReadLineFn() ReadLineFnType {
 	return readLineFn
 }
 
+// FIXME: The GNU readline interface, doesn't have an I/O parameter.
+// Our SimpleReadLine needs a bufio.Reader. We'll use a global
+// variable here to get around the interface mismatch problem.
+var Input *bufio.Reader
+
 // Simple replacement for GNU readline
-func SimpleReadLine(prompt string, in *bufio.Reader) (string, error) {
+func SimpleReadLine(prompt string, add_history ... bool) (string, error) {
 	fmt.Printf(prompt)
-	line, err := in.ReadString('\n')
+	line, err := Input.ReadString('\n')
 	if err == nil {
 		line = strings.TrimRight(line, "\r\n")
 	}
@@ -47,8 +51,7 @@ func REPL(env *interactive.Env, results *([]interface{})) {
 
 	var err error
 	exprs := 0
-	in := bufio.NewReader(os.Stdin)
-	line, err := readLineFn("go> ", in)
+	line, err := readLineFn("go> ", true)
 	for line != "quit" {
 		if err != nil {
 			if err == io.EOF { break }
@@ -97,6 +100,6 @@ func REPL(env *interactive.Env, results *([]interface{})) {
 			*results = append(*results, (*vals))
 		}
 
-		line, err = readLineFn("go> ", in)
+		line, err = readLineFn("go> ", true)
 	}
 }

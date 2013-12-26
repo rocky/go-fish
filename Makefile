@@ -6,9 +6,13 @@
 #: Same as make go-fish
 all: go-fish
 
-#: The REPL front-end to the go-interactive evaluator
+#: The non-GNU Readline REPL front-end to the go-interactive evaluator
 go-fish: extracted_imports.go main.go repl.go
 	go build -o go-fish main.go
+
+#: The GNU Readline REPL front-end to the go-interactive evaluator
+go-fish-grl: extracted_imports.go main.go repl.go
+	go build -o go-fish-grl main_grl.go
 
 main.go: extracted_imports.go
 

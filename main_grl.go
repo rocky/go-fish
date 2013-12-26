@@ -2,19 +2,13 @@
 
 package main
 
-// This is a simple REPL (read-eval-print loop) for GO.
+// This simple REPL (read-eval-print loop) for GO using GNU Readline
 
-// (rocky) My intent here is to have something that I can debug in
-// the ssa-debugger tortoise/gub.sh. Right now that can't handle the
-// unsafe package, pointers, and calls to C code. So that let's out
-// go-gnureadline and lineedit.
-// See also main_gr.go for GNU readline code.
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"reflect"
 
+	"code.google.com/p/go-gnureadline"
 	"github.com/rocky/go-fish"
 	"github.com/0xfaded/go-interactive"
 )
@@ -59,7 +53,7 @@ func main() {
 
 	intro_text()
 
-	repl.Input = bufio.NewReader(os.Stdin)
+	repl.SetReadLineFn(gnureadline.Readline)
 
 	// And just when you thought we'd never get around to it...
 	repl.REPL(&env, &results)
