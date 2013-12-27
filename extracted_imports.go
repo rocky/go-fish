@@ -36,7 +36,7 @@ import (
 	"unicode/utf8"
 )
 
-type pkgType map[string] interactive.Pkg
+type pkgType map[string] eval.Pkg
 
 func Extract_environment(pkgs pkgType) {
 	var consts map[string] reflect.Value
@@ -69,7 +69,7 @@ func Extract_environment(pkgs pkgType) {
 	vars["ErrTooLong"] = reflect.ValueOf(&bufio.ErrTooLong)
 	vars["ErrNegativeAdvance"] = reflect.ValueOf(&bufio.ErrNegativeAdvance)
 	vars["ErrAdvanceTooFar"] = reflect.ValueOf(&bufio.ErrAdvanceTooFar)
-	pkgs["bufio"] = &interactive.Env {
+	pkgs["bufio"] = &eval.Env {
 		Name: "bufio",
 		Consts: consts,
 		Funcs:  funcs,
@@ -131,7 +131,7 @@ func Extract_environment(pkgs pkgType) {
 
 	vars = make(map[string] reflect.Value)
 	vars["ErrTooLarge"] = reflect.ValueOf(&bytes.ErrTooLarge)
-	pkgs["bytes"] = &interactive.Env {
+	pkgs["bytes"] = &eval.Env {
 		Name: "bytes",
 		Consts: consts,
 		Funcs:  funcs,
@@ -160,7 +160,7 @@ func Extract_environment(pkgs pkgType) {
 	vars = make(map[string] reflect.Value)
 	vars["LittleEndian"] = reflect.ValueOf(&binary.LittleEndian)
 	vars["BigEndian"] = reflect.ValueOf(&binary.BigEndian)
-	pkgs["binary"] = &interactive.Env {
+	pkgs["binary"] = &eval.Env {
 		Name: "binary",
 		Consts: consts,
 		Funcs:  funcs,
@@ -176,7 +176,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["errors"] = &interactive.Env {
+	pkgs["errors"] = &eval.Env {
 		Name: "errors",
 		Consts: consts,
 		Funcs:  funcs,
@@ -226,7 +226,7 @@ func Extract_environment(pkgs pkgType) {
 	vars["ErrHelp"] = reflect.ValueOf(&flag.ErrHelp)
 	vars["Usage"] = reflect.ValueOf(&flag.Usage)
 	vars["CommandLine"] = reflect.ValueOf(&flag.CommandLine)
-	pkgs["flag"] = &interactive.Env {
+	pkgs["flag"] = &eval.Env {
 		Name: "flag",
 		Consts: consts,
 		Funcs:  funcs,
@@ -260,7 +260,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["fmt"] = &interactive.Env {
+	pkgs["fmt"] = &eval.Env {
 		Name: "fmt",
 		Consts: consts,
 		Funcs:  funcs,
@@ -271,41 +271,41 @@ func Extract_environment(pkgs pkgType) {
 	consts = make(map[string] reflect.Value)
 
 	funcs = make(map[string] reflect.Value)
-	funcs["CheckExpr"] = reflect.ValueOf(interactive.CheckExpr)
-	funcs["NewConstInteger"] = reflect.ValueOf(interactive.NewConstInteger)
-	funcs["NewConstFloat"] = reflect.ValueOf(interactive.NewConstFloat)
-	funcs["NewConstImag"] = reflect.ValueOf(interactive.NewConstImag)
-	funcs["NewConstRune"] = reflect.ValueOf(interactive.NewConstRune)
-	funcs["NewConstInt64"] = reflect.ValueOf(interactive.NewConstInt64)
-	funcs["NewConstUint64"] = reflect.ValueOf(interactive.NewConstUint64)
-	funcs["NewConstFloat64"] = reflect.ValueOf(interactive.NewConstFloat64)
-	funcs["NewConstComplex128"] = reflect.ValueOf(interactive.NewConstComplex128)
-	funcs["EvalExpr"] = reflect.ValueOf(interactive.EvalExpr)
-	funcs["DerefValue"] = reflect.ValueOf(interactive.DerefValue)
-	funcs["EvalIdentExpr"] = reflect.ValueOf(interactive.EvalIdentExpr)
-	funcs["SetEvalIdentExprCallback"] = reflect.ValueOf(interactive.SetEvalIdentExprCallback)
-	funcs["GetEvalIdentExprCallback"] = reflect.ValueOf(interactive.GetEvalIdentExprCallback)
-	funcs["CannotIndex"] = reflect.ValueOf(interactive.CannotIndex)
-	funcs["EvalSelectorExpr"] = reflect.ValueOf(interactive.EvalSelectorExpr)
-	funcs["SetEvalSelectorExprCallback"] = reflect.ValueOf(interactive.SetEvalSelectorExprCallback)
-	funcs["GetEvalSelectorExprCallback"] = reflect.ValueOf(interactive.GetEvalSelectorExprCallback)
-	funcs["SetUserConversion"] = reflect.ValueOf(interactive.SetUserConversion)
-	funcs["GetUserConversion"] = reflect.ValueOf(interactive.GetUserConversion)
+	funcs["CheckExpr"] = reflect.ValueOf(eval.CheckExpr)
+	funcs["NewConstInteger"] = reflect.ValueOf(eval.NewConstInteger)
+	funcs["NewConstFloat"] = reflect.ValueOf(eval.NewConstFloat)
+	funcs["NewConstImag"] = reflect.ValueOf(eval.NewConstImag)
+	funcs["NewConstRune"] = reflect.ValueOf(eval.NewConstRune)
+	funcs["NewConstInt64"] = reflect.ValueOf(eval.NewConstInt64)
+	funcs["NewConstUint64"] = reflect.ValueOf(eval.NewConstUint64)
+	funcs["NewConstFloat64"] = reflect.ValueOf(eval.NewConstFloat64)
+	funcs["NewConstComplex128"] = reflect.ValueOf(eval.NewConstComplex128)
+	funcs["EvalExpr"] = reflect.ValueOf(eval.EvalExpr)
+	funcs["DerefValue"] = reflect.ValueOf(eval.DerefValue)
+	funcs["EvalIdentExpr"] = reflect.ValueOf(eval.EvalIdentExpr)
+	funcs["SetEvalIdentExprCallback"] = reflect.ValueOf(eval.SetEvalIdentExprCallback)
+	funcs["GetEvalIdentExprCallback"] = reflect.ValueOf(eval.GetEvalIdentExprCallback)
+	funcs["CannotIndex"] = reflect.ValueOf(eval.CannotIndex)
+	funcs["EvalSelectorExpr"] = reflect.ValueOf(eval.EvalSelectorExpr)
+	funcs["SetEvalSelectorExprCallback"] = reflect.ValueOf(eval.SetEvalSelectorExprCallback)
+	funcs["GetEvalSelectorExprCallback"] = reflect.ValueOf(eval.GetEvalSelectorExprCallback)
+	funcs["SetUserConversion"] = reflect.ValueOf(eval.SetUserConversion)
+	funcs["GetUserConversion"] = reflect.ValueOf(eval.GetUserConversion)
 
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	vars["ConstInt"] = reflect.ValueOf(&interactive.ConstInt)
-	vars["ConstRune"] = reflect.ValueOf(&interactive.ConstRune)
-	vars["ConstFloat"] = reflect.ValueOf(&interactive.ConstFloat)
-	vars["ConstComplex"] = reflect.ValueOf(&interactive.ConstComplex)
-	vars["ConstString"] = reflect.ValueOf(&interactive.ConstString)
-	vars["ConstNil"] = reflect.ValueOf(&interactive.ConstNil)
-	vars["ConstBool"] = reflect.ValueOf(&interactive.ConstBool)
-	vars["ErrArrayKey"] = reflect.ValueOf(&interactive.ErrArrayKey)
-	vars["RuneType"] = reflect.ValueOf(&interactive.RuneType)
-	pkgs["interactive"] = &interactive.Env {
-		Name: "interactive",
+	vars["ConstInt"] = reflect.ValueOf(&eval.ConstInt)
+	vars["ConstRune"] = reflect.ValueOf(&eval.ConstRune)
+	vars["ConstFloat"] = reflect.ValueOf(&eval.ConstFloat)
+	vars["ConstComplex"] = reflect.ValueOf(&eval.ConstComplex)
+	vars["ConstString"] = reflect.ValueOf(&eval.ConstString)
+	vars["ConstNil"] = reflect.ValueOf(&eval.ConstNil)
+	vars["ConstBool"] = reflect.ValueOf(&eval.ConstBool)
+	vars["ErrArrayKey"] = reflect.ValueOf(&eval.ErrArrayKey)
+	vars["RuneType"] = reflect.ValueOf(&eval.RuneType)
+	pkgs["eval"] = &eval.Env {
+		Name: "eval",
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -349,7 +349,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["ast"] = &interactive.Env {
+	pkgs["ast"] = &eval.Env {
 		Name: "ast",
 		Consts: consts,
 		Funcs:  funcs,
@@ -374,7 +374,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["parser"] = &interactive.Env {
+	pkgs["parser"] = &eval.Env {
 		Name: "parser",
 		Consts: consts,
 		Funcs:  funcs,
@@ -391,7 +391,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["scanner"] = &interactive.Env {
+	pkgs["scanner"] = &eval.Env {
 		Name: "scanner",
 		Consts: consts,
 		Funcs:  funcs,
@@ -493,7 +493,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["token"] = &interactive.Env {
+	pkgs["token"] = &eval.Env {
 		Name: "token",
 		Consts: consts,
 		Funcs:  funcs,
@@ -525,7 +525,7 @@ func Extract_environment(pkgs pkgType) {
 	vars["ErrUnexpectedEOF"] = reflect.ValueOf(&io.ErrUnexpectedEOF)
 	vars["ErrNoProgress"] = reflect.ValueOf(&io.ErrNoProgress)
 	vars["ErrClosedPipe"] = reflect.ValueOf(&io.ErrClosedPipe)
-	pkgs["io"] = &interactive.Env {
+	pkgs["io"] = &eval.Env {
 		Name: "io",
 		Consts: consts,
 		Funcs:  funcs,
@@ -548,7 +548,7 @@ func Extract_environment(pkgs pkgType) {
 
 	vars = make(map[string] reflect.Value)
 	vars["Discard"] = reflect.ValueOf(&ioutil.Discard)
-	pkgs["ioutil"] = &interactive.Env {
+	pkgs["ioutil"] = &eval.Env {
 		Name: "ioutil",
 		Consts: consts,
 		Funcs:  funcs,
@@ -584,7 +584,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["log"] = &interactive.Env {
+	pkgs["log"] = &eval.Env {
 		Name: "log",
 		Consts: consts,
 		Funcs:  funcs,
@@ -687,7 +687,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["math"] = &interactive.Env {
+	pkgs["math"] = &eval.Env {
 		Name: "math",
 		Consts: consts,
 		Funcs:  funcs,
@@ -705,7 +705,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["big"] = &interactive.Env {
+	pkgs["big"] = &eval.Env {
 		Name: "big",
 		Consts: consts,
 		Funcs:  funcs,
@@ -736,7 +736,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["rand"] = &interactive.Env {
+	pkgs["rand"] = &eval.Env {
 		Name: "rand",
 		Consts: consts,
 		Funcs:  funcs,
@@ -836,7 +836,7 @@ func Extract_environment(pkgs pkgType) {
 	vars["Stdout"] = reflect.ValueOf(&os.Stdout)
 	vars["Stderr"] = reflect.ValueOf(&os.Stderr)
 	vars["Args"] = reflect.ValueOf(&os.Args)
-	pkgs["os"] = &interactive.Env {
+	pkgs["os"] = &eval.Env {
 		Name: "os",
 		Consts: consts,
 		Funcs:  funcs,
@@ -873,7 +873,7 @@ func Extract_environment(pkgs pkgType) {
 	vars = make(map[string] reflect.Value)
 	vars["ErrBadPattern"] = reflect.ValueOf(&filepath.ErrBadPattern)
 	vars["SkipDir"] = reflect.ValueOf(&filepath.SkipDir)
-	pkgs["filepath"] = &interactive.Env {
+	pkgs["filepath"] = &eval.Env {
 		Name: "filepath",
 		Consts: consts,
 		Funcs:  funcs,
@@ -940,7 +940,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["reflect"] = &interactive.Env {
+	pkgs["reflect"] = &eval.Env {
 		Name: "reflect",
 		Consts: consts,
 		Funcs:  funcs,
@@ -984,7 +984,7 @@ func Extract_environment(pkgs pkgType) {
 
 	vars = make(map[string] reflect.Value)
 	vars["MemProfileRate"] = reflect.ValueOf(&runtime.MemProfileRate)
-	pkgs["runtime"] = &interactive.Env {
+	pkgs["runtime"] = &eval.Env {
 		Name: "runtime",
 		Consts: consts,
 		Funcs:  funcs,
@@ -1005,7 +1005,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["pprof"] = &interactive.Env {
+	pkgs["pprof"] = &eval.Env {
 		Name: "pprof",
 		Consts: consts,
 		Funcs:  funcs,
@@ -1034,7 +1034,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["sort"] = &interactive.Env {
+	pkgs["sort"] = &eval.Env {
 		Name: "sort",
 		Consts: consts,
 		Funcs:  funcs,
@@ -1078,7 +1078,7 @@ func Extract_environment(pkgs pkgType) {
 	vars = make(map[string] reflect.Value)
 	vars["ErrRange"] = reflect.ValueOf(&strconv.ErrRange)
 	vars["ErrSyntax"] = reflect.ValueOf(&strconv.ErrSyntax)
-	pkgs["strconv"] = &interactive.Env {
+	pkgs["strconv"] = &eval.Env {
 		Name: "strconv",
 		Consts: consts,
 		Funcs:  funcs,
@@ -1136,7 +1136,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["strings"] = &interactive.Env {
+	pkgs["strings"] = &eval.Env {
 		Name: "strings",
 		Consts: consts,
 		Funcs:  funcs,
@@ -1152,7 +1152,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["sync"] = &interactive.Env {
+	pkgs["sync"] = &eval.Env {
 		Name: "sync",
 		Consts: consts,
 		Funcs:  funcs,
@@ -1196,7 +1196,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["atomic"] = &interactive.Env {
+	pkgs["atomic"] = &eval.Env {
 		Name: "atomic",
 		Consts: consts,
 		Funcs:  funcs,
@@ -3348,7 +3348,7 @@ func Extract_environment(pkgs pkgType) {
 	vars["Stdout"] = reflect.ValueOf(&syscall.Stdout)
 	vars["Stderr"] = reflect.ValueOf(&syscall.Stderr)
 	vars["SocketDisableIPv6"] = reflect.ValueOf(&syscall.SocketDisableIPv6)
-	pkgs["syscall"] = &interactive.Env {
+	pkgs["syscall"] = &eval.Env {
 		Name: "syscall",
 		Consts: consts,
 		Funcs:  funcs,
@@ -3372,7 +3372,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["testing"] = &interactive.Env {
+	pkgs["testing"] = &eval.Env {
 		Name: "testing",
 		Consts: consts,
 		Funcs:  funcs,
@@ -3395,7 +3395,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["tabwriter"] = &interactive.Env {
+	pkgs["tabwriter"] = &eval.Env {
 		Name: "tabwriter",
 		Consts: consts,
 		Funcs:  funcs,
@@ -3467,7 +3467,7 @@ func Extract_environment(pkgs pkgType) {
 	vars = make(map[string] reflect.Value)
 	vars["UTC"] = reflect.ValueOf(&time.UTC)
 	vars["Local"] = reflect.ValueOf(&time.Local)
-	pkgs["time"] = &interactive.Env {
+	pkgs["time"] = &eval.Env {
 		Name: "time",
 		Consts: consts,
 		Funcs:  funcs,
@@ -3704,7 +3704,7 @@ func Extract_environment(pkgs pkgType) {
 	vars["CaseRanges"] = reflect.ValueOf(&unicode.CaseRanges)
 	vars["FoldCategory"] = reflect.ValueOf(&unicode.FoldCategory)
 	vars["FoldScript"] = reflect.ValueOf(&unicode.FoldScript)
-	pkgs["unicode"] = &interactive.Env {
+	pkgs["unicode"] = &eval.Env {
 		Name: "unicode",
 		Consts: consts,
 		Funcs:  funcs,
@@ -3737,7 +3737,7 @@ func Extract_environment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["utf8"] = &interactive.Env {
+	pkgs["utf8"] = &eval.Env {
 		Name: "utf8",
 		Consts: consts,
 		Funcs:  funcs,

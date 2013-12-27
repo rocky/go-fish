@@ -47,7 +47,7 @@ func init() {
 }
 
 // The read-eval-print portion
-func REPL(env *interactive.Env, results *([]interface{})) {
+func REPL(env *eval.Env, results *([]interface{})) {
 
 	var err error
 	exprs := 0
@@ -57,14 +57,14 @@ func REPL(env *interactive.Env, results *([]interface{})) {
 			if err == io.EOF { break }
 			panic(err)
 		}
-		ctx := &interactive.Ctx{line}
+		ctx := &eval.Ctx{line}
 		if expr, err := parser.ParseExpr(line); err != nil {
 			fmt.Printf("parse error: %s\n", err)
-		} else if cexpr, errs := interactive.CheckExpr(ctx, expr, env); len(errs) != 0 {
+		} else if cexpr, errs := eval.CheckExpr(ctx, expr, env); len(errs) != 0 {
 			for _, cerr := range errs {
 				fmt.Printf("%v\n", cerr)
 			}
-		} else if vals, _, err := interactive.EvalExpr(ctx, cexpr, env); err != nil {
+		} else if vals, _, err := eval.EvalExpr(ctx, cexpr, env); err != nil {
 			fmt.Printf("eval error: %s\n", err)
 		} else if vals == nil {
 			fmt.Printf("nil\n")

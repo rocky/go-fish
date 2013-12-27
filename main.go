@@ -42,10 +42,10 @@ func main() {
 	var global_vars map[string]  reflect.Value = make(map[string] reflect.Value)
 	global_vars["results"] = reflect.ValueOf(&results)
 
-	var pkgs map[string] interactive.Pkg = make(map[string] interactive.Pkg)
+	var pkgs map[string] eval.Pkg = make(map[string] eval.Pkg)
 	repl.Extract_environment(pkgs)
 
-	env := interactive.Env {
+	env := eval.Env {
 		Name:   ".",
 		Vars:   global_vars,
 		Consts: make(map[string] reflect.Value),

@@ -157,7 +157,7 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 		}
         ****/
 
-		fmt.Printf(`	pkgs["%s"] = &interactive.Env {
+		fmt.Printf(`	pkgs["%s"] = &eval.Env {
 		Name: "%s",
 		Consts: consts,
 		Funcs:  funcs,
@@ -233,7 +233,7 @@ import (`)
 	}
 	fmt.Println(`)
 
-type pkgType map[string] interactive.Pkg
+type pkgType map[string] eval.Pkg
 
 func Extract_environment(pkgs pkgType) {
 	var consts map[string] reflect.Value
