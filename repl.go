@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/0xfaded/go-interactive"
+	"github.com/0xfaded/eval"
 )
 
 type ReadLineFnType func(prompt string, add_history ... bool) (string, error)

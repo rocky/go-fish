@@ -10,7 +10,7 @@ import (
 
 	"code.google.com/p/go-gnureadline"
 	"github.com/rocky/go-fish"
-	"github.com/0xfaded/go-interactive"
+	"github.com/0xfaded/eval"
 )
 
 func intro_text() {

@@ -7,7 +7,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/0xfaded/go-interactive"
+	"github.com/0xfaded/eval"
 	"go/ast"
 	"go/parser"
 	"go/scanner"
