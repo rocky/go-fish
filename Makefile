@@ -7,14 +7,14 @@
 all: go-fish
 
 #: The non-GNU Readline REPL front-end to the go-interactive evaluator
-go-fish: extracted_imports.go main.go repl.go
+go-fish: eval_imports.go main.go repl.go
 	go build -o go-fish main.go
 
 #: The GNU Readline REPL front-end to the go-interactive evaluator
-go-fish-grl: extracted_imports.go main.go repl.go
+go-fish-grl: eval_imports.go main.go repl.go
 	go build -o go-fish-grl main_grl.go
 
-main.go: extracted_imports.go
+main.go: eval_imports.go
 
 #: Subsidiary program to import packages into go-fish
 make_env: make_env.go
@@ -22,4 +22,4 @@ make_env: make_env.go
 
 #: Recreate extracted imports
 imports: make_env
-	./make_env > extracted_imports.go
+	./make_env > eval_imports.go

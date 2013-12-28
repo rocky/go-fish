@@ -220,7 +220,7 @@ func (s *packageInfoSorter) Less(i, j int) bool {
 	return s.by(s.pkg_infos[i], s.pkg_infos[j])
 }
 
-func writePreamble(pkg_infos []*importer.PackageInfo) {
+func writePreamble(pkg_infos []*importer.PackageInfo, name string) {
 	path := func(p1, p2 *importer.PackageInfo) bool {
 		return p1.Pkg.Path() < p2.Pkg.Path()
 	}
@@ -231,16 +231,17 @@ import (`)
 	for _, pkg_info := range pkg_infos {
 		fmt.Printf("\t\"%s\"\n", pkg_info.Pkg.Path())
 	}
-	fmt.Println(`)
+	fmt.Printf(`)
 
 type pkgType map[string] eval.Pkg
 
-func Extract_environment(pkgs pkgType) {
+func %s_environment(pkgs pkgType) {
 	var consts map[string] reflect.Value
 	var vars   map[string] reflect.Value
 	var types  map[string] reflect.Type
 	var funcs  map[string] reflect.Value
-`)
+
+`, name)
 }
 func writePostamble() {
 	fmt.Println("}")
@@ -264,7 +265,7 @@ func main() {
 	pkg_infos = imp.AllPackages()
 	var errpkgs []string
 
-	writePreamble(pkg_infos)
+	writePreamble(pkg_infos, "eval")
 
 	for _, pkg_info := range pkg_infos {
 		if pkg_info.Err != nil {
