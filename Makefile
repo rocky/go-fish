@@ -11,7 +11,7 @@ go-fish: eval_imports.go main.go repl.go
 	go build -o go-fish main.go
 
 #: The GNU Readline REPL front-end to the go-interactive evaluator
-go-fish-grl: eval_imports.go main.go repl.go
+go-fish-grl: eval_imports.go main_grl.go repl.go
 	go build -o go-fish-grl main_grl.go
 
 main.go: eval_imports.go

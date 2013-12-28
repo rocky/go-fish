@@ -254,7 +254,7 @@ func main() {
 	imp := importer.New(&impctx)
 
 	var pkgs_string []string = make([] string, 0, 10)
-	pkgs_string = append(pkgs_string, "github.com/0xfaded/eval")
+	pkgs_string = append(pkgs_string, "github.com/rocky/eval")
 	//pkgs_string = append(pkgs_string, "fmt")
 
 	pkg_infos, _, err := imp.LoadInitialPackages(pkgs_string)

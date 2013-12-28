@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"go/parser"
 	"io"
+	"os"
+	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
@@ -19,6 +21,28 @@ import (
 
 type ReadLineFnType func(prompt string, add_history ... bool) (string, error)
 var  readLineFn ReadLineFnType
+
+// HistoryFile returns a string file name to use for saving command
+// history entries
+func HistoryFile(history_basename string) string {
+	home_dir := os.Getenv("HOME")
+	if home_dir == "" {
+		// FIXME: also try ~ ?
+		fmt.Println("ignoring history file; environment variable HOME not set")
+		return ""
+	}
+	history_file := filepath.Join(home_dir, history_basename)
+	if fi, err := os.Stat(history_file); err != nil {
+		fmt.Println("No history file found to read in")
+	} else {
+		if fi.IsDir() {
+			fmt.Printf("Ignoring history file %s; is a directory, should be a file",
+				history_file)
+			return ""
+		}
+	}
+	return history_file
+}
 
 func SetReadLineFn(fn ReadLineFnType) {
 	readLineFn = fn

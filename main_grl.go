@@ -6,6 +6,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 
 	"code.google.com/p/go-gnureadline"
@@ -13,7 +14,7 @@ import (
 )
 
 func intro_text() {
-	fmt.Printf(`=== A simple Go eval REPL ===
+	fmt.Printf(`=== A Go eval REPL with GNU Readline support ===
 
 Results of expression are stored in variable slice "results".
 The environment is stored in global variable "env".
@@ -27,8 +28,40 @@ To quit, enter: "quit" or Ctrl-D (EOF).
 
 }
 
+// history_file is file name where history entries were and are to be saved. If
+// the empty string, no history is saved and no history read in initially.
+var historyFile string
+
+// term is the current environment TERM value, e.g. "gnome", "xterm", or "vt100"
+var term string
+
+// Boilerplate initialization for GNU Readline
+func gnuReadLineSetup() {
+	term = os.Getenv("TERM")
+	historyFile = repl.HistoryFile(".go-fish")
+	if historyFile != "" {
+		gnureadline.ReadHistory(historyFile)
+	}
+	// Set maximum number of history entries
+	gnureadline.StifleHistory(100)
+}
+
+// gnuReadLineTermination has GNU Readline Termination tasks:
+// save history file if ane, and reset the terminal.
+func gnuReadLineTermination() {
+	if historyFile != "" {
+		gnureadline.WriteHistory(historyFile)
+	}
+	if term != "" {
+		gnureadline.Rl_reset_terminal(term)
+	}
+}
+
+
+// Set up the Go package, function, constant, variable environment; then REPL
+// (Read, Eval, Print, and Loop).
 func main() {
-	// Set up the environment and then call REPL
+
 	// A place to store result values of expressions entered
 	// interactively
 	var results []interface{} = make([] interface{}, 0, 10)
@@ -44,6 +77,9 @@ func main() {
 	intro_text()
 
 	repl.SetReadLineFn(gnureadline.Readline)
+	gnuReadLineSetup()
+
+	defer gnuReadLineTermination()
 
 	// And just when you thought we'd never get around to it...
 	repl.REPL(&env, &results)
