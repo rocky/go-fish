@@ -38,7 +38,7 @@ import (
 
 type pkgType map[string] eval.Pkg
 
-func Extract_environment(pkgs pkgType) {
+func EvalEnvironment(pkgs pkgType) {
 	var consts map[string] reflect.Value
 	var vars   map[string] reflect.Value
 	var types  map[string] reflect.Type

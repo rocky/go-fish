@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"go/parser"
 	"io"
+	"reflect"
 	"strconv"
 	"strings"
 
@@ -32,7 +33,10 @@ func GetReadLineFn() ReadLineFnType {
 // variable here to get around the interface mismatch problem.
 var Input *bufio.Reader
 
-// Simple replacement for GNU readline
+// SimpleReadLine is aimple replacement for GNU readline.
+// prompt is the command prompt to print before reading input.
+// add_history is ignored, but provided as a parameter to match
+// those readline interfaces that do support saving command history.
 func SimpleReadLine(prompt string, add_history ... bool) (string, error) {
 	fmt.Printf(prompt)
 	line, err := Input.ReadString('\n')
@@ -46,7 +50,26 @@ func init() {
 	readLineFn = SimpleReadLine
 }
 
-// The read-eval-print portion
+
+// MakeEvalEnv creates an environment to use in evaluation.  The
+// environment is exactly that environment needed by eval
+// automatically extracted from github.com/0xfaded/eval.
+func MakeEvalEnv() eval.Env {
+	var pkgs map[string] eval.Pkg = make(map[string] eval.Pkg)
+	EvalEnvironment(pkgs)
+
+	env := eval.Env {
+		Name:   ".",
+		Vars:   make(map[string] reflect.Value),
+		Consts: make(map[string] reflect.Value),
+		Funcs:  make(map[string] reflect.Value),
+		Types:  make(map[string] reflect.Type),
+		Pkgs:   pkgs,
+	}
+	return env
+}
+
+// REPL is the a read, eval, and print loop.
 func REPL(env *eval.Env, results *([]interface{})) {
 
 	var err error

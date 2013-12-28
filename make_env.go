@@ -235,7 +235,7 @@ import (`)
 
 type pkgType map[string] eval.Pkg
 
-func %s_environment(pkgs pkgType) {
+func %sEnvironment(pkgs pkgType) {
 	var consts map[string] reflect.Value
 	var vars   map[string] reflect.Value
 	var types  map[string] reflect.Type
@@ -265,7 +265,7 @@ func main() {
 	pkg_infos = imp.AllPackages()
 	var errpkgs []string
 
-	writePreamble(pkg_infos, "eval")
+	writePreamble(pkg_infos, "Eval")
 
 	for _, pkg_info := range pkg_infos {
 		if pkg_info.Err != nil {

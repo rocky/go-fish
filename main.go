@@ -16,7 +16,6 @@ import (
 	"reflect"
 
 	"github.com/rocky/go-fish"
-	"github.com/0xfaded/eval"
 )
 
 func intro_text() {
@@ -42,17 +41,8 @@ func main() {
 	var global_vars map[string]  reflect.Value = make(map[string] reflect.Value)
 	global_vars["results"] = reflect.ValueOf(&results)
 
-	var pkgs map[string] eval.Pkg = make(map[string] eval.Pkg)
-	repl.Extract_environment(pkgs)
-
-	env := eval.Env {
-		Name:   ".",
-		Vars:   global_vars,
-		Consts: make(map[string] reflect.Value),
-		Funcs:  make(map[string] reflect.Value),
-		Types:  make(map[string] reflect.Type),
-		Pkgs:   pkgs,
-	}
+	env := repl.MakeEvalEnv()
+	env.Vars = global_vars
 
 	// Make this truly self-referential
 	global_vars["env"] = reflect.ValueOf(&env)
