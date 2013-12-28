@@ -35,7 +35,7 @@ var historyFile string
 // term is the current environment TERM value, e.g. "gnome", "xterm", or "vt100"
 var term string
 
-// Boilerplate initialization for GNU Readline
+// gnuReadLineSetup is boilerplate initialization for GNU Readline.
 func gnuReadLineSetup() {
 	term = os.Getenv("TERM")
 	historyFile = repl.HistoryFile(".go-fish")
