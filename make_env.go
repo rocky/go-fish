@@ -3,7 +3,6 @@
 // A tool for creating declarations that get fed into the REPL
 package main
 
-
 import (
 	"fmt"
 	"go/ast"
@@ -15,6 +14,10 @@ import (
 	"unicode"
 	"code.google.com/p/go.tools/importer"
 )
+
+// StartingImport is the import from which we start gathering
+// package imports from.
+const StartingImport = "github.com/0xfaded/eval"
 
 // isExportedIdent returns false if e is an Ident with name "_".
 // These identifers have no associated types.Object, and thus no type.
@@ -243,13 +246,15 @@ import (`)
 
 type pkgType map[string] eval.Pkg
 
+// %sEnvironment adds to the eval.Pkg those imports from the package
+// eval (https://%s).
 func %sEnvironment(pkgs pkgType) {
 	var consts map[string] reflect.Value
 	var vars   map[string] reflect.Value
 	var types  map[string] reflect.Type
 	var funcs  map[string] reflect.Value
 
-`, name)
+`, name, name, StartingImport)
 }
 
 // writePostamble finishes of the Go code
@@ -267,7 +272,7 @@ func main() {
 	imp := importer.New(&impctx)
 
 	var pkgs_string []string = make([] string, 0, 10)
-	pkgs_string = append(pkgs_string, "github.com/0xfaded/eval")
+	pkgs_string = append(pkgs_string, StartingImport)
 	//pkgs_string = append(pkgs_string, "fmt")
 
 	pkg_infos, _, err := imp.LoadInitialPackages(pkgs_string)

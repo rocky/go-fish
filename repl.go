@@ -3,7 +3,7 @@
 // the eval() part.
 //
 // Inside this package we provide two front-ends, one which uses GNU
-// Readline (http://github.com/rocky/gnu-readline) and one which doesn't.
+// Readline (http://code.google.com/p/go-gnureadline) and one which doesn't.
 // Feel free to add patches to support other kinds of readline support.
 //
 package repl
@@ -89,7 +89,8 @@ func init() {
 
 // MakeEvalEnv creates an environment to use in evaluation.  The
 // environment is exactly that environment needed by eval
-// automatically extracted from github.com/0xfaded/eval.
+// automatically extracted from the package eval
+// (http://github.com/0xfaded/eval).
 func MakeEvalEnv() eval.Env {
 	var pkgs map[string] eval.Pkg = make(map[string] eval.Pkg)
 	EvalEnvironment(pkgs)
