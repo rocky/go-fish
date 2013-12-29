@@ -35,7 +35,7 @@ and want the GNU readline support. In addition to the above try:
 Using
 -----
 
-Run `go-fish` or `go-fish-rl`. For now, we have only a static
+Run `go-fish` or `go-fish-grl`. For now, we have only a static
 environment provided and that's exactly the environment that *eval*
 uses for itself. (In other words this is ideally suited to introspect
 about itself). Since the *eval* package is a reasonable size program,
