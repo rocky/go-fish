@@ -1,6 +1,12 @@
+// Package repl is a simple REPL (read-eval-print loop) for GO using
+// http://github.com/0xfaded/eval to the heavy lifting to implement
+// the eval() part.
+//
+// Inside this package we provide two front-ends, one which uses GNU
+// Readline (http://github.com/rocky/gnu-readline) and one which doesn't.
+// Feel free to add patches to support other kinds of readline support.
+//
 package repl
-
-// The common guts of is a simple REPL (read-eval-print loop) for GO.
 
 // We separate this from the main package so that the main package
 // can provide its own readline function. This could be, for example,
@@ -19,11 +25,13 @@ import (
 	"github.com/0xfaded/eval"
 )
 
+// ReadLineFnType is function signature for a common read line
+// interface that we support.
 type ReadLineFnType func(prompt string, add_history ... bool) (string, error)
 var  readLineFn ReadLineFnType
 
 // HistoryFile returns a string file name to use for saving command
-// history entries
+// history entries.
 func HistoryFile(history_basename string) string {
 	home_dir := os.Getenv("HOME")
 	if home_dir == "" {
@@ -44,20 +52,25 @@ func HistoryFile(history_basename string) string {
 	return history_file
 }
 
+// SetReadLineFn is used to set a specific readline function to be used
+// as the "read" part of the read/eval/print loop.
 func SetReadLineFn(fn ReadLineFnType) {
 	readLineFn = fn
 }
 
+// GetReadLineFn returns the current readline function in effect for
+// the "read" part of the read/eval/print loop.
 func GetReadLineFn() ReadLineFnType {
 	return readLineFn
 }
 
-// FIXME: The GNU readline interface, doesn't have an I/O parameter.
-// Our SimpleReadLine needs a bufio.Reader. We'll use a global
-// variable here to get around the interface mismatch problem.
+// Input is a workaround for the fact that ReadLineFnType doesn't have
+// an input parameter, but SimpleReadLine below needs a
+// *bufioReader. So set this global variable beforehand if you are using
+// SimpleReadLine.
 var Input *bufio.Reader
 
-// SimpleReadLine is aimple replacement for GNU readline.
+// SimpleReadLine is simple replacement for GNU readline.
 // prompt is the command prompt to print before reading input.
 // add_history is ignored, but provided as a parameter to match
 // those readline interfaces that do support saving command history.
@@ -73,7 +86,6 @@ func SimpleReadLine(prompt string, add_history ... bool) (string, error) {
 func init() {
 	readLineFn = SimpleReadLine
 }
-
 
 // MakeEvalEnv creates an environment to use in evaluation.  The
 // environment is exactly that environment needed by eval

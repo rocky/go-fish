@@ -1,8 +1,8 @@
 // +build ignore
 
+// A tool for creating declarations that get fed into the REPL
 package main
 
-// A tool for creating declarations that get fed into the REPL
 
 import (
 	"fmt"
@@ -16,9 +16,10 @@ import (
 	"code.google.com/p/go.tools/importer"
 )
 
-// isBlankIdent returns true iff e is an Ident with name "_".
-// They have no associated types.Object, and thus no type.
-//
+// isExportedIdent returns false if e is an Ident with name "_".
+// These identifers have no associated types.Object, and thus no type.
+// isExportedIdent also returns false if identifier e doesn't start
+// with an uppercase character and thus is not exported.
 func isExportedIdent(e ast.Expr) bool {
 	id, ok := e.(*ast.Ident)
 	return !(ok && id.Name == "_") && unicode.IsUpper(rune(id.Name[0]))
@@ -187,10 +188,12 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 
 }
 
-// By is the type of a "less" function that defines the ordering of its Planet arguments.
+// By is the type of a "less" function that defines the ordering of
+// its Planet arguments.
 type By func(p1, p2 *importer.PackageInfo) bool
 
-// Sort is a method on the function type, By, that sorts the argument slice according to the function.
+// Sort is a method on the function type, By, that sorts the argument
+// slice according to the function.
 func (by By) Sort(pkg_infos []*importer.PackageInfo) {
 	ps := &packageInfoSorter{
 		pkg_infos: pkg_infos,
@@ -199,7 +202,8 @@ func (by By) Sort(pkg_infos []*importer.PackageInfo) {
 	sort.Sort(ps)
 }
 
-// packageInfoSorter joins a By function and a slice of importer.PackageInfos to be sorted.
+// packageInfoSorter joins a By function and a slice of
+// importer.PackageInfos to be sorted.
 type packageInfoSorter struct {
 	pkg_infos []*importer.PackageInfo
 	by      func(p1, p2 *importer.PackageInfo) bool // Closure used in the Less method.
@@ -215,11 +219,15 @@ func (s *packageInfoSorter) Swap(i, j int) {
 	s.pkg_infos[i], s.pkg_infos[j] = s.pkg_infos[j], s.pkg_infos[i]
 }
 
-// Less is part of sort.Interface. It is implemented by calling the "by" closure in the sorter.
+// Less is part of sort.Interface. It is implemented by calling the
+// "by" closure in the sorter.
 func (s *packageInfoSorter) Less(i, j int) bool {
 	return s.by(s.pkg_infos[i], s.pkg_infos[j])
 }
 
+// writePreamble prints the initial boiler-plate Go package code. That
+// is it starts out:
+//     package repl; import (... )
 func writePreamble(pkg_infos []*importer.PackageInfo, name string) {
 	path := func(p1, p2 *importer.PackageInfo) bool {
 		return p1.Pkg.Path() < p2.Pkg.Path()
@@ -243,10 +251,15 @@ func %sEnvironment(pkgs pkgType) {
 
 `, name)
 }
+
+// writePostamble finishes of the Go code
 func writePostamble() {
 	fmt.Println("}")
 }
 
+// main creates a Go program that adds to a github.com/0xfaded/eval
+// environment (of type eval.Env) the transitive closure of imports
+// for a given starting package. Here we use github.com/0xfaded/eval.
 func main() {
 	impctx := importer.Config{Build: &build.Default}
 
