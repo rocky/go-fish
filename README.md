@@ -18,7 +18,7 @@ Setup
 
 ```
    $ go get github.com/rocky/go-fish
-   $ cd <place where ssa-interp/src copied>
+   $ cd <place where go-fish got copied>
    $ make go-fish
    $ cp go-fish $GOBIN/
 ```
