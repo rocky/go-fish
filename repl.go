@@ -127,9 +127,9 @@ func REPL(env *eval.Env, results *([]interface{})) {
 		} else if vals, _, err := eval.EvalExpr(ctx, cexpr, env); err != nil {
 			fmt.Printf("eval error: %s\n", err)
 		} else if vals == nil {
-			fmt.Printf("nil\n")
+			fmt.Printf("Kind=nil\nnil\n")
 		} else if len(*vals) == 0 {
-			fmt.Printf("void\n")
+			fmt.Printf("Kind=Slice\nvoid\n")
 		} else if len(*vals) == 1 {
 			value := (*vals)[0]
 			kind := value.Kind().String()
@@ -149,13 +149,17 @@ func REPL(env *eval.Env, results *([]interface{})) {
 			exprs  += 1
 			*results = append(*results, (*vals)[0].Interface())
 		} else {
-			fmt.Printf("(")
+			fmt.Printf("Kind = Multi-Value\n")
 			size := len(*vals)
 			for i, v := range *vals {
-				fmt.Printf("%v", v.Interface())
+				if v.Interface() == nil {
+					fmt.Printf("nil")
+				} else {
+					fmt.Printf("%v", v.Interface())
+				}
 				if i < size-1 { fmt.Printf(", ") }
 			}
-			fmt.Printf(")\n")
+			fmt.Printf("\n")
 			exprs  += 1
 			*results = append(*results, (*vals))
 		}
