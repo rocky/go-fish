@@ -2,6 +2,8 @@ language: go
 
 go:
   - tip
+  - 1.1
+  - 1.2
 
 script:
   - go get "github.com/0xfaded/eval"
