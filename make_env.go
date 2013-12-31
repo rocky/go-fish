@@ -241,7 +241,10 @@ func writePreamble(pkg_infos []*importer.PackageInfo, name string, startingImpor
 
 import (`)
 	for _, pkg_info := range pkg_infos {
-		fmt.Printf("\t\"%s\"\n", pkg_info.Pkg.Path())
+		path := pkg_info.Pkg.Path()
+		if !strings.HasSuffix(path, "_test") {
+			fmt.Printf("\t\"%s\"\n", path)
+		}
 	}
 	fmt.Printf(`)
 
@@ -255,7 +258,7 @@ func %sEnvironment(pkgs pkgType) {
 	var types  map[string] reflect.Type
 	var funcs  map[string] reflect.Value
 
-`, name, name, startingImport)
+`, name, startingImport, name)
 }
 
 // writePostamble finishes of the Go code
