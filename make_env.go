@@ -53,13 +53,13 @@ func memberFromDecl(decl ast.Decl, imp *importer.Importer,
 				}
 			}
 
-		// case token.TYPE:
-		// 	for _, spec := range decl.Specs {
-		// 		id := spec.(*ast.TypeSpec).Name
-		// 		if isExportedIdent(id) {
-		// 			types = append(types, &id.Name)
-		// 		}
-		// 	}
+		case token.TYPE:
+			for _, spec := range decl.Specs {
+				id := spec.(*ast.TypeSpec).Name
+				if isExportedIdent(id) {
+					types = append(types, &id.Name)
+				}
+			}
 		}
 
 	case *ast.FuncDecl:
@@ -144,7 +144,7 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 
 		fmt.Println("\n\ttypes = make(map[string] reflect.Type)")
 		for _, v := range types {
-			fmt.Printf("\ttypes[\"%s\"] = reflect.TypeOf(%s.%s){}\n", *v, name, *v)
+			fmt.Printf("\ttypes[\"%s\"] = reflect.TypeOf(*new(%s.%s))\n", *v, name, *v)
 		}
 
 		fmt.Println("\n\tvars = make(map[string] reflect.Value)")
