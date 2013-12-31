@@ -9,6 +9,7 @@ import (
 	"go/build"
 	"go/token"
 	"log"
+	"os"
 	"sort"
 	"strings"
 	"unicode"
@@ -17,7 +18,7 @@ import (
 
 // StartingImport is the import from which we start gathering
 // package imports from.
-const StartingImport = "github.com/0xfaded/eval"
+const DefaultStartingImport = "github.com/0xfaded/eval"
 
 // isExportedIdent returns false if e is an Ident with name "_".
 // These identifers have no associated types.Object, and thus no type.
@@ -231,7 +232,7 @@ func (s *packageInfoSorter) Less(i, j int) bool {
 // writePreamble prints the initial boiler-plate Go package code. That
 // is it starts out:
 //     package repl; import (... )
-func writePreamble(pkg_infos []*importer.PackageInfo, name string) {
+func writePreamble(pkg_infos []*importer.PackageInfo, name string, startingImport string) {
 	path := func(p1, p2 *importer.PackageInfo) bool {
 		return p1.Pkg.Path() < p2.Pkg.Path()
 	}
@@ -254,7 +255,7 @@ func %sEnvironment(pkgs pkgType) {
 	var types  map[string] reflect.Type
 	var funcs  map[string] reflect.Value
 
-`, name, name, StartingImport)
+`, name, name, startingImport)
 }
 
 // writePostamble finishes of the Go code
@@ -266,13 +267,22 @@ func writePostamble() {
 // environment (of type eval.Env) the transitive closure of imports
 // for a given starting package. Here we use github.com/0xfaded/eval.
 func main() {
+	startingImport := DefaultStartingImport
+	if len(os.Args) == 2 {
+		startingImport = os.Args[1]
+	} else if len(os.Args) > 2 {
+		fmt.Printf("usage: %s [starting-import]\n")
+		os.Exit(1)
+	}
+	fmt.Printf("// starting import %s\n", startingImport)
+
 	impctx := importer.Config{Build: &build.Default}
 
 	// Load, parse and type-check the program.
 	imp := importer.New(&impctx)
 
 	var pkgs_string []string = make([] string, 0, 10)
-	pkgs_string = append(pkgs_string, StartingImport)
+	pkgs_string = append(pkgs_string, startingImport)
 	//pkgs_string = append(pkgs_string, "fmt")
 
 	pkg_infos, _, err := imp.LoadInitialPackages(pkgs_string)
@@ -283,7 +293,7 @@ func main() {
 	pkg_infos = imp.AllPackages()
 	var errpkgs []string
 
-	writePreamble(pkg_infos, "Eval")
+	writePreamble(pkg_infos, "Eval", startingImport)
 
 	for _, pkg_info := range pkg_infos {
 		if pkg_info.Err != nil {
