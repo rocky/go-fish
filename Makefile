@@ -1,18 +1,21 @@
 # Comments starting with #: below are remake GNU Makefile comments. See
 # https://github.com/rocky/remake/wiki/Rake-tasks-for-gnu-make
 
-.PHONY: all exports test check clean
+.PHONY: all exports test check clean cmd
 
 #: Same as: make go-fish
 all: go-fish
 
 #: The non-GNU Readline REPL front-end to the go-interactive evaluator
-go-fish: repl_imports.go main.go repl.go
+go-fish: repl_imports.go main.go repl.go cmd
 	go build -o go-fish main.go
 
 #: The GNU Readline REPL front-end to the go-interactive evaluator
 go-fish-grl: repl_imports.go main_grl.go repl.go
 	go build -o go-fish-grl main_grl.go
+
+cmd:
+	cd cmd && go build
 
 main.go: repl_imports.go
 

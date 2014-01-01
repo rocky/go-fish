@@ -16,16 +16,17 @@ import (
 )
 
 func intro_text() {
-	fmt.Printf(`=== A Go eval REPL with GNU Readline support ===
-
+	repl.Section("== A Go eval REPL with GNU Readline support ==")
+	fmt.Printf(`
 Results of expression are stored in variable slice "results".
 The environment is stored in global variable "env".
 
-Enter expressions to be evaluated at the "go>" prompt.
+Enter expressions to be evaluated at the "gofish>" prompt.
 
 To see all results, type: "results".
 
 To quit, enter: "quit" or Ctrl-D (EOF).
+To get help, enter: "help".
 `)
 
 }

@@ -30,6 +30,10 @@ import (
 
 var Highlight = flag.Bool("highlight", true, `use syntax highlighting in output`)
 
+// Maxwidth is the size of the line. We will try to wrap text that is
+// longer than this. It like the COLS environment variable
+var Maxwidth int = 80
+
 // ReadLineFnType is function signature for a common read line
 // interface that we support.
 type ReadLineFnType func(prompt string, add_history ... bool) (string, error)
@@ -117,18 +121,25 @@ var LeaveREPL bool = false
 // ExitCode is the exit code this program will set on exit.
 var ExitCode  int  = 0
 
-// REPL is the a read, eval, and print loop.
+// Env is the evaluation environment we are working with.
+var Env *eval.Env
+
+// REPL is the read, eval, and print loop.
 func REPL(env *eval.Env, results *([]interface{})) {
 
 	var err error
+	Env = env
 	exprs := 0
-	line, err := readLineFn("go> ", true)
+	line, err := readLineFn("gofish> ", true)
 	for !LeaveREPL {
 		if err != nil {
 			if err == io.EOF { break }
 			panic(err)
 		}
-		if wasProcessed(line) { continue }
+		if wasProcessed(line) {
+			line, err = readLineFn("gofish> ", true)
+			continue
+		}
 		ctx := &eval.Ctx{line}
 		if expr, err := parser.ParseExpr(line); err != nil {
 			fmt.Printf("parse error: %s\n", err)
@@ -176,6 +187,6 @@ func REPL(env *eval.Env, results *([]interface{})) {
 			*results = append(*results, (*vals))
 		}
 
-		line, err = readLineFn("go> ", true)
+		line, err = readLineFn("gofish> ", true)
 	}
 }

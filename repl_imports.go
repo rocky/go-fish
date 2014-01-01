@@ -9,6 +9,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/0xfaded/eval"
+	"github.com/mgutz/ansi"
 	"go/ast"
 	"go/parser"
 	"go/scanner"
@@ -400,8 +401,35 @@ func EvalEnvironment(pkgs pkgType) {
 		Pkgs:   pkgs,
 	}
 	consts = make(map[string] reflect.Value)
+	consts["Reset"] = reflect.ValueOf(ansi.Reset)
 
 	funcs = make(map[string] reflect.Value)
+	funcs["ColorCode"] = reflect.ValueOf(ansi.ColorCode)
+	funcs["Color"] = reflect.ValueOf(ansi.Color)
+	funcs["ColorFunc"] = reflect.ValueOf(ansi.ColorFunc)
+	funcs["DisableColors"] = reflect.ValueOf(ansi.DisableColors)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["ansi"] = &eval.Env {
+		Name: "ansi",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["AddAlias"] = reflect.ValueOf(AddAlias)
+	funcs["AddToCategory"] = reflect.ValueOf(AddToCategory)
+	funcs["LookupCmd"] = reflect.ValueOf(LookupCmd)
+	funcs["Errmsg"] = reflect.ValueOf(Errmsg)
+	funcs["MsgNoCr"] = reflect.ValueOf(MsgNoCr)
+	funcs["Msg"] = reflect.ValueOf(Msg)
+	funcs["Section"] = reflect.ValueOf(Section)
 	funcs["HistoryFile"] = reflect.ValueOf(HistoryFile)
 	funcs["SetReadLineFn"] = reflect.ValueOf(SetReadLineFn)
 	funcs["GetReadLineFn"] = reflect.ValueOf(GetReadLineFn)
@@ -409,12 +437,25 @@ func EvalEnvironment(pkgs pkgType) {
 	funcs["MakeEvalEnv"] = reflect.ValueOf(MakeEvalEnv)
 	funcs["REPL"] = reflect.ValueOf(REPL)
 	funcs["EvalEnvironment"] = reflect.ValueOf(EvalEnvironment)
+	funcs["ArgCountOK"] = reflect.ValueOf(ArgCountOK)
+	funcs["GetInt"] = reflect.ValueOf(GetInt)
+	funcs["GetUInt"] = reflect.ValueOf(GetUInt)
 
 	types = make(map[string] reflect.Type)
+	types["CmdFunc"] = reflect.TypeOf(*new(CmdFunc))
+	types["CmdInfo"] = reflect.TypeOf(*new(CmdInfo))
 	types["ReadLineFnType"] = reflect.TypeOf(*new(ReadLineFnType))
+	types["NumError"] = reflect.TypeOf(*new(NumError))
 
 	vars = make(map[string] reflect.Value)
+	vars["Cmds"] = reflect.ValueOf(&Cmds)
+	vars["Aliases"] = reflect.ValueOf(&Aliases)
+	vars["Categories"] = reflect.ValueOf(&Categories)
+	vars["Highlight"] = reflect.ValueOf(&Highlight)
+	vars["Maxwidth"] = reflect.ValueOf(&Maxwidth)
 	vars["Input"] = reflect.ValueOf(&Input)
+	vars["LeaveREPL"] = reflect.ValueOf(&LeaveREPL)
+	vars["ExitCode"] = reflect.ValueOf(&ExitCode)
 	pkgs["repl"] = &eval.Env {
 		Name: "repl",
 		Consts: consts,
