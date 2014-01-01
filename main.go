@@ -59,4 +59,5 @@ func main() {
 
 	// And just when you thought we'd never get around to it...
 	repl.REPL(&env, &results)
+	os.Exit(repl.ExitCode)
 }

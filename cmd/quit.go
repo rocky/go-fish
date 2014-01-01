@@ -31,8 +31,9 @@ func QuitCommand(args []string) {
 	if len(args) == 2 {
 		new_rc, ok := strconv.Atoi(args[1])
 		if ok == nil { rc = new_rc } else {
-			repl.Errmsg("Expecting integer return code; got %s. Ignoring",
+			repl.Errmsg("Expecting integer return code; got %s.",
 				args[1])
+			return
 		}
 	}
 	repl.Msg("go-fish: That's all folks...")

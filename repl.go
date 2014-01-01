@@ -131,12 +131,13 @@ func REPL(env *eval.Env, results *([]interface{})) {
 	Env = env
 	exprs := 0
 	line, err := readLineFn("gofish> ", true)
-	for !LeaveREPL {
+	for true {
 		if err != nil {
 			if err == io.EOF { break }
 			panic(err)
 		}
 		if wasProcessed(line) {
+			if LeaveREPL {break}
 			line, err = readLineFn("gofish> ", true)
 			continue
 		}

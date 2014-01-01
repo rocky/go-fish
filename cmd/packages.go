@@ -38,6 +38,16 @@ func printReflectMap(title string, m map[string] reflect.Value) {
 	}
 }
 
+func printReflectTypeMap(title string, m map[string] reflect.Type) {
+	if len(m) > 0 {
+		list := []string {}
+		for item := range m {
+			list = append(list, item)
+		}
+		repl.PrintSorted(title, list)
+	}
+}
+
 // PackageCommand implements the command:
 //    package [*name* ]
 // which show information about a package or lists all packages.
@@ -48,6 +58,7 @@ func PackageCommand(args []string) {
 			repl.Section("=== Package %s: ===", pkg_name)
 			printReflectMap("Constants of "+pkg_name, pkg.Consts)
 			printReflectMap("Functions of "+pkg_name, pkg.Funcs)
+			printReflectTypeMap("Types of "+pkg_name, pkg.Types)
 			printReflectMap("Variables of "+pkg_name, pkg.Funcs)
 		} else {
 			repl.Errmsg("Package %s not imported", pkg_name)
