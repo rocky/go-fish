@@ -1,4 +1,5 @@
 // +build ignore
+// Copyright 2013-2014 Rocky Bernstein
 
 package main
 
@@ -16,6 +17,7 @@ import (
 	"reflect"
 
 	"github.com/rocky/go-fish"
+	"github.com/rocky/go-fish/cmd"
 )
 
 func intro_text() {
@@ -50,6 +52,9 @@ func main() {
 	intro_text()
 
 	repl.Input = bufio.NewReader(os.Stdin)
+
+	// Initialize REPL commands
+	fishcmd.Init()
 
 	// And just when you thought we'd never get around to it...
 	repl.REPL(&env, &results)

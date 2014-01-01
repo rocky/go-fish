@@ -1,3 +1,5 @@
+// Copyright 2013-2014 Rocky Bernstein.
+
 // Package repl is a simple REPL (read-eval-print loop) for GO using
 // http://github.com/0xfaded/eval to the heavy lifting to implement
 // the eval() part.
@@ -13,6 +15,7 @@ package repl
 // GNU Readline, lineedit or something else.
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"go/parser"
 	"io"
@@ -24,6 +27,8 @@ import (
 
 	"github.com/0xfaded/eval"
 )
+
+var Highlight = flag.Bool("highlight", true, `use syntax highlighting in output`)
 
 // ReadLineFnType is function signature for a common read line
 // interface that we support.
@@ -106,17 +111,24 @@ func MakeEvalEnv() eval.Env {
 	return env
 }
 
+// LeaveREPL is set when we want to quit.
+var LeaveREPL bool = false
+
+// ExitCode is the exit code this program will set on exit.
+var ExitCode  int  = 0
+
 // REPL is the a read, eval, and print loop.
 func REPL(env *eval.Env, results *([]interface{})) {
 
 	var err error
 	exprs := 0
 	line, err := readLineFn("go> ", true)
-	for line != "quit" {
+	for !LeaveREPL {
 		if err != nil {
 			if err == io.EOF { break }
 			panic(err)
 		}
+		if wasProcessed(line) { continue }
 		ctx := &eval.Ctx{line}
 		if expr, err := parser.ParseExpr(line); err != nil {
 			fmt.Printf("parse error: %s\n", err)
