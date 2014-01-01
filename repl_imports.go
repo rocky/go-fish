@@ -1,4 +1,4 @@
-// starting import: "github.com/0xfaded/eval"
+// starting import: "github.com/rocky/go-fish"
 package repl
 
 import (
@@ -20,6 +20,7 @@ import (
 	"math/big"
 	"math/rand"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -40,7 +41,7 @@ import (
 type pkgType map[string] eval.Pkg
 
 // EvalEnvironment adds to eval.Pkg those packages included
-// with import "github.com/0xfaded/eval".
+// with import "github.com/rocky/go-fish".
 
 func EvalEnvironment(pkgs pkgType) {
 	var consts map[string] reflect.Value
@@ -392,6 +393,30 @@ func EvalEnvironment(pkgs pkgType) {
 	vars["RuneType"] = reflect.ValueOf(&eval.RuneType)
 	pkgs["eval"] = &eval.Env {
 		Name: "eval",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["HistoryFile"] = reflect.ValueOf(HistoryFile)
+	funcs["SetReadLineFn"] = reflect.ValueOf(SetReadLineFn)
+	funcs["GetReadLineFn"] = reflect.ValueOf(GetReadLineFn)
+	funcs["SimpleReadLine"] = reflect.ValueOf(SimpleReadLine)
+	funcs["MakeEvalEnv"] = reflect.ValueOf(MakeEvalEnv)
+	funcs["REPL"] = reflect.ValueOf(REPL)
+	funcs["EvalEnvironment"] = reflect.ValueOf(EvalEnvironment)
+
+	types = make(map[string] reflect.Type)
+	types["ReadLineFnType"] = reflect.TypeOf(*new(ReadLineFnType))
+
+	vars = make(map[string] reflect.Value)
+	vars["Input"] = reflect.ValueOf(&Input)
+	pkgs["repl"] = &eval.Env {
+		Name: "repl",
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -1046,6 +1071,27 @@ func EvalEnvironment(pkgs pkgType) {
 	vars["Args"] = reflect.ValueOf(&os.Args)
 	pkgs["os"] = &eval.Env {
 		Name: "os",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["Command"] = reflect.ValueOf(exec.Command)
+	funcs["LookPath"] = reflect.ValueOf(exec.LookPath)
+
+	types = make(map[string] reflect.Type)
+	types["Error"] = reflect.TypeOf(*new(exec.Error))
+	types["Cmd"] = reflect.TypeOf(*new(exec.Cmd))
+	types["ExitError"] = reflect.TypeOf(*new(exec.ExitError))
+
+	vars = make(map[string] reflect.Value)
+	vars["ErrNotFound"] = reflect.ValueOf(&exec.ErrNotFound)
+	pkgs["exec"] = &eval.Env {
+		Name: "exec",
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,

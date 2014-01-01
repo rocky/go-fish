@@ -3,7 +3,7 @@
 
 .PHONY: all exports test check clean
 
-#: Same as make go-fish
+#: Same as: make go-fish
 all: go-fish
 
 #: The non-GNU Readline REPL front-end to the go-interactive evaluator
@@ -20,22 +20,28 @@ main.go: repl_imports.go
 make_env: make_env.go
 	go build make_env.go
 
-#: Recreate extracted imports
+# Note: we have to create the next repl_imports.go to a new place
+# either outside of this directory or to a non-go extension, otherwise
+# make_env will try to read the file it is trying to create!
+
+#: The recreated extracted imports by running make_env
 repl_imports.go: make_env
-	./make_env > repl_imports.go
+	./make_env > repl_imports.next && mv repl_imports.next repl_imports.go
 
 #: Check stuff
 test: make_env.go
 	go test -v
 
-#: Same as test
+#: Same as: make test
 check: test
 
+#: Remove derived files.
 clean:
 	for file in make_env go-fish go-fish-grl ; do \
 		[ -e $$file ] && rm $$file; \
 	done
 
+#: Install this puppy
 install:
 	go install
 	[ -x ./go-fish ] && cp ./go-fish $$GOBIN/go-fish

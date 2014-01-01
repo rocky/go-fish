@@ -18,7 +18,8 @@ import (
 
 // StartingImport is the import from which we start gathering
 // package imports from.
-const DefaultStartingImport = "github.com/0xfaded/eval"
+const DefaultStartingImport = "github.com/rocky/go-fish"
+// const DefaultStartingImport = "github.com/0xfaded/eval"
 
 // MyImport is the import string name of this package that the output
 // Go code will live in. We have to treat that special because we
