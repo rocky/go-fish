@@ -31,13 +31,20 @@ import (
 var Highlight = flag.Bool("highlight", true, `use syntax highlighting in output`)
 
 // Maxwidth is the size of the line. We will try to wrap text that is
-// longer than this. It like the COLS environment variable
-var Maxwidth int = 80
+// longer than this. It like the COLUMNS environment variable
+var Maxwidth int
 
 // ReadLineFnType is function signature for a common read line
 // interface that we support.
 type ReadLineFnType func(prompt string, add_history ... bool) (string, error)
 var  readLineFn ReadLineFnType
+
+var initial_cwd string
+
+// GOFISH_RESTART_CMD is a string that was used to invoke gofish.
+//If we want to restart gofish, this is what we'll use.
+var GOFISH_RESTART_CMD string
+
 
 // HistoryFile returns a string file name to use for saving command
 // history entries.
@@ -94,6 +101,14 @@ func SimpleReadLine(prompt string, add_history ... bool) (string, error) {
 
 func init() {
 	readLineFn = SimpleReadLine
+	widthstr := os.Getenv("COLUMNS")
+	initial_cwd, _ = os.Getwd()
+	GOFISH_RESTART_CMD = os.Getenv("GOFISH_RESTART_CMD")
+	if len(widthstr) == 0 {
+		Maxwidth = 80
+	} else if i, err := strconv.Atoi(widthstr); err == nil {
+		Maxwidth = i
+	}
 }
 
 // MakeEvalEnv creates an environment to use in evaluation.  The
