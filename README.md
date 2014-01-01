@@ -31,7 +31,7 @@ and want the GNU readline support. In addition to the above try:
    $ make install
 ```
 
-If you have [remake](https://github.com/rocky/remake) installe, you can change *make* above to *remake -x* to see the simple *go* and shell commands that get run. (And *remake --tasks* is also your friend.)
+If you have [remake](https://github.com/rocky/remake) installed, you can change *make* above to *remake -x* to see the simple *go* and shell commands that get run. (And *remake --tasks* is also your friend.)
 
 Using
 -----
