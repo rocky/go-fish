@@ -4,6 +4,7 @@ package repl
 import (
 	"bufio"
 	"bytes"
+	"code.google.com/p/go-columnize"
 	"encoding/binary"
 	"errors"
 	"flag"
@@ -146,6 +147,31 @@ func EvalEnvironment(pkgs pkgType) {
 	vars["ErrTooLarge"] = reflect.ValueOf(&bytes.ErrTooLarge)
 	pkgs["bytes"] = &eval.Env {
 		Name: "bytes",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["VERSION"] = reflect.ValueOf(columnize.VERSION)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["DefaultOptions"] = reflect.ValueOf(columnize.DefaultOptions)
+	funcs["SetOptions"] = reflect.ValueOf(columnize.SetOptions)
+	funcs["CellSize"] = reflect.ValueOf(columnize.CellSize)
+	funcs["ToStringSliceFromIndexable"] = reflect.ValueOf(columnize.ToStringSliceFromIndexable)
+	funcs["ToStringSlice"] = reflect.ValueOf(columnize.ToStringSlice)
+	funcs["Columnize"] = reflect.ValueOf(columnize.Columnize)
+	funcs["ColumnizeS"] = reflect.ValueOf(columnize.ColumnizeS)
+
+	types = make(map[string] reflect.Type)
+	types["Opts_t"] = reflect.TypeOf(*new(columnize.Opts_t))
+	types["KeyValuePair_t"] = reflect.TypeOf(*new(columnize.KeyValuePair_t))
+
+	vars = make(map[string] reflect.Value)
+	pkgs["columnize"] = &eval.Env {
+		Name: "columnize",
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -430,6 +456,7 @@ func EvalEnvironment(pkgs pkgType) {
 	funcs["MsgNoCr"] = reflect.ValueOf(MsgNoCr)
 	funcs["Msg"] = reflect.ValueOf(Msg)
 	funcs["Section"] = reflect.ValueOf(Section)
+	funcs["PrintSorted"] = reflect.ValueOf(PrintSorted)
 	funcs["HistoryFile"] = reflect.ValueOf(HistoryFile)
 	funcs["SetReadLineFn"] = reflect.ValueOf(SetReadLineFn)
 	funcs["GetReadLineFn"] = reflect.ValueOf(GetReadLineFn)
@@ -456,6 +483,7 @@ func EvalEnvironment(pkgs pkgType) {
 	vars["Input"] = reflect.ValueOf(&Input)
 	vars["LeaveREPL"] = reflect.ValueOf(&LeaveREPL)
 	vars["ExitCode"] = reflect.ValueOf(&ExitCode)
+	vars["Env"] = reflect.ValueOf(&Env)
 	pkgs["repl"] = &eval.Env {
 		Name: "repl",
 		Consts: consts,

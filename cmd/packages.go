@@ -3,9 +3,7 @@
 package fishcmd
 
 import (
-	"sort"
-	"strings"
-	"code.google.com/p/go-columnize"
+	"reflect"
 	"github.com/rocky/go-fish"
 )
 
@@ -30,20 +28,35 @@ that package import. Otherwise we give a list of imported packages.
 	repl.AddAlias("package", name)
 }
 
+func printReflectMap(title string, m map[string] reflect.Value) {
+	if len(m) > 0 {
+		list := []string {}
+		for item := range m {
+			list = append(list, item)
+		}
+		repl.PrintSorted(title, list)
+	}
+}
+
+// PackageCommand implements the command:
+//    package [*name* ]
+// which show information about a package or lists all packages.
 func PackageCommand(args []string) {
-	repl.Section("All imported packages:")
-	opts := columnize.DefaultOptions()
-	opts.DisplayWidth = repl.Maxwidth
-	pkgNames := []string {}
 	if len(args) > 1 {
-		repl.Errmsg("Sorry, information about single package not done yet")
+		pkg_name := args[1]
+		if pkg, ok := repl.Env.Pkgs[pkg_name]; ok {
+			repl.Section("=== Package %s: ===", pkg_name)
+			printReflectMap("Constants of "+pkg_name, pkg.Consts)
+			printReflectMap("Functions of "+pkg_name, pkg.Funcs)
+			printReflectMap("Variables of "+pkg_name, pkg.Funcs)
+		} else {
+			repl.Errmsg("Package %s not imported", pkg_name)
+		}
 	} else {
+		pkgNames := []string {}
 		for pkg := range repl.Env.Pkgs {
 			pkgNames = append(pkgNames, pkg)
 		}
-		sort.Strings(pkgNames)
-		columnizedNames := strings.TrimRight(columnize.Columnize(pkgNames, opts),
-			"\n")
-		repl.Msg(columnizedNames)
+		repl.PrintSorted("All imported packages", pkgNames)
 	}
 }

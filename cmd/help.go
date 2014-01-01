@@ -38,6 +38,9 @@ debugger command.
 	repl.AddAlias("h", name)
 }
 
+// HelpCommand implements the command:
+//    help [*name* |* ]
+// which gives help.
 func HelpCommand(args []string) {
 	if len(args) == 1 {
 		repl.Msg(repl.Cmds["help"].Help)
@@ -52,6 +55,7 @@ func HelpCommand(args []string) {
 			repl.Section("All command names:")
 			sort.Strings(names)
 			opts := columnize.DefaultOptions()
+			opts.LinePrefix  = "  "
 			opts.DisplayWidth = repl.Maxwidth
 			mems := strings.TrimRight(columnize.Columnize(names, opts),
 				"\n")
