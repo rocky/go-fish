@@ -1,7 +1,7 @@
 # Comments starting with #: below are remake GNU Makefile comments. See
 # https://github.com/rocky/remake/wiki/Rake-tasks-for-gnu-make
 
-.PHONY: all exports
+.PHONY: all exports test check clean
 
 #: Same as make go-fish
 all: go-fish
@@ -23,3 +23,13 @@ make_env: make_env.go
 #: Recreate extracted imports
 imports: make_env
 	./make_env > eval_imports.go
+
+#: Check stuff
+test: make_env.go
+	go test -v
+
+#: Same as test
+check: test
+
+clean:
+	rm make_env go-fish go-fish-grl || true
