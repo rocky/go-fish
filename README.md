@@ -51,32 +51,37 @@ slice *results*. To quit, enter `Ctrl-D` (EOF) or the word `quit`.
 
 Here's a sample session:
 
-```
-
+```console
 $ ./go-fish
-=== A simple Go eval REPL ===
+== A simple Go eval REPL ==
 
 Results of expression are stored in variable slice "results".
 The environment is stored in global variable "env".
 
-Enter expressions to be evaluated at the "go>" prompt.
+Enter expressions to be evaluated at the "gofish>" prompt.
 
 To see all results, type: "results".
 
 To quit, enter: "quit" or Ctrl-D (EOF).
-go> 10 + len("abc" + "def")
+To get help, enter: "help".
+gofish> 10+len("abc" + "def")
 Kind = Type = int
 results[0] = 16
-go> len(results)
-Kind = Type = int
-results[1] = 1
-go> os.Args[0]
+gofish> os.Args[0]
 Kind = Type = string
-results[2] = "./go-fish"
-go> strings.HasPrefix(os.Args[0], "./")
-Kind = Type = bool
-results[3] = true
-go> quit
+results[1] = "./go-fish"
+gofish> help *
+All command names:
+help  packages  quit
+gofish> packages
+All imported packages:
+ansi    binary  eval      fmt     math    rand     scanner  sync       time   
+ast     bufio   exec      io      os      reflect  sort     syscall    token  
+atomic  bytes   filepath  ioutil  parser  repl     strconv  tabwriter  unicode
+big     errors  flag      log     pprof   runtime  strings  testing    utf8   
+gofish> quit
+go-fish: That's all folks...
+$ 
 ```
 
 See Also
