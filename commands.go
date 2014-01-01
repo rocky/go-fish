@@ -19,7 +19,7 @@ type CmdInfo struct {
 var Cmds map[string]*CmdInfo  = make(map[string]*CmdInfo)
 
 
-// Aliases maps a name to its underlying debugger command name.
+// Aliases maps a name to its underlying gofish command name.
 // For example, "?" is an alias for "help".
 var	Aliases map[string]string = make(map[string]string)
 
@@ -37,7 +37,7 @@ func AddAlias(alias string, cmdname string) bool {
 	return true
 }
 
-// AddToCategory adds "cmdname" into general debugger category "category".
+// AddToCategory adds "cmdname" into general category "category".
 func AddToCategory(category string, cmdname string) {
 	Categories[category] = append(Categories[category], cmdname)
 	// Cmds[cmdname].category = category
@@ -45,7 +45,7 @@ func AddToCategory(category string, cmdname string) {
 
 
 // LookupCmd canonicalize parameter cmd, by changing it to the underlying
-// debugger command if it is an alias.
+// gofish command if it is an alias.
 func LookupCmd(cmd string) (string) {
 	if Cmds[cmd] == nil {
 		cmd = Aliases[cmd];

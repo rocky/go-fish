@@ -5,7 +5,10 @@ go:
   - 1.2
 
 script:
+  - go get "code.google.com/p/go-columnize"
   - go get "github.com/0xfaded/eval"
+  - go get "github.com/mgutz/ansi"
+  - go get "github.com/rocky/go-fish/cmd"
   - go build
 # need to work on not running out of source tree
 # - go test -v
