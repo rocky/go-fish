@@ -1,4 +1,4 @@
-// starting import github.com/0xfaded/eval
+// starting import: "github.com/0xfaded/eval"
 package repl
 
 import (
@@ -39,8 +39,9 @@ import (
 
 type pkgType map[string] eval.Pkg
 
-// EvalEnvironment adds to the eval.Pkg those imports from the package
-// eval (https://github.com/0xfaded/eval).
+// EvalEnvironment adds to eval.Pkg those packages included
+// with import "github.com/0xfaded/eval".
+
 func EvalEnvironment(pkgs pkgType) {
 	var consts map[string] reflect.Value
 	var vars   map[string] reflect.Value

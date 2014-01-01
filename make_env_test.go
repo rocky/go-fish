@@ -21,14 +21,14 @@ func TestMakeEnv(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	got, err = exec.Command("./make_env").Output()
+	got, err = exec.Command("./make_env", "strings").Output()
 	if err != nil {
 		fmt.Printf("Error running ./make_env: %s", got)
 		log.Fatal(err)
 	}
 
 
-	rightFileName := "eval_imports.go"
+	rightFileName := fmt.Sprintf("testdata%sstring_imports.go",  slash)
 
 	var rightFile *os.File
 	rightFile, err = os.Open(rightFileName) // For read access.
@@ -44,7 +44,7 @@ func TestMakeEnv(t *testing.T) {
 	}
 	want := string(data[0:count])
 	if string(got) != want {
-		gotName := fmt.Sprintf("testdata%snew_eval_imports.go",  slash)
+		gotName := fmt.Sprintf("testdata%sstring_imports.got",  slash)
 		gotLines  := strings.Split(string(got), "\n")
 		wantLines := strings.Split(string(want), "\n")
 		wantLen   := len(wantLines)

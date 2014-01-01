@@ -7,22 +7,22 @@
 all: go-fish
 
 #: The non-GNU Readline REPL front-end to the go-interactive evaluator
-go-fish: eval_imports.go main.go repl.go
+go-fish: repl_imports.go main.go repl.go
 	go build -o go-fish main.go
 
 #: The GNU Readline REPL front-end to the go-interactive evaluator
-go-fish-grl: eval_imports.go main_grl.go repl.go
+go-fish-grl: repl_imports.go main_grl.go repl.go
 	go build -o go-fish-grl main_grl.go
 
-main.go: eval_imports.go
+main.go: repl_imports.go
 
 #: Subsidiary program to import packages into go-fish
 make_env: make_env.go
 	go build make_env.go
 
 #: Recreate extracted imports
-imports: make_env
-	./make_env > eval_imports.go
+repl_imports.go: make_env
+	./make_env > repl_imports.go
 
 #: Check stuff
 test: make_env.go
@@ -32,4 +32,11 @@ test: make_env.go
 check: test
 
 clean:
-	rm make_env go-fish go-fish-grl || true
+	for file in make_env go-fish go-fish-grl ; do \
+		[ -e $$file ] && rm $$file; \
+	done
+
+install:
+	go install
+	[ -x ./go-fish ] && cp ./go-fish $$GOBIN/go-fish
+	[ -x ./go-fish-grl ] && cp ./go-fish $$GOBIN/go-fish-grl

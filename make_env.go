@@ -20,6 +20,14 @@ import (
 // package imports from.
 const DefaultStartingImport = "github.com/0xfaded/eval"
 
+// MyImport is the import string name of this package that the output
+// Go code will live in. We have to treat that special because we
+// can't include it in an import which causes circular imports. Also,
+// variables in this import should not have the package name included
+// in it. For example we use refer to function SimpleReadline as
+// SimpleReadLine, not repl.SimpleReadline
+const MyImport = "github.com/rocky/go-fish"
+
 // excludeSyscallConst excludes "syscall" constants from the output.
 // "syscall" has architecture and/OS specific constants that make
 // it hard to test this program automatically. So unless specifically
@@ -86,6 +94,15 @@ func memberFromDecl(decl ast.Decl, imp *importer.Importer,
 	return consts, funcs, types, vars
 }
 
+func fullIdentName(path, pkg, ident string) (fullname string) {
+	fullname = pkg + "." + ident
+	if "repl" == pkg && MyImport == path {
+		// This is me my package! We can't include repl
+		fullname = ident
+	}
+	return fullname
+}
+
 func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importer) {
 
 	var typed_decls = map[string]string {
@@ -120,6 +137,7 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 	}
 
 	name := pkg_info.Pkg.Name()
+	path := pkg_info.Pkg.Path()
 	if len(pkg_info.Files) > 0 {
 		// Go source package.
 		consts := make([]*string, 0, 10)
@@ -138,7 +156,7 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 			fmt.Println("\t//syscall constants excluded")
 		} else {
 			for _, v := range consts {
-				fullname := name + "." + *v
+				fullname := fullIdentName(path, name, *v)
 				if typename, found := typed_decls[fullname]; found {
 					fmt.Printf("\tconsts[\"%s\"] = reflect.ValueOf(%s(%s))\n",
 						*v, typename, fullname)
@@ -150,17 +168,19 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 
 		fmt.Println("\n\tfuncs = make(map[string] reflect.Value)")
 		for _, v := range funcs {
-			fmt.Printf("\tfuncs[\"%s\"] = reflect.ValueOf(%s.%s)\n", *v, name, *v)
+			fullname := fullIdentName(path, name, *v)
+			fmt.Printf("\tfuncs[\"%s\"] = reflect.ValueOf(%s)\n", *v, fullname)
 		}
 
 		fmt.Println("\n\ttypes = make(map[string] reflect.Type)")
 		for _, v := range types {
-			fmt.Printf("\ttypes[\"%s\"] = reflect.TypeOf(*new(%s.%s))\n", *v, name, *v)
+			fullname := fullIdentName(path, name, *v)
+			fmt.Printf("\ttypes[\"%s\"] = reflect.TypeOf(*new(%s))\n", *v, fullname)
 		}
 
 		fmt.Println("\n\tvars = make(map[string] reflect.Value)")
 		for _, v := range vars   {
-			fullname := name + "." + *v
+			fullname := fullIdentName(path, name, *v)
 			fmt.Printf("\tvars[\"%s\"] = reflect.ValueOf(&%s)\n", *v, fullname)
 		}
 
@@ -249,7 +269,9 @@ import (`)
 	for _, pkg_info := range pkg_infos {
 		path := pkg_info.Pkg.Path()
 		if !strings.HasSuffix(path, "_test") {
-			fmt.Printf("\t\"%s\"\n", path)
+			if	MyImport != path {
+				fmt.Printf("\t\"%s\"\n", path)
+			}
 			kept_pkgs = append(kept_pkgs, pkg_info)
 		}
 	}
@@ -257,8 +279,9 @@ import (`)
 
 type pkgType map[string] eval.Pkg
 
-// %sEnvironment adds to the eval.Pkg those imports from the package
-// eval (https://%s).
+// %sEnvironment adds to eval.Pkg those packages included
+// with import "%s".
+
 func %sEnvironment(pkgs pkgType) {
 	var consts map[string] reflect.Value
 	var vars   map[string] reflect.Value
@@ -285,7 +308,7 @@ func main() {
 		fmt.Printf("usage: %s [starting-import]\n")
 		os.Exit(1)
 	}
-	fmt.Printf("// starting import %s\n", startingImport)
+	fmt.Printf("// starting import: \"%s\"\n", startingImport)
 
 	impctx := importer.Config{Build: &build.Default}
 

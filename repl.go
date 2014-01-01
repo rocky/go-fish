@@ -41,7 +41,7 @@ func HistoryFile(history_basename string) string {
 	}
 	history_file := filepath.Join(home_dir, history_basename)
 	if fi, err := os.Stat(history_file); err != nil {
-		fmt.Println("No history file found to read in")
+		fmt.Println("No history file found to read in: ", err.Error())
 	} else {
 		if fi.IsDir() {
 			fmt.Printf("Ignoring history file %s; is a directory, should be a file",
