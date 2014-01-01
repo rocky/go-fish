@@ -20,6 +20,12 @@ import (
 // package imports from.
 const DefaultStartingImport = "github.com/0xfaded/eval"
 
+// excludeSyscallConst excludes "syscall" constants from the output.
+// "syscall" has architecture and/OS specific constants that make
+// it hard to test this program automatically. So unless specifically
+// asked for, we will exclude it by default.
+var excludeSyscallConsts bool = true
+
 // isExportedIdent returns false if e is an Ident with name "_".
 // These identifers have no associated types.Object, and thus no type.
 // isExportedIdent also returns false if identifier e doesn't start
@@ -127,13 +133,18 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 			}
 		}
 		fmt.Println("\tconsts = make(map[string] reflect.Value)")
-		for _, v := range consts {
-			fullname := name + "." + *v
-			if typename, found := typed_decls[fullname]; found {
-				fmt.Printf("\tconsts[\"%s\"] = reflect.ValueOf(%s(%s))\n",
-					*v, typename, fullname)
-			} else {
-				fmt.Printf("\tconsts[\"%s\"] = reflect.ValueOf(%s)\n", *v, fullname)
+
+		if name == "syscall" && excludeSyscallConsts {
+			fmt.Println("\t//syscall constants excluded")
+		} else {
+			for _, v := range consts {
+				fullname := name + "." + *v
+				if typename, found := typed_decls[fullname]; found {
+					fmt.Printf("\tconsts[\"%s\"] = reflect.ValueOf(%s(%s))\n",
+						*v, typename, fullname)
+				} else {
+					fmt.Printf("\tconsts[\"%s\"] = reflect.ValueOf(%s)\n", *v, fullname)
+				}
 			}
 		}
 
@@ -152,15 +163,6 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 			fullname := name + "." + *v
 			fmt.Printf("\tvars[\"%s\"] = reflect.ValueOf(&%s)\n", *v, fullname)
 		}
-
-		/****
-		for _, pkg := range pkg_info.Pkg.Imports() {
-			// fmt.Printf("%d %v\n", j, pkg)
-			name := pkg.Name()
-			if name == "testing" { continue }
-			fmt.Printf("pkgs[\"%s\"] = %s\n", name, name)
-		}
-        ****/
 
 		fmt.Printf(`	pkgs["%s"] = &eval.Env {
 		Name: "%s",
@@ -232,7 +234,10 @@ func (s *packageInfoSorter) Less(i, j int) bool {
 // writePreamble prints the initial boiler-plate Go package code. That
 // is it starts out:
 //     package repl; import (... )
-func writePreamble(pkg_infos []*importer.PackageInfo, name string, startingImport string) {
+// Packages that end in _test are removed from the list of imported
+// packages and this stripped down list is returned.
+func writePreamble(pkg_infos []*importer.PackageInfo,
+	name string, startingImport string) []*importer.PackageInfo {
 	path := func(p1, p2 *importer.PackageInfo) bool {
 		return p1.Pkg.Path() < p2.Pkg.Path()
 	}
@@ -240,10 +245,12 @@ func writePreamble(pkg_infos []*importer.PackageInfo, name string, startingImpor
 	fmt.Println(`package repl
 
 import (`)
+	kept_pkgs := []*importer.PackageInfo {}
 	for _, pkg_info := range pkg_infos {
 		path := pkg_info.Pkg.Path()
 		if !strings.HasSuffix(path, "_test") {
 			fmt.Printf("\t\"%s\"\n", path)
+			kept_pkgs = append(kept_pkgs, pkg_info)
 		}
 	}
 	fmt.Printf(`)
@@ -259,6 +266,7 @@ func %sEnvironment(pkgs pkgType) {
 	var funcs  map[string] reflect.Value
 
 `, name, startingImport, name)
+	return kept_pkgs
 }
 
 // writePostamble finishes of the Go code
@@ -296,7 +304,7 @@ func main() {
 	pkg_infos = imp.AllPackages()
 	var errpkgs []string
 
-	writePreamble(pkg_infos, "Eval", startingImport)
+	pkg_infos = writePreamble(pkg_infos, "Eval", startingImport)
 
 	for _, pkg_info := range pkg_infos {
 		if pkg_info.Err != nil {
