@@ -78,7 +78,15 @@ All imported packages:
 ansi    binary  eval      fmt     math    rand     scanner  sync       time   
 ast     bufio   exec      io      os      reflect  sort     syscall    token  
 atomic  bytes   filepath  ioutil  parser  repl     strconv  tabwriter  unicode
-big     errors  flag      log     pprof   runtime  strings  testing    utf8   
+big     errors  flag      log     pprof   runtime  strings  testing    utf8  
+gofish> pkg ansi
+=== Package ansi: ===
+Constants of ansi:
+  Reset
+Functions of ansi:
+  Color  ColorCode  ColorFunc  DisableColors
+Variables of ansi:
+  Color  ColorCode  ColorFunc  DisableColors
 gofish> quit
 go-fish: That's all folks...
 $ 
