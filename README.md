@@ -18,9 +18,8 @@ Setup
 
 ```
    $ go get github.com/rocky/go-fish
-   $ cd <place where go-fish got copied>
-   $ make go-fish
-   $ cp go-fish $GOBIN/
+   $ cd $GOPATH/src/github.com/rocky/go-fish
+   $ make install  # or look at Makefile
 ```
 
 If you have
@@ -29,7 +28,7 @@ and want the GNU readline support. In addition to the above try:
 
 ```
    $ make go-fish-grl
-   $ cp go-fish-grl $GOBIN/
+   $ make install
 ```
 
 Using
