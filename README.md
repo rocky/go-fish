@@ -82,5 +82,7 @@ See Also
 --------
 
 * [What's left to do?](https://github.com/rocky/go-fish/wiki/What%27s-left-to-do%3F)
+* [go-play](http://code.google.com/p/go-play): A locally-run HTML5 web interface for experimenting with Go code
+* [gub](https://github.com/rocky/ssa-interp): A Go debugger based on the SSA interpreter
 
 [![endorse rocky](https://api.coderwall.com/rocky/endorsecount.png)](https://coderwall.com/rocky)
