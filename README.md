@@ -80,7 +80,8 @@ ast     bufio   exec      io      os      reflect  sort     syscall    token
 atomic  bytes   filepath  ioutil  parser  repl     strconv  tabwriter  unicode
 big     errors  flag      log     pprof   runtime  strings  testing    utf8  
 gofish> pkg ansi
-=== Package ansi: ===
+=== Package ansi ("github.com/mgutz/ansi"): ===
+
 Constants of ansi:
   Reset
 Functions of ansi:
