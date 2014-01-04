@@ -75,6 +75,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "bufio",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["MinRead"] = reflect.ValueOf(bytes.MinRead)
@@ -139,6 +140,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "bytes",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -155,6 +157,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "errors",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["ContinueOnError"] = reflect.ValueOf(flag.ContinueOnError)
@@ -210,6 +213,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "flag",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -250,6 +254,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "fmt",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -306,6 +311,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "io",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["E"] = reflect.ValueOf(math.E)
@@ -409,6 +415,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "math",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -443,6 +450,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "math/rand",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["O_RDONLY"] = reflect.ValueOf(os.O_RDONLY)
@@ -553,6 +561,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "os",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["Invalid"] = reflect.ValueOf(reflect.Invalid)
@@ -632,6 +641,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "reflect",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["Compiler"] = reflect.ValueOf(runtime.Compiler)
@@ -683,6 +693,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "runtime",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -705,6 +716,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "runtime/pprof",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -738,6 +750,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "sort",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["IntSize"] = reflect.ValueOf(strconv.IntSize)
@@ -783,6 +796,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "strconv",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -843,6 +857,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "strings",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -865,6 +880,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "sync",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -909,6 +925,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "sync/atomic",
 	}
 	consts = make(map[string] reflect.Value)
 	//syscall constants excluded
@@ -1221,6 +1238,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "syscall",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -1254,6 +1272,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "testing",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["FilterHTML"] = reflect.ValueOf(tabwriter.FilterHTML)
@@ -1278,6 +1297,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "text/tabwriter",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["ANSIC"] = reflect.ValueOf(time.ANSIC)
@@ -1358,6 +1378,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "time",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["MaxRune"] = reflect.ValueOf(unicode.MaxRune)
@@ -1600,6 +1621,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "unicode",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["RuneError"] = reflect.ValueOf(utf8.RuneError)
@@ -1633,5 +1655,6 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "unicode/utf8",
 	}
 }

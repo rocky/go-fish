@@ -192,8 +192,9 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "%s",
 	}
-`, name, name)
+`, name, name, path)
 	}
 
 	// } else {

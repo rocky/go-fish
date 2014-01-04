@@ -88,6 +88,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "bufio",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["MinRead"] = reflect.ValueOf(bytes.MinRead)
@@ -152,6 +153,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "bytes",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["VERSION"] = reflect.ValueOf(columnize.VERSION)
@@ -177,6 +179,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "code.google.com/p/go-columnize",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["MaxVarintLen16"] = reflect.ValueOf(binary.MaxVarintLen16)
@@ -207,6 +210,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "encoding/binary",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -223,6 +227,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "errors",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["ContinueOnError"] = reflect.ValueOf(flag.ContinueOnError)
@@ -278,6 +283,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "flag",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -318,6 +324,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "fmt",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -425,6 +432,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "github.com/0xfaded/eval",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["Reset"] = reflect.ValueOf(ansi.Reset)
@@ -445,6 +453,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "github.com/mgutz/ansi",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -480,6 +489,7 @@ func EvalEnvironment(pkgs pkgType) {
 	vars["Categories"] = reflect.ValueOf(&Categories)
 	vars["Highlight"] = reflect.ValueOf(&Highlight)
 	vars["Maxwidth"] = reflect.ValueOf(&Maxwidth)
+	vars["GOFISH_RESTART_CMD"] = reflect.ValueOf(&GOFISH_RESTART_CMD)
 	vars["Input"] = reflect.ValueOf(&Input)
 	vars["LeaveREPL"] = reflect.ValueOf(&LeaveREPL)
 	vars["ExitCode"] = reflect.ValueOf(&ExitCode)
@@ -491,6 +501,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "github.com/rocky/go-fish",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["SEND"] = reflect.ValueOf(ast.SEND)
@@ -606,6 +617,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "go/ast",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["PackageClauseOnly"] = reflect.ValueOf(parser.PackageClauseOnly)
@@ -632,6 +644,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "go/parser",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["ScanComments"] = reflect.ValueOf(scanner.ScanComments)
@@ -654,6 +667,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "go/scanner",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["NoPos"] = reflect.ValueOf(token.NoPos)
@@ -761,6 +775,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "go/token",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -817,6 +832,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "io",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -840,6 +856,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "io/ioutil",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["Ldate"] = reflect.ValueOf(log.Ldate)
@@ -877,6 +894,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "log",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["E"] = reflect.ValueOf(math.E)
@@ -980,6 +998,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "math",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["MaxBase"] = reflect.ValueOf(big.MaxBase)
@@ -1001,6 +1020,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "math/big",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -1035,6 +1055,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "math/rand",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["O_RDONLY"] = reflect.ValueOf(os.O_RDONLY)
@@ -1145,6 +1166,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "os",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -1166,6 +1188,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "os/exec",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["Separator"] = reflect.ValueOf(filepath.Separator)
@@ -1204,6 +1227,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "path/filepath",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["Invalid"] = reflect.ValueOf(reflect.Invalid)
@@ -1283,6 +1307,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "reflect",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["Compiler"] = reflect.ValueOf(runtime.Compiler)
@@ -1334,6 +1359,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "runtime",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -1356,6 +1382,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "runtime/pprof",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -1389,6 +1416,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "sort",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["IntSize"] = reflect.ValueOf(strconv.IntSize)
@@ -1434,6 +1462,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "strconv",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -1494,6 +1523,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "strings",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -1516,6 +1546,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "sync",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -1560,6 +1591,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "sync/atomic",
 	}
 	consts = make(map[string] reflect.Value)
 	//syscall constants excluded
@@ -1872,6 +1904,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "syscall",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -1905,6 +1938,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "testing",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["FilterHTML"] = reflect.ValueOf(tabwriter.FilterHTML)
@@ -1929,6 +1963,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "text/tabwriter",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["ANSIC"] = reflect.ValueOf(time.ANSIC)
@@ -2009,6 +2044,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "time",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["MaxRune"] = reflect.ValueOf(unicode.MaxRune)
@@ -2251,6 +2287,7 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "unicode",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["RuneError"] = reflect.ValueOf(utf8.RuneError)
@@ -2284,5 +2321,6 @@ func EvalEnvironment(pkgs pkgType) {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
+		Path:   "unicode/utf8",
 	}
 }
