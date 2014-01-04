@@ -13,8 +13,8 @@ heavy lifting for eval is provided by the Carl Chatfield's
 Setup
 -----
 
-* Make sure our GO environment is setup, e.g. *$GOBIN*, *$GOPATH*, ...
-* Make sure you have go a 1.2ish version installed.
+* Make sure our Go environment is setup, e.g. *$GOBIN*, *$GOPATH*, ...
+* Make sure you have a version 1.2ish Go installed.
 
 ```
    $ go get github.com/rocky/go-fish
@@ -37,12 +37,12 @@ Using
 -----
 
 Run `go-fish` or `go-fish-grl`. For now, we have only a static
-environment provided and that's exactly the environment that *eval*
+environment provided and that's exactly the environment that *go-fish*
 uses for itself. (In other words this is ideally suited to introspect
-about itself). Since the *eval* package is a reasonable size program,
-many of the packages like *os*, *fmt*, *strconv*, *errors*, etc. are
-available. Look at the import list in file *eval_imports.go* for the
-exact list.
+about itself). Since it uses *eval* and that package is a reasonable size program,
+many of the packages like *os*, *fmt*, *strconv*, *errors*, *exec*, etc. are
+available. Look at the import list in file *repl_imports.go* for the
+exact list, or type *pkgs* inside *go-fish* (as shown below) for a list.
 
 Two global variables have been defined: *env*, and *results*. *env*
 the environment that is defined, again largely by
@@ -78,7 +78,15 @@ All imported packages:
 ansi    binary  eval      fmt     math    rand     scanner  sync       time   
 ast     bufio   exec      io      os      reflect  sort     syscall    token  
 atomic  bytes   filepath  ioutil  parser  repl     strconv  tabwriter  unicode
-big     errors  flag      log     pprof   runtime  strings  testing    utf8   
+big     errors  flag      log     pprof   runtime  strings  testing    utf8  
+gofish> pkg ansi
+=== Package ansi ("github.com/mgutz/ansi"): ===
+Constants of ansi:
+  Reset
+Functions of ansi:
+  Color  ColorCode  ColorFunc  DisableColors
+Variables of ansi:
+  Color  ColorCode  ColorFunc  DisableColors
 gofish> quit
 go-fish: That's all folks...
 $ 
