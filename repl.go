@@ -158,6 +158,10 @@ func REPL(env *eval.Env, results *([]interface{})) {
 		}
 		ctx := &eval.Ctx{line}
 		if expr, err := parser.ParseExpr(line); err != nil {
+			if pair := eval.FormatErrorPos(line, err.Error()); len(pair) == 2 {
+				fmt.Println(pair[0])
+				fmt.Println(pair[1])
+			}
 			fmt.Printf("parse error: %s\n", err)
 		} else if cexpr, errs := eval.CheckExpr(ctx, expr, env); len(errs) != 0 {
 			for _, cerr := range errs {

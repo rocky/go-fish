@@ -59,7 +59,7 @@ func PackageCommand(args []string) {
 				printReflectMap("Constants of "+pkg_name, pkg.Consts)
 				printReflectMap("Functions of "+pkg_name, pkg.Funcs)
 				printReflectTypeMap("Types of "+pkg_name, pkg.Types)
-				printReflectMap("Variables of "+pkg_name, pkg.Funcs)
+				printReflectMap("Variables of "+pkg_name, pkg.Vars)
 			} else {
 			repl.Errmsg("Package %s not imported", pkg_name)
 			}
