@@ -67,9 +67,15 @@ To get help, enter: "help".
 gofish> 10+len("abc" + "def")
 Kind = Type = int
 results[0] = 16
-gofish> os.Args[0]
-Kind = Type = string
-results[1] = "./go-fish"
+gofish> os.Stderr
+os.Stderr
+Kind = ptr
+Type = *os.File
+results[1] = &{0x1882d120}
+gofish> fmt.Fprintln(os.Stderr, os.Getenv("GOPATH"))
+/home/rocky/go
+Kind = Multi-Value
+15, nil
 gofish> help *
 All command names:
 help  packages  quit
