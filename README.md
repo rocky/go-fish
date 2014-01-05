@@ -91,8 +91,6 @@ Constants of ansi:
   Reset
 Functions of ansi:
   Color  ColorCode  ColorFunc  DisableColors
-Variables of ansi:
-  Color  ColorCode  ColorFunc  DisableColors
 gofish> quit
 go-fish: That's all folks...
 $ 
