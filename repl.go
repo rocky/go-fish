@@ -175,17 +175,21 @@ func REPL(env *eval.Env, results *([]interface{})) {
 			fmt.Printf("Kind=Slice\nvoid\n")
 		} else if len(*vals) == 1 {
 			value := (*vals)[0]
-			kind := value.Kind().String()
-			typ  := value.Type().String()
-			if typ != kind {
-				fmt.Printf("Kind = %v\n", kind)
-				fmt.Printf("Type = %v\n", typ)
+			if value.IsValid() {
+				kind := value.Kind().String()
+				typ  := value.Type().String()
+				if typ != kind {
+					fmt.Printf("Kind = %v\n", kind)
+					fmt.Printf("Type = %v\n", typ)
+				} else {
+					fmt.Printf("Kind = Type = %v\n", kind)
+				}
+				fmt.Printf("results[%d] = %s\n", exprs, eval.Inspect(value))
+				exprs += 1
+				*results = append(*results, (*vals)[0].Interface())
 			} else {
-				fmt.Printf("Kind = Type = %v\n", kind)
+				fmt.Printf("%s\n", value)
 			}
-			fmt.Printf("results[%d] = %s\n", exprs, eval.Inspect(value))
-			exprs += 1
-			*results = append(*results, (*vals)[0].Interface())
 		} else {
 			fmt.Printf("Kind = Multi-Value\n")
 			size := len(*vals)
