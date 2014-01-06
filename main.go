@@ -3,7 +3,7 @@
 
 package main
 
-// This is a simple REPL (read-eval-print loop) for GO.
+// This is a simple REPL (read-eval-print loop) for Go.
 
 // (rocky) My intent here is to have something that I can debug in
 // the ssa-debugger tortoise/gub.sh. Right now that can't handle the
@@ -36,19 +36,16 @@ To get help, enter: "help".
 
 }
 
+// Set up the Go package, function, constant, variable environment; then REPL
+// (Read, Eval, Print, and Loop).
 func main() {
-	// Set up the environment and then call REPL
+
 	// A place to store result values of expressions entered
 	// interactively
-	var results []interface{} = make([] interface{}, 0, 10)
-	var global_vars map[string]  reflect.Value = make(map[string] reflect.Value)
-	global_vars["results"] = reflect.ValueOf(&results)
-
 	env := repl.MakeEvalEnv()
-	env.Vars = global_vars
 
 	// Make this truly self-referential
-	global_vars["env"] = reflect.ValueOf(&env)
+	env.Vars["env"] = reflect.ValueOf(&env)
 
 	intro_text()
 
@@ -57,7 +54,6 @@ func main() {
 	// Initialize REPL commands
 	fishcmd.Init()
 
-	// And just when you thought we'd never get around to it...
-	repl.REPL(&env, &results)
+	repl.REPL(&env)
 	os.Exit(repl.ExitCode)
 }

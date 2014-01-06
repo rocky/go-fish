@@ -140,9 +140,15 @@ var ExitCode  int  = 0
 var Env *eval.Env
 
 // REPL is the read, eval, and print loop.
-func REPL(env *eval.Env, results *([]interface{})) {
+func REPL(env *eval.Env) {
 
 	var err error
+
+	// A place to store result values of expressions entered
+	// interactively
+	var results *([]interface{})
+	env.Vars["results"] = reflect.ValueOf(&results)
+
 	Env = env
 	exprs := 0
 	line, err := readLineFn("gofish> ", true)

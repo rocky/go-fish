@@ -3,7 +3,7 @@
 
 package main
 
-// This simple REPL (read-eval-print loop) for GO using GNU Readline
+// This simple REPL (read-eval-print loop) for Go using GNU Readline
 
 import (
 	"fmt"
@@ -67,15 +67,10 @@ func main() {
 
 	// A place to store result values of expressions entered
 	// interactively
-	var results []interface{} = make([] interface{}, 0, 10)
-	var global_vars map[string]  reflect.Value = make(map[string] reflect.Value)
-	global_vars["results"] = reflect.ValueOf(&results)
-
 	env := repl.MakeEvalEnv()
-	env.Vars = global_vars
 
 	// Make this truly self-referential
-	global_vars["env"] = reflect.ValueOf(&env)
+	env.Vars["env"] = reflect.ValueOf(&env)
 
 	intro_text()
 
@@ -87,7 +82,6 @@ func main() {
 	// Initialize REPL commands
 	fishcmd.Init()
 
-	// And just when you thought we'd never get around to it...
-	repl.REPL(&env, &results)
+	repl.REPL(&env)
 	os.Exit(repl.ExitCode)
 }

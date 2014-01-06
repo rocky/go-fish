@@ -25,6 +25,8 @@ import (
 	"os/exec"
 	"path/filepath"
 	"reflect"
+	"regexp"
+	"regexp/syntax"
 	"runtime"
 	"runtime/pprof"
 	"sort"
@@ -350,6 +352,7 @@ func EvalEnvironment(pkgs pkgType) {
 	funcs["GetEvalSelectorExprCallback"] = reflect.ValueOf(eval.GetEvalSelectorExprCallback)
 	funcs["SetUserConversion"] = reflect.ValueOf(eval.SetUserConversion)
 	funcs["GetUserConversion"] = reflect.ValueOf(eval.GetUserConversion)
+	funcs["FormatErrorPos"] = reflect.ValueOf(eval.FormatErrorPos)
 
 	types = make(map[string] reflect.Type)
 	types["Expr"] = reflect.TypeOf(*new(eval.Expr))
@@ -390,6 +393,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types["Env"] = reflect.TypeOf(*new(eval.Env))
 	types["ErrBadBasicLit"] = reflect.TypeOf(*new(eval.ErrBadBasicLit))
 	types["ErrInvalidOperand"] = reflect.TypeOf(*new(eval.ErrInvalidOperand))
+	types["ErrInvalidIndirect"] = reflect.TypeOf(*new(eval.ErrInvalidIndirect))
 	types["ErrMismatchedTypes"] = reflect.TypeOf(*new(eval.ErrMismatchedTypes))
 	types["ErrInvalidOperands"] = reflect.TypeOf(*new(eval.ErrInvalidOperands))
 	types["ErrBadFunArgument"] = reflect.TypeOf(*new(eval.ErrBadFunArgument))
@@ -1310,6 +1314,123 @@ func EvalEnvironment(pkgs pkgType) {
 		Vars:   vars,
 		Pkgs:   pkgs,
 		Path:   "reflect",
+	}
+	consts = make(map[string] reflect.Value)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["Compile"] = reflect.ValueOf(regexp.Compile)
+	funcs["CompilePOSIX"] = reflect.ValueOf(regexp.CompilePOSIX)
+	funcs["MustCompile"] = reflect.ValueOf(regexp.MustCompile)
+	funcs["MustCompilePOSIX"] = reflect.ValueOf(regexp.MustCompilePOSIX)
+	funcs["MatchReader"] = reflect.ValueOf(regexp.MatchReader)
+	funcs["MatchString"] = reflect.ValueOf(regexp.MatchString)
+	funcs["Match"] = reflect.ValueOf(regexp.Match)
+	funcs["QuoteMeta"] = reflect.ValueOf(regexp.QuoteMeta)
+
+	types = make(map[string] reflect.Type)
+	types["Regexp"] = reflect.TypeOf(*new(regexp.Regexp))
+
+	vars = make(map[string] reflect.Value)
+	pkgs["regexp"] = &eval.Env {
+		Name: "regexp",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+		Path:   "regexp",
+	}
+	consts = make(map[string] reflect.Value)
+	consts["ErrInternalError"] = reflect.ValueOf(syntax.ErrInternalError)
+	consts["ErrInvalidCharClass"] = reflect.ValueOf(syntax.ErrInvalidCharClass)
+	consts["ErrInvalidCharRange"] = reflect.ValueOf(syntax.ErrInvalidCharRange)
+	consts["ErrInvalidEscape"] = reflect.ValueOf(syntax.ErrInvalidEscape)
+	consts["ErrInvalidNamedCapture"] = reflect.ValueOf(syntax.ErrInvalidNamedCapture)
+	consts["ErrInvalidPerlOp"] = reflect.ValueOf(syntax.ErrInvalidPerlOp)
+	consts["ErrInvalidRepeatOp"] = reflect.ValueOf(syntax.ErrInvalidRepeatOp)
+	consts["ErrInvalidRepeatSize"] = reflect.ValueOf(syntax.ErrInvalidRepeatSize)
+	consts["ErrInvalidUTF8"] = reflect.ValueOf(syntax.ErrInvalidUTF8)
+	consts["ErrMissingBracket"] = reflect.ValueOf(syntax.ErrMissingBracket)
+	consts["ErrMissingParen"] = reflect.ValueOf(syntax.ErrMissingParen)
+	consts["ErrMissingRepeatArgument"] = reflect.ValueOf(syntax.ErrMissingRepeatArgument)
+	consts["ErrTrailingBackslash"] = reflect.ValueOf(syntax.ErrTrailingBackslash)
+	consts["ErrUnexpectedParen"] = reflect.ValueOf(syntax.ErrUnexpectedParen)
+	consts["FoldCase"] = reflect.ValueOf(syntax.FoldCase)
+	consts["Literal"] = reflect.ValueOf(syntax.Literal)
+	consts["ClassNL"] = reflect.ValueOf(syntax.ClassNL)
+	consts["DotNL"] = reflect.ValueOf(syntax.DotNL)
+	consts["OneLine"] = reflect.ValueOf(syntax.OneLine)
+	consts["NonGreedy"] = reflect.ValueOf(syntax.NonGreedy)
+	consts["PerlX"] = reflect.ValueOf(syntax.PerlX)
+	consts["UnicodeGroups"] = reflect.ValueOf(syntax.UnicodeGroups)
+	consts["WasDollar"] = reflect.ValueOf(syntax.WasDollar)
+	consts["Simple"] = reflect.ValueOf(syntax.Simple)
+	consts["MatchNL"] = reflect.ValueOf(syntax.MatchNL)
+	consts["Perl"] = reflect.ValueOf(syntax.Perl)
+	consts["POSIX"] = reflect.ValueOf(syntax.POSIX)
+	consts["InstAlt"] = reflect.ValueOf(syntax.InstAlt)
+	consts["InstAltMatch"] = reflect.ValueOf(syntax.InstAltMatch)
+	consts["InstCapture"] = reflect.ValueOf(syntax.InstCapture)
+	consts["InstEmptyWidth"] = reflect.ValueOf(syntax.InstEmptyWidth)
+	consts["InstMatch"] = reflect.ValueOf(syntax.InstMatch)
+	consts["InstFail"] = reflect.ValueOf(syntax.InstFail)
+	consts["InstNop"] = reflect.ValueOf(syntax.InstNop)
+	consts["InstRune"] = reflect.ValueOf(syntax.InstRune)
+	consts["InstRune1"] = reflect.ValueOf(syntax.InstRune1)
+	consts["InstRuneAny"] = reflect.ValueOf(syntax.InstRuneAny)
+	consts["InstRuneAnyNotNL"] = reflect.ValueOf(syntax.InstRuneAnyNotNL)
+	consts["EmptyBeginLine"] = reflect.ValueOf(syntax.EmptyBeginLine)
+	consts["EmptyEndLine"] = reflect.ValueOf(syntax.EmptyEndLine)
+	consts["EmptyBeginText"] = reflect.ValueOf(syntax.EmptyBeginText)
+	consts["EmptyEndText"] = reflect.ValueOf(syntax.EmptyEndText)
+	consts["EmptyWordBoundary"] = reflect.ValueOf(syntax.EmptyWordBoundary)
+	consts["EmptyNoWordBoundary"] = reflect.ValueOf(syntax.EmptyNoWordBoundary)
+	consts["OpNoMatch"] = reflect.ValueOf(syntax.OpNoMatch)
+	consts["OpEmptyMatch"] = reflect.ValueOf(syntax.OpEmptyMatch)
+	consts["OpLiteral"] = reflect.ValueOf(syntax.OpLiteral)
+	consts["OpCharClass"] = reflect.ValueOf(syntax.OpCharClass)
+	consts["OpAnyCharNotNL"] = reflect.ValueOf(syntax.OpAnyCharNotNL)
+	consts["OpAnyChar"] = reflect.ValueOf(syntax.OpAnyChar)
+	consts["OpBeginLine"] = reflect.ValueOf(syntax.OpBeginLine)
+	consts["OpEndLine"] = reflect.ValueOf(syntax.OpEndLine)
+	consts["OpBeginText"] = reflect.ValueOf(syntax.OpBeginText)
+	consts["OpEndText"] = reflect.ValueOf(syntax.OpEndText)
+	consts["OpWordBoundary"] = reflect.ValueOf(syntax.OpWordBoundary)
+	consts["OpNoWordBoundary"] = reflect.ValueOf(syntax.OpNoWordBoundary)
+	consts["OpCapture"] = reflect.ValueOf(syntax.OpCapture)
+	consts["OpStar"] = reflect.ValueOf(syntax.OpStar)
+	consts["OpPlus"] = reflect.ValueOf(syntax.OpPlus)
+	consts["OpQuest"] = reflect.ValueOf(syntax.OpQuest)
+	consts["OpRepeat"] = reflect.ValueOf(syntax.OpRepeat)
+	consts["OpConcat"] = reflect.ValueOf(syntax.OpConcat)
+	consts["OpAlternate"] = reflect.ValueOf(syntax.OpAlternate)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["Compile"] = reflect.ValueOf(syntax.Compile)
+	funcs["Parse"] = reflect.ValueOf(syntax.Parse)
+	funcs["EmptyOpContext"] = reflect.ValueOf(syntax.EmptyOpContext)
+	funcs["IsWordChar"] = reflect.ValueOf(syntax.IsWordChar)
+
+	types = make(map[string] reflect.Type)
+	types["Error"] = reflect.TypeOf(*new(syntax.Error))
+	types["ErrorCode"] = reflect.TypeOf(*new(syntax.ErrorCode))
+	types["Flags"] = reflect.TypeOf(*new(syntax.Flags))
+	types["Prog"] = reflect.TypeOf(*new(syntax.Prog))
+	types["InstOp"] = reflect.TypeOf(*new(syntax.InstOp))
+	types["EmptyOp"] = reflect.TypeOf(*new(syntax.EmptyOp))
+	types["Inst"] = reflect.TypeOf(*new(syntax.Inst))
+	types["Regexp"] = reflect.TypeOf(*new(syntax.Regexp))
+	types["Op"] = reflect.TypeOf(*new(syntax.Op))
+
+	vars = make(map[string] reflect.Value)
+	pkgs["syntax"] = &eval.Env {
+		Name: "syntax",
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+		Path:   "regexp/syntax",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["Compiler"] = reflect.ValueOf(runtime.Compiler)
