@@ -346,6 +346,7 @@ func EvalEnvironment(pkgs pkgType) {
 	funcs["SetEvalIdentExprCallback"] = reflect.ValueOf(eval.SetEvalIdentExprCallback)
 	funcs["GetEvalIdentExprCallback"] = reflect.ValueOf(eval.GetEvalIdentExprCallback)
 	funcs["CannotIndex"] = reflect.ValueOf(eval.CannotIndex)
+	funcs["InspectPtr"] = reflect.ValueOf(eval.InspectPtr)
 	funcs["Inspect"] = reflect.ValueOf(eval.Inspect)
 	funcs["EvalSelectorExpr"] = reflect.ValueOf(eval.EvalSelectorExpr)
 	funcs["SetEvalSelectorExprCallback"] = reflect.ValueOf(eval.SetEvalSelectorExprCallback)

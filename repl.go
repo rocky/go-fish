@@ -60,7 +60,7 @@ func HistoryFile(history_basename string) string {
 		fmt.Println("No history file found to read in: ", err.Error())
 	} else {
 		if fi.IsDir() {
-			fmt.Printf("Ignoring history file %s; is a directory, should be a file",
+			Errmsg("Ignoring history file %s; is a directory, should be a file",
 				history_file)
 			return ""
 		}
@@ -146,7 +146,7 @@ func REPL(env *eval.Env) {
 
 	// A place to store result values of expressions entered
 	// interactively
-	var results *([]interface{})
+	results := make([] interface{}, 0, 10)
 	env.Vars["results"] = reflect.ValueOf(&results)
 
 	Env = env
@@ -165,47 +165,47 @@ func REPL(env *eval.Env) {
 		ctx := &eval.Ctx{line}
 		if expr, err := parser.ParseExpr(line); err != nil {
 			if pair := eval.FormatErrorPos(line, err.Error()); len(pair) == 2 {
-				fmt.Println(pair[0])
-				fmt.Println(pair[1])
+				Msg(pair[0])
+				Msg(pair[1])
 			}
-			fmt.Printf("parse error: %s\n", err)
+			Errmsg("parse error: %s", err)
 		} else if cexpr, errs := eval.CheckExpr(ctx, expr, env); len(errs) != 0 {
 			for _, cerr := range errs {
-				fmt.Printf("%v\n", cerr)
+				Errmsg("%v", cerr)
 			}
 		} else if vals, _, err := eval.EvalExpr(ctx, cexpr, env); err != nil {
-			fmt.Printf("eval error: %s\n", err)
+			Errmsg("eval error: %s", err)
 		} else if vals == nil {
-			fmt.Printf("Kind=nil\nnil\n")
+			Msg("Kind=nil\nnil")
 		} else if len(*vals) == 0 {
-			fmt.Printf("Kind=Slice\nvoid\n")
+			Msg("Kind=Slice\nvoid")
 		} else if len(*vals) == 1 {
 			value := (*vals)[0]
 			if value.IsValid() {
 				kind := value.Kind().String()
 				typ  := value.Type().String()
 				if typ != kind {
-					fmt.Printf("Kind = %v\n", kind)
-					fmt.Printf("Type = %v\n", typ)
+					Msg("Kind = %v", kind)
+					Msg("Type = %v", typ)
 				} else {
-					fmt.Printf("Kind = Type = %v\n", kind)
+					Msg("Kind = Type = %v", kind)
 				}
-				fmt.Printf("results[%d] = %s\n", exprs, eval.Inspect(value))
+				Msg("results[%d] = %s", exprs, eval.Inspect(value))
 				exprs += 1
-				*results = append(*results, (*vals)[0].Interface())
+				results = append(results, (*vals)[0].Interface())
 			} else {
-				fmt.Printf("%s\n", value)
+				Msg("%s", value)
 			}
 		} else {
-			fmt.Printf("Kind = Multi-Value\n")
+			Msg("Kind = Multi-Value")
 			size := len(*vals)
 			for i, v := range *vals {
 				fmt.Printf("%s", eval.Inspect(v))
 				if i < size-1 { fmt.Printf(", ") }
 			}
-			fmt.Printf("\n")
+			Msg("")
 			exprs += 1
-			*results = append(*results, (*vals))
+			results = append(results, (*vals))
 		}
 
 		line, err = readLineFn("gofish> ", true)

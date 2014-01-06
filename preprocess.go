@@ -7,9 +7,11 @@ import (
 	"strings"
 )
 
+var CmdLine string
+
 func wasProcessed(line string) bool {
-	line = strings.Trim(line, " \t\n")
-	args  := strings.Split(line, " ")
+	CmdLine = strings.Trim(line, " \t\n")
+	args  := strings.Split(CmdLine, " ")
 	if len(args) == 0 || len(args[0]) == 0 {
 		Msg("Empty line skipped")
 		// gnureadline.RemoveHistory(gnureadline.HistoryLength()-1)
