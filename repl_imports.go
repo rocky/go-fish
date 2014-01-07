@@ -494,6 +494,7 @@ func EvalEnvironment(pkgs pkgType) {
 	vars["Cmds"] = reflect.ValueOf(&Cmds)
 	vars["Aliases"] = reflect.ValueOf(&Aliases)
 	vars["Categories"] = reflect.ValueOf(&Categories)
+	vars["CmdLine"] = reflect.ValueOf(&CmdLine)
 	vars["Highlight"] = reflect.ValueOf(&Highlight)
 	vars["Maxwidth"] = reflect.ValueOf(&Maxwidth)
 	vars["GOFISH_RESTART_CMD"] = reflect.ValueOf(&GOFISH_RESTART_CMD)

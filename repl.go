@@ -39,6 +39,10 @@ var Maxwidth int
 type ReadLineFnType func(prompt string, add_history ... bool) (string, error)
 var  readLineFn ReadLineFnType
 
+type InspectFnType func(a ...interface{}) string
+var  inspectFn InspectFnType
+
+
 var initial_cwd string
 
 // GOFISH_RESTART_CMD is a string that was used to invoke gofish.
@@ -80,6 +84,18 @@ func GetReadLineFn() ReadLineFnType {
 	return readLineFn
 }
 
+// GetInspectFn returns the current inspect function in effect for
+// the "print" part of the read/eval/print loop.
+func GetInspectFn() InspectFnType {
+	return inspectFn
+}
+
+// SetInspectFn is used to set a specific readline function to be used
+// as the "print" part of the read/eval/print loop.
+func SetInspectFn(fn InspectFnType) {
+	inspectFn = fn
+}
+
 // Input is a workaround for the fact that ReadLineFnType doesn't have
 // an input parameter, but SimpleReadLine below needs a
 // *bufioReader. So set this global variable beforehand if you are using
@@ -99,8 +115,14 @@ func SimpleReadLine(prompt string, add_history ... bool) (string, error) {
 	return line, err
 }
 
+func SimpleInspect(a ...interface{}) string {
+	value := a[0].(reflect.Value)
+	return eval.Inspect(value)
+}
+
 func init() {
 	readLineFn = SimpleReadLine
+	inspectFn  = SimpleInspect
 	widthstr := os.Getenv("COLUMNS")
 	initial_cwd, _ = os.Getwd()
 	GOFISH_RESTART_CMD = os.Getenv("GOFISH_RESTART_CMD")
@@ -190,7 +212,7 @@ func REPL(env *eval.Env) {
 				} else {
 					Msg("Kind = Type = %v", kind)
 				}
-				Msg("results[%d] = %s", exprs, eval.Inspect(value))
+				Msg("results[%d] = %s", exprs, inspectFn(value))
 				exprs += 1
 				results = append(results, (*vals)[0].Interface())
 			} else {
@@ -200,7 +222,7 @@ func REPL(env *eval.Env) {
 			Msg("Kind = Multi-Value")
 			size := len(*vals)
 			for i, v := range *vals {
-				fmt.Printf("%s", eval.Inspect(v))
+				fmt.Printf("%s", inspectFn(v))
 				if i < size-1 { fmt.Printf(", ") }
 			}
 			Msg("")

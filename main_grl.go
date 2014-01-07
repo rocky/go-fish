@@ -11,6 +11,7 @@ import (
 	"reflect"
 
 	"code.google.com/p/go-gnureadline"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/rocky/go-fish"
 	"github.com/rocky/go-fish/cmd"
 )
@@ -60,6 +61,12 @@ func gnuReadLineTermination() {
 	}
 }
 
+func spewInspect(a ...interface{}) string {
+	value := a[0].(reflect.Value)
+	return spew.Sdump(value.Interface())
+}
+
+
 
 // Set up the Go package, function, constant, variable environment; then REPL
 // (Read, Eval, Print, and Loop).
@@ -76,6 +83,8 @@ func main() {
 
 	repl.SetReadLineFn(gnureadline.Readline)
 	gnuReadLineSetup()
+
+	repl.SetInspectFn(spewInspect)
 
 	defer gnuReadLineTermination()
 
