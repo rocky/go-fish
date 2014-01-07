@@ -54,6 +54,6 @@ func main() {
 	// Initialize REPL commands
 	fishcmd.Init()
 
-	repl.REPL(&env)
+	repl.REPL(&env, repl.SimpleReadLine, repl.SimpleInspect)
 	os.Exit(repl.ExitCode)
 }

@@ -474,8 +474,6 @@ func EvalEnvironment(pkgs pkgType) {
 	funcs["Section"] = reflect.ValueOf(Section)
 	funcs["PrintSorted"] = reflect.ValueOf(PrintSorted)
 	funcs["HistoryFile"] = reflect.ValueOf(HistoryFile)
-	funcs["SetReadLineFn"] = reflect.ValueOf(SetReadLineFn)
-	funcs["GetReadLineFn"] = reflect.ValueOf(GetReadLineFn)
 	funcs["SimpleReadLine"] = reflect.ValueOf(SimpleReadLine)
 	funcs["MakeEvalEnv"] = reflect.ValueOf(MakeEvalEnv)
 	funcs["REPL"] = reflect.ValueOf(REPL)

@@ -80,17 +80,13 @@ func main() {
 	env.Vars["env"] = reflect.ValueOf(&env)
 
 	intro_text()
-
-	repl.SetReadLineFn(gnureadline.Readline)
 	gnuReadLineSetup()
-
-	repl.SetInspectFn(spewInspect)
 
 	defer gnuReadLineTermination()
 
 	// Initialize REPL commands
 	fishcmd.Init()
 
-	repl.REPL(&env)
+	repl.REPL(&env, gnureadline.Readline, spewInspect)
 	os.Exit(repl.ExitCode)
 }

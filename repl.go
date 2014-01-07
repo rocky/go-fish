@@ -72,30 +72,6 @@ func HistoryFile(history_basename string) string {
 	return history_file
 }
 
-// SetReadLineFn is used to set a specific readline function to be used
-// as the "read" part of the read/eval/print loop.
-func SetReadLineFn(fn ReadLineFnType) {
-	readLineFn = fn
-}
-
-// GetReadLineFn returns the current readline function in effect for
-// the "read" part of the read/eval/print loop.
-func GetReadLineFn() ReadLineFnType {
-	return readLineFn
-}
-
-// GetInspectFn returns the current inspect function in effect for
-// the "print" part of the read/eval/print loop.
-func GetInspectFn() InspectFnType {
-	return inspectFn
-}
-
-// SetInspectFn is used to set a specific readline function to be used
-// as the "print" part of the read/eval/print loop.
-func SetInspectFn(fn InspectFnType) {
-	inspectFn = fn
-}
-
 // Input is a workaround for the fact that ReadLineFnType doesn't have
 // an input parameter, but SimpleReadLine below needs a
 // *bufioReader. So set this global variable beforehand if you are using
@@ -162,7 +138,7 @@ var ExitCode  int  = 0
 var Env *eval.Env
 
 // REPL is the read, eval, and print loop.
-func REPL(env *eval.Env) {
+func REPL(env *eval.Env, readLineFn ReadLineFnType, InspectFn InspectFnType) {
 
 	var err error
 
