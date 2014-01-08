@@ -40,7 +40,6 @@ type ReadLineFnType func(prompt string, add_history ... bool) (string, error)
 var  readLineFn ReadLineFnType
 
 type InspectFnType func(a ...interface{}) string
-var  inspectFn InspectFnType
 
 
 var initial_cwd string
@@ -97,8 +96,6 @@ func SimpleInspect(a ...interface{}) string {
 }
 
 func init() {
-	readLineFn = SimpleReadLine
-	inspectFn  = SimpleInspect
 	widthstr := os.Getenv("COLUMNS")
 	initial_cwd, _ = os.Getwd()
 	GOFISH_RESTART_CMD = os.Getenv("GOFISH_RESTART_CMD")
@@ -138,7 +135,7 @@ var ExitCode  int  = 0
 var Env *eval.Env
 
 // REPL is the read, eval, and print loop.
-func REPL(env *eval.Env, readLineFn ReadLineFnType, InspectFn InspectFnType) {
+func REPL(env *eval.Env, readLineFn ReadLineFnType, inspectFn InspectFnType) {
 
 	var err error
 

@@ -475,6 +475,7 @@ func EvalEnvironment(pkgs pkgType) {
 	funcs["PrintSorted"] = reflect.ValueOf(PrintSorted)
 	funcs["HistoryFile"] = reflect.ValueOf(HistoryFile)
 	funcs["SimpleReadLine"] = reflect.ValueOf(SimpleReadLine)
+	funcs["SimpleInspect"] = reflect.ValueOf(SimpleInspect)
 	funcs["MakeEvalEnv"] = reflect.ValueOf(MakeEvalEnv)
 	funcs["REPL"] = reflect.ValueOf(REPL)
 	funcs["EvalEnvironment"] = reflect.ValueOf(EvalEnvironment)
@@ -486,6 +487,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types["CmdFunc"] = reflect.TypeOf(*new(CmdFunc))
 	types["CmdInfo"] = reflect.TypeOf(*new(CmdInfo))
 	types["ReadLineFnType"] = reflect.TypeOf(*new(ReadLineFnType))
+	types["InspectFnType"] = reflect.TypeOf(*new(InspectFnType))
 	types["NumError"] = reflect.TypeOf(*new(NumError))
 
 	vars = make(map[string] reflect.Value)
