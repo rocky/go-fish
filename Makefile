@@ -41,7 +41,7 @@ check: test
 #: Remove derived files.
 clean:
 	for file in make_env go-fish go-fish-grl repl_import.go ; do \
-		[ -e $$file ] && rm $$file; \
+		if test -e "$$file" ; then rm $$file ; fi \
 	done
 
 #: Install this puppy
