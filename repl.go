@@ -92,7 +92,7 @@ func SimpleReadLine(prompt string, add_history ... bool) (string, error) {
 
 func SimpleInspect(a ...interface{}) string {
 	value := a[0].(reflect.Value)
-	return fmt.Sprintf("%#v", value)
+	return fmt.Sprintf("%#v", value.Interface())
 }
 
 func init() {

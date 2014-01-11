@@ -406,6 +406,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types["ErrMultiInSingleContext"] = reflect.TypeOf(*new(eval.ErrMultiInSingleContext))
 	types["ErrArrayIndexOutOfBounds"] = reflect.TypeOf(*new(eval.ErrArrayIndexOutOfBounds))
 	types["ErrInvalidIndexOperation"] = reflect.TypeOf(*new(eval.ErrInvalidIndexOperation))
+	types["ErrInvalidSliceType"] = reflect.TypeOf(*new(eval.ErrInvalidSliceType))
 	types["ErrInvalidIndex"] = reflect.TypeOf(*new(eval.ErrInvalidIndex))
 	types["ErrDivideByZero"] = reflect.TypeOf(*new(eval.ErrDivideByZero))
 	types["ErrInvalidBinaryOperation"] = reflect.TypeOf(*new(eval.ErrInvalidBinaryOperation))
