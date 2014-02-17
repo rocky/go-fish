@@ -185,8 +185,7 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 			fmt.Printf("\tvars[\"%s\"] = reflect.ValueOf(&%s)\n", *v, fullname)
 		}
 
-		fmt.Printf(`	pkgs["%s"] = &eval.Env {
-		Name: "%s",
+		fmt.Printf(`	pkgs["%s"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -194,7 +193,7 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 		Pkgs:   pkgs,
 		Path:   "%s",
 	}
-`, name, name, path)
+`, name, path)
 	}
 
 	// } else {
@@ -279,16 +278,15 @@ import (`)
 	}
 	fmt.Printf(`)
 
-type pkgType map[string] eval.Pkg
-
-// %sEnvironment adds to eval.Pkg those packages included
+// %sEnvironment adds to eval.Env those packages included
 // with import "%s".
 
-func %sEnvironment(pkgs pkgType) {
+func %sEnvironment() *eval.SimpleEnv {
 	var consts map[string] reflect.Value
 	var vars   map[string] reflect.Value
 	var types  map[string] reflect.Type
 	var funcs  map[string] reflect.Value
+	var pkgs   map[string] eval.Env = make(map[string] eval.Env)
 
 `, name, startingImport, name)
 	return kept_pkgs
@@ -296,7 +294,11 @@ func %sEnvironment(pkgs pkgType) {
 
 // writePostamble finishes of the Go code
 func writePostamble() {
-	fmt.Println("}")
+	fmt.Printf(`
+	mainEnv := eval.MakeSimpleEnv()
+	mainEnv.Pkgs = pkgs
+	return mainEnv
+}`)
 }
 
 // main creates a Go program that adds to a github.com/0xfaded/eval

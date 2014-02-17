@@ -52,6 +52,8 @@ func printReflectTypeMap(title string, m map[string] reflect.Type) {
 //    package [*name* [name*...]]
 // which shows information about a package or lists all packages.
 func PackageCommand(args []string) {
+	repl.Msg("Needs to be redone")
+	/****
 	if len(args) > 1 {
 		for _, pkg_name := range args[1:len(args)] {
 			if pkg, ok := repl.Env.Pkgs[pkg_name]; ok {
@@ -71,4 +73,5 @@ func PackageCommand(args []string) {
 		}
 		repl.PrintSorted("All imported packages", pkgNames)
 	}
+    ****/
 }

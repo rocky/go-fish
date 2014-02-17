@@ -26,31 +26,27 @@ Shows the type checker information for an expression
 
 func WhatisCommand(args []string) {
 	line := repl.CmdLine[len(args[0]):len(repl.CmdLine)]
-	ctx  := &eval.Ctx{line}
 	if expr, err := parser.ParseExpr(line); err != nil {
 		if pair := eval.FormatErrorPos(line, err.Error()); len(pair) == 2 {
 			repl.Msg(pair[0])
 			repl.Msg(pair[1])
 		}
 		repl.Errmsg("parse error: %s\n", err)
+	} else if cexpr, errs := eval.CheckExpr(expr, repl.Env); len(errs) != 0 {
+		for _, cerr := range errs {
+			repl.Msg("%v", cerr)
+		}
 	} else {
-		cexpr, errs := eval.CheckExpr(ctx, expr, repl.Env)
-		if len(errs) != 0 {
-			for _, cerr := range errs {
-				repl.Msg("%v", cerr)
-			}
+		repl.Section(cexpr.String())
+		if cexpr.IsConst() {
+			repl.Msg("constant:\t%s", cexpr.Const())
+		}
+		knownTypes := cexpr.KnownType()
+		if len(knownTypes) == 1{
+			repl.Msg("type:\t%s", knownTypes[0])
 		} else {
-			repl.Section(cexpr.String())
-			if cexpr.IsConst() {
-				repl.Msg("constant:\t%s", cexpr.Const())
-			}
-			knownTypes := cexpr.KnownType()
-			if len(knownTypes) == 1{
-				repl.Msg("type:\t%s", knownTypes[0])
-			} else {
-				for i, v := range knownTypes {
-					repl.Msg("type[%d]:\t%s", i, v)
-				}
+			for i, v := range knownTypes {
+				repl.Msg("type[%d]:\t%s", i, v)
 			}
 		}
 	}

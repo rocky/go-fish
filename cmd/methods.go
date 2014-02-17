@@ -3,8 +3,10 @@
 package fishcmd
 
 import (
+	/***
 	"reflect"
 	"strings"
+    ****/
 	"github.com/rocky/go-fish"
 )
 
@@ -28,6 +30,7 @@ the methods of that type. If a value is given methods of that value are given
 	repl.AddAlias("func", name)
 }
 
+/*****************
 func printMethodsOf(fullname string) {
 	pkgName  := "."
 	name     :=  fullname
@@ -77,10 +80,13 @@ func printMethodsOf(fullname string) {
 	}
 }
 
+********************/
 // MethodCommand implements the command:
 //    method [*name* [name*...]]
 // which shows information about a package or lists all packages.
 func MethodCommand(args []string) {
+	repl.Msg("Needs to be redone")
+	/****
 	if len(args) > 2 {
 		for _, name := range args[1:len(args)] {
 			printMethodsOf(name)
@@ -88,4 +94,5 @@ func MethodCommand(args []string) {
 	} else {
 		printMethodsOf(args[1])
 	}
+    ****/
 }

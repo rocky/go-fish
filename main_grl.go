@@ -77,7 +77,7 @@ func main() {
 	env := repl.MakeEvalEnv()
 
 	// Make this truly self-referential
-	env.Vars["env"] = reflect.ValueOf(&env)
+	env.Vars["env"] = reflect.ValueOf(env)
 
 	intro_text()
 	gnuReadLineSetup()
@@ -87,6 +87,6 @@ func main() {
 	// Initialize REPL commands
 	fishcmd.Init()
 
-	repl.REPL(&env, gnureadline.Readline, spewInspect)
+	repl.REPL(env, gnureadline.Readline, spewInspect)
 	os.Exit(repl.ExitCode)
 }

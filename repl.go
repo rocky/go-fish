@@ -110,19 +110,8 @@ func init() {
 // environment is exactly that environment needed by eval
 // automatically extracted from the package eval
 // (http://github.com/0xfaded/eval).
-func MakeEvalEnv() eval.Env {
-	var pkgs map[string] eval.Pkg = make(map[string] eval.Pkg)
-	EvalEnvironment(pkgs)
-
-	env := eval.Env {
-		Name:   ".",
-		Vars:   make(map[string] reflect.Value),
-		Consts: make(map[string] reflect.Value),
-		Funcs:  make(map[string] reflect.Value),
-		Types:  make(map[string] reflect.Type),
-		Pkgs:   pkgs,
-	}
-	return env
+func MakeEvalEnv() *eval.SimpleEnv {
+	return EvalEnvironment()
 }
 
 // LeaveREPL is set when we want to quit.
@@ -132,16 +121,16 @@ var LeaveREPL bool = false
 var ExitCode  int  = 0
 
 // Env is the evaluation environment we are working with.
-var Env *eval.Env
+var Env *eval.SimpleEnv
 
 // REPL is the read, eval, and print loop.
-func REPL(env *eval.Env, readLineFn ReadLineFnType, inspectFn InspectFnType) {
+func REPL(env *eval.SimpleEnv, readLineFn ReadLineFnType, inspectFn InspectFnType) {
 
 	var err error
 
 	// A place to store result values of expressions entered
 	// interactively
-	results := make([] interface{}, 0, 10)
+	results := make([]interface{}, 0, 10)
 	env.Vars["results"] = reflect.ValueOf(&results)
 
 	Env = env
@@ -157,25 +146,22 @@ func REPL(env *eval.Env, readLineFn ReadLineFnType, inspectFn InspectFnType) {
 			line, err = readLineFn("gofish> ", true)
 			continue
 		}
-		ctx := &eval.Ctx{line}
 		if expr, err := parser.ParseExpr(line); err != nil {
 			if pair := eval.FormatErrorPos(line, err.Error()); len(pair) == 2 {
 				Msg(pair[0])
 				Msg(pair[1])
 			}
 			Errmsg("parse error: %s", err)
-		} else if cexpr, errs := eval.CheckExpr(ctx, expr, env); len(errs) != 0 {
+		} else if cexpr, errs := eval.CheckExpr(expr, env); len(errs) != 0 {
 			for _, cerr := range errs {
 				Errmsg("%v", cerr)
 			}
-		} else if vals, _, err := eval.EvalExpr(ctx, cexpr, env); err != nil {
-			Errmsg("eval error: %s", err)
-		} else if vals == nil {
-			Msg("Kind=nil\nnil")
-		} else if len(*vals) == 0 {
-			Msg("Kind=Slice\nvoid")
-		} else if len(*vals) == 1 {
-			value := (*vals)[0]
+		} else if vals, err := eval.EvalExpr(cexpr, env); err != nil {
+			Errmsg("panic: %s", err)
+		} else if len(vals) == 0 {
+			fmt.Printf("Kind=Slice\nvoid\n")
+		} else if len(vals) == 1 {
+			value := (vals)[0]
 			if value.IsValid() {
 				kind := value.Kind().String()
 				typ  := value.Type().String()
@@ -187,20 +173,20 @@ func REPL(env *eval.Env, readLineFn ReadLineFnType, inspectFn InspectFnType) {
 				}
 				Msg("results[%d] = %s", exprs, inspectFn(value))
 				exprs += 1
-				results = append(results, (*vals)[0].Interface())
+				results = append(results, (vals)[0].Interface())
 			} else {
 				Msg("%s", value)
 			}
 		} else {
 			Msg("Kind = Multi-Value")
-			size := len(*vals)
-			for i, v := range *vals {
+			size := len(vals)
+			for i, v := range vals {
 				fmt.Printf("%s", inspectFn(v))
 				if i < size-1 { fmt.Printf(", ") }
 			}
 			Msg("")
 			exprs += 1
-			results = append(results, (*vals))
+			results = append(results, vals)
 		}
 
 		line, err = readLineFn("gofish> ", true)
