@@ -64,7 +64,7 @@ func gnuReadLineTermination() {
 
 func spewInspect(a ...interface{}) string {
 	value := a[0].(reflect.Value)
-	return spew.Sdump(value.Interface())
+	return spew.Sprint(value.Interface())
 }
 
 
