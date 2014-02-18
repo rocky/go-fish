@@ -25,6 +25,7 @@ func intro_text() {
 	fmt.Printf(`
 Results of expression are stored in variable slice "results".
 The environment is stored in global variable "env".
+Short form assignment, e.g. a, b := 1, 2, is supported.
 
 Enter expressions to be evaluated at the "gofish>" prompt.
 

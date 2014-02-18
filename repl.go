@@ -17,7 +17,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"go/parser"
+	"go/ast"
 	"io"
 	"os"
 	"path/filepath"
@@ -146,49 +146,58 @@ func REPL(env *eval.SimpleEnv, readLineFn ReadLineFnType, inspectFn InspectFnTyp
 			line, err = readLineFn("gofish> ", true)
 			continue
 		}
-		if expr, err := parser.ParseExpr(line); err != nil {
+		if stmt, err := eval.ParseStmt(line); err != nil {
 			if pair := eval.FormatErrorPos(line, err.Error()); len(pair) == 2 {
 				Msg(pair[0])
 				Msg(pair[1])
 			}
 			Errmsg("parse error: %s", err)
-		} else if cexpr, errs := eval.CheckExpr(expr, env); len(errs) != 0 {
-			for _, cerr := range errs {
-				Errmsg("%v", cerr)
-			}
-		} else if vals, err := eval.EvalExpr(cexpr, env); err != nil {
-			Errmsg("panic: %s", err)
-		} else if len(vals) == 0 {
-			fmt.Printf("Kind=Slice\nvoid\n")
-		} else if len(vals) == 1 {
-			value := (vals)[0]
-			if value.IsValid() {
-				kind := value.Kind().String()
-				typ  := value.Type().String()
-				if typ != kind {
-					Msg("Kind = %v", kind)
-					Msg("Type = %v", typ)
-				} else {
-					Msg("Kind = Type = %v", kind)
+		} else if expr, ok := stmt.(*ast.ExprStmt); ok {
+			if cexpr, errs := eval.CheckExpr(expr.X, env); len(errs) != 0 {
+				for _, cerr := range errs {
+					Errmsg("%v", cerr)
 				}
-				Msg("results[%d] = %s", exprs, inspectFn(value))
-				exprs += 1
-				results = append(results, (vals)[0].Interface())
+			} else if vals, err := eval.EvalExpr(cexpr, env); err != nil {
+				Errmsg("panic: %s", err)
+			} else if len(vals) == 0 {
+				fmt.Printf("Kind=Slice\nvoid\n")
+			} else if len(vals) == 1 {
+				value := (vals)[0]
+				if value.IsValid() {
+					kind := value.Kind().String()
+					typ  := value.Type().String()
+					if typ != kind {
+						Msg("Kind = %v", kind)
+						Msg("Type = %v", typ)
+					} else {
+						Msg("Kind = Type = %v", kind)
+					}
+					Msg("results[%d] = %s", exprs, inspectFn(value))
+					exprs += 1
+					results = append(results, (vals)[0].Interface())
+				} else {
+					Msg("%s", value)
+				}
 			} else {
-				Msg("%s", value)
+				Msg("Kind = Multi-Value")
+				size := len(vals)
+				for i, v := range vals {
+					fmt.Printf("%s", inspectFn(v))
+					if i < size-1 { fmt.Printf(", ") }
+				}
+				Msg("")
+				exprs += 1
+				results = append(results, vals)
 			}
 		} else {
-			Msg("Kind = Multi-Value")
-			size := len(vals)
-			for i, v := range vals {
-				fmt.Printf("%s", inspectFn(v))
-				if i < size-1 { fmt.Printf(", ") }
+			if cstmt, errs := eval.CheckStmt(stmt, env); len(errs) != 0 {
+				for _, cerr := range errs {
+					Errmsg("%v", cerr)
+				}
+			} else if err := eval.InterpStmt(cstmt, env); err != nil {
+				Errmsg("panic: %s", err)
 			}
-			Msg("")
-			exprs += 1
-			results = append(results, vals)
 		}
-
 		line, err = readLineFn("gofish> ", true)
 	}
 }
