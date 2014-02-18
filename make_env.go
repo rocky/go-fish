@@ -176,13 +176,15 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 		fmt.Println("\n\ttypes = make(map[string] reflect.Type)")
 		for _, v := range types {
 			fullname := fullIdentName(path, name, *v)
-			fmt.Printf("\ttypes[\"%s\"] = reflect.TypeOf(*new(%s))\n", *v, fullname)
+			fmt.Printf("\ttypes[\"%s\"] = reflect.TypeOf(new(%s)).Elem()\n",
+				*v, fullname)
 		}
 
 		fmt.Println("\n\tvars = make(map[string] reflect.Value)")
 		for _, v := range vars   {
 			fullname := fullIdentName(path, name, *v)
-			fmt.Printf("\tvars[\"%s\"] = reflect.ValueOf(&%s)\n", *v, fullname)
+			fmt.Printf("\tvars[\"%s\"] = reflect.ValueOf(&%s)\n", *v,
+				fullname)
 		}
 
 		fmt.Printf(`	pkgs["%s"] = &eval.SimpleEnv {
