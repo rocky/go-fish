@@ -4,6 +4,7 @@ package fishcmd
 
 import (
 	"reflect"
+	"github.com/0xfaded/eval"
 	"github.com/rocky/go-fish"
 )
 
@@ -54,14 +55,17 @@ func printReflectTypeMap(title string, m map[string] reflect.Type) {
 func PackageCommand(args []string) {
 	if len(args) > 1 {
 		for _, pkg_name := range args[1:len(args)] {
-			if pkg, ok := repl.Env.Pkgs[pkg_name]; ok {
-				repl.Section("=== Package %s (\"%s\"): ===", pkg_name, pkg.Path)
-				printReflectMap("Constants of "+pkg_name, pkg.Consts)
-				printReflectMap("Functions of "+pkg_name, pkg.Funcs)
-				printReflectTypeMap("Types of "+pkg_name, pkg.Types)
-				printReflectMap("Variables of "+pkg_name, pkg.Vars)
+
+			pkg := repl.Env.Pkg(pkg_name)
+			if pkg != nil {
+				repl.Section("=== Package %s: ===", pkg_name)
+				simplePkg := pkg.(*eval.SimpleEnv)
+				printReflectMap("Constants of "+pkg_name, simplePkg.Consts)
+				printReflectMap("Functions of "+pkg_name, simplePkg.Funcs)
+				printReflectTypeMap("Types of "+pkg_name, simplePkg.Types)
+				printReflectMap("Variables of "+pkg_name, simplePkg.Vars)
 			} else {
-			repl.Errmsg("Package %s not imported", pkg_name)
+				repl.Errmsg("Package %s not imported", pkg_name)
 			}
 		}
 	} else {

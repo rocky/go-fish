@@ -45,7 +45,7 @@ func main() {
 	env := repl.MakeEvalEnv()
 
 	// Make this truly self-referential
-	env.Vars["env"] = reflect.ValueOf(&env)
+	env.Vars["env"] = reflect.ValueOf(env)
 
 	intro_text()
 
@@ -54,6 +54,6 @@ func main() {
 	// Initialize REPL commands
 	fishcmd.Init()
 
-	repl.REPL(&env, repl.SimpleReadLine, repl.SimpleInspect)
+	repl.REPL(env, repl.SimpleReadLine, repl.SimpleInspect)
 	os.Exit(repl.ExitCode)
 }

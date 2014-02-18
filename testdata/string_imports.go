@@ -27,16 +27,15 @@ import (
 	"unicode/utf8"
 )
 
-type pkgType map[string] eval.Pkg
-
-// EvalEnvironment adds to eval.Pkg those packages included
+// EvalEnvironment adds to eval.Env those packages included
 // with import "strings".
 
-func EvalEnvironment(pkgs pkgType) {
+func EvalEnvironment() *eval.SimpleEnv {
 	var consts map[string] reflect.Value
 	var vars   map[string] reflect.Value
 	var types  map[string] reflect.Type
 	var funcs  map[string] reflect.Value
+	var pkgs   map[string] eval.Env = make(map[string] eval.Env)
 
 	consts = make(map[string] reflect.Value)
 	consts["MaxScanTokenSize"] = reflect.ValueOf(bufio.MaxScanTokenSize)
@@ -68,8 +67,7 @@ func EvalEnvironment(pkgs pkgType) {
 	vars["ErrTooLong"] = reflect.ValueOf(&bufio.ErrTooLong)
 	vars["ErrNegativeAdvance"] = reflect.ValueOf(&bufio.ErrNegativeAdvance)
 	vars["ErrAdvanceTooFar"] = reflect.ValueOf(&bufio.ErrAdvanceTooFar)
-	pkgs["bufio"] = &eval.Env {
-		Name: "bufio",
+	pkgs["bufio"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -133,8 +131,7 @@ func EvalEnvironment(pkgs pkgType) {
 
 	vars = make(map[string] reflect.Value)
 	vars["ErrTooLarge"] = reflect.ValueOf(&bytes.ErrTooLarge)
-	pkgs["bytes"] = &eval.Env {
-		Name: "bytes",
+	pkgs["bytes"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -150,8 +147,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["errors"] = &eval.Env {
-		Name: "errors",
+	pkgs["errors"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -206,8 +202,7 @@ func EvalEnvironment(pkgs pkgType) {
 	vars["ErrHelp"] = reflect.ValueOf(&flag.ErrHelp)
 	vars["Usage"] = reflect.ValueOf(&flag.Usage)
 	vars["CommandLine"] = reflect.ValueOf(&flag.CommandLine)
-	pkgs["flag"] = &eval.Env {
-		Name: "flag",
+	pkgs["flag"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -247,8 +242,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types["Scanner"] = reflect.TypeOf(*new(fmt.Scanner))
 
 	vars = make(map[string] reflect.Value)
-	pkgs["fmt"] = &eval.Env {
-		Name: "fmt",
+	pkgs["fmt"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -304,8 +298,7 @@ func EvalEnvironment(pkgs pkgType) {
 	vars["ErrUnexpectedEOF"] = reflect.ValueOf(&io.ErrUnexpectedEOF)
 	vars["ErrNoProgress"] = reflect.ValueOf(&io.ErrNoProgress)
 	vars["ErrClosedPipe"] = reflect.ValueOf(&io.ErrClosedPipe)
-	pkgs["io"] = &eval.Env {
-		Name: "io",
+	pkgs["io"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -408,8 +401,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["math"] = &eval.Env {
-		Name: "math",
+	pkgs["math"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -443,8 +435,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types["Zipf"] = reflect.TypeOf(*new(rand.Zipf))
 
 	vars = make(map[string] reflect.Value)
-	pkgs["rand"] = &eval.Env {
-		Name: "rand",
+	pkgs["rand"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -554,8 +545,7 @@ func EvalEnvironment(pkgs pkgType) {
 	vars["Stdout"] = reflect.ValueOf(&os.Stdout)
 	vars["Stderr"] = reflect.ValueOf(&os.Stderr)
 	vars["Args"] = reflect.ValueOf(&os.Args)
-	pkgs["os"] = &eval.Env {
-		Name: "os",
+	pkgs["os"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -634,8 +624,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types["SelectCase"] = reflect.TypeOf(*new(reflect.SelectCase))
 
 	vars = make(map[string] reflect.Value)
-	pkgs["reflect"] = &eval.Env {
-		Name: "reflect",
+	pkgs["reflect"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -686,8 +675,7 @@ func EvalEnvironment(pkgs pkgType) {
 
 	vars = make(map[string] reflect.Value)
 	vars["MemProfileRate"] = reflect.ValueOf(&runtime.MemProfileRate)
-	pkgs["runtime"] = &eval.Env {
-		Name: "runtime",
+	pkgs["runtime"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -709,8 +697,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types["Profile"] = reflect.TypeOf(*new(pprof.Profile))
 
 	vars = make(map[string] reflect.Value)
-	pkgs["pprof"] = &eval.Env {
-		Name: "pprof",
+	pkgs["pprof"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -743,8 +730,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types["StringSlice"] = reflect.TypeOf(*new(sort.StringSlice))
 
 	vars = make(map[string] reflect.Value)
-	pkgs["sort"] = &eval.Env {
-		Name: "sort",
+	pkgs["sort"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -789,8 +775,7 @@ func EvalEnvironment(pkgs pkgType) {
 	vars = make(map[string] reflect.Value)
 	vars["ErrRange"] = reflect.ValueOf(&strconv.ErrRange)
 	vars["ErrSyntax"] = reflect.ValueOf(&strconv.ErrSyntax)
-	pkgs["strconv"] = &eval.Env {
-		Name: "strconv",
+	pkgs["strconv"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -850,8 +835,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types["Replacer"] = reflect.TypeOf(*new(strings.Replacer))
 
 	vars = make(map[string] reflect.Value)
-	pkgs["strings"] = &eval.Env {
-		Name: "strings",
+	pkgs["strings"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -873,8 +857,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types["WaitGroup"] = reflect.TypeOf(*new(sync.WaitGroup))
 
 	vars = make(map[string] reflect.Value)
-	pkgs["sync"] = &eval.Env {
-		Name: "sync",
+	pkgs["sync"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -918,8 +901,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["atomic"] = &eval.Env {
-		Name: "atomic",
+	pkgs["atomic"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -1231,8 +1213,7 @@ func EvalEnvironment(pkgs pkgType) {
 	vars["Stdout"] = reflect.ValueOf(&syscall.Stdout)
 	vars["Stderr"] = reflect.ValueOf(&syscall.Stderr)
 	vars["SocketDisableIPv6"] = reflect.ValueOf(&syscall.SocketDisableIPv6)
-	pkgs["syscall"] = &eval.Env {
-		Name: "syscall",
+	pkgs["syscall"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -1265,8 +1246,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types["InternalTest"] = reflect.TypeOf(*new(testing.InternalTest))
 
 	vars = make(map[string] reflect.Value)
-	pkgs["testing"] = &eval.Env {
-		Name: "testing",
+	pkgs["testing"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -1290,8 +1270,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types["Writer"] = reflect.TypeOf(*new(tabwriter.Writer))
 
 	vars = make(map[string] reflect.Value)
-	pkgs["tabwriter"] = &eval.Env {
-		Name: "tabwriter",
+	pkgs["tabwriter"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -1371,8 +1350,7 @@ func EvalEnvironment(pkgs pkgType) {
 	vars = make(map[string] reflect.Value)
 	vars["UTC"] = reflect.ValueOf(&time.UTC)
 	vars["Local"] = reflect.ValueOf(&time.Local)
-	pkgs["time"] = &eval.Env {
-		Name: "time",
+	pkgs["time"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -1614,8 +1592,7 @@ func EvalEnvironment(pkgs pkgType) {
 	vars["CaseRanges"] = reflect.ValueOf(&unicode.CaseRanges)
 	vars["FoldCategory"] = reflect.ValueOf(&unicode.FoldCategory)
 	vars["FoldScript"] = reflect.ValueOf(&unicode.FoldScript)
-	pkgs["unicode"] = &eval.Env {
-		Name: "unicode",
+	pkgs["unicode"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -1648,8 +1625,7 @@ func EvalEnvironment(pkgs pkgType) {
 	types = make(map[string] reflect.Type)
 
 	vars = make(map[string] reflect.Value)
-	pkgs["utf8"] = &eval.Env {
-		Name: "utf8",
+	pkgs["utf8"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,
@@ -1657,4 +1633,8 @@ func EvalEnvironment(pkgs pkgType) {
 		Pkgs:   pkgs,
 		Path:   "unicode/utf8",
 	}
+
+	mainEnv := eval.MakeSimpleEnv()
+	mainEnv.Pkgs = pkgs
+	return mainEnv
 }
