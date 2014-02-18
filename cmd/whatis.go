@@ -1,4 +1,4 @@
-// copyright 2013 rocky bernstein.
+// copyright 2013-2014 rocky bernstein.
 // whatis command
 
 package fishcmd
@@ -15,8 +15,9 @@ func init() {
 		Fn: WhatisCommand,
 		Help: `whatis expression
 
-Shows the type checker information for an expression
-`,
+Shows the type checker information for an expression. As a special
+case, if expression is a package name, we'll confirm that.
+ `,
 
 		Min_args: 0,
 		Max_args: -1,
@@ -25,6 +26,12 @@ Shows the type checker information for an expression
 }
 
 func WhatisCommand(args []string) {
+	if len(args) == 2 {
+		if _, ok := repl.Env.Pkg(args[1]).(*eval.SimpleEnv); ok  {
+			repl.Msg("`%s' is a package", args[1])
+			return
+		}
+	}
 	line := repl.CmdLine[len(args[0]):len(repl.CmdLine)]
 	if expr, err := parser.ParseExpr(line); err != nil {
 		if pair := eval.FormatErrorPos(line, err.Error()); len(pair) == 2 {

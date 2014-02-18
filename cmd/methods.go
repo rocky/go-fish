@@ -3,10 +3,9 @@
 package fishcmd
 
 import (
-	/***
 	"reflect"
 	"strings"
-    ****/
+	"github.com/0xfaded/eval"
 	"github.com/rocky/go-fish"
 )
 
@@ -14,12 +13,13 @@ func init() {
 	name := "method"
 	repl.Cmds[name] = &repl.CmdInfo{
 		Fn: MethodCommand,
-		Help: `method [*typeorvalue* [*typeorvalue* ...] ]
+		Help: `method [*package-type-or-value* [*package-type-or-value* ...] ]
 
-Show information about methods of a type or value.
+Show information about methods of a package, type, or value.
 
-If a type name is given, then information is given about
-the methods of that type. If a value is given methods of that value are given
+If a type name is given, then information is given about the methods
+of that type. Likewise, if a value or package name is given, the methods
+of that value or package are given.
 `,
 
 		Min_args: 0,
@@ -30,19 +30,31 @@ the methods of that type. If a value is given methods of that value are given
 	repl.AddAlias("func", name)
 }
 
-/*****************
 func printMethodsOf(fullname string) {
 	pkgName  := "."
 	name     :=  fullname
-	names   := strings.Split(fullname, ".")
+	names    := strings.Split(fullname, ".")
+	pkg      := repl.Env
+	ok       := true
 	if len(names) > 1 {
 		pkgName = names[0]
 		name    = names[1]
+		pkg, ok = repl.Env.Pkg(pkgName).(*eval.SimpleEnv)
+		if !ok || pkg == nil {
+			repl.Errmsg("Can't find package %s", pkgName)
+			return
 		}
-	pkgs := repl.Env.Pkgs
-	pkg, ok  := pkgs[pkgName]
-	if !ok || pkg == nil {
-		repl.Errmsg("Can't find package %s", pkgName)
+	} else {
+		pkg, ok = repl.Env.Pkg(fullname).(*eval.SimpleEnv)
+		if !ok || pkg == nil {
+			repl.Errmsg("Can't find package %s", pkgName)
+			return
+		}
+		fnNames := []string {}
+		for name := range pkg.Funcs {
+			fnNames = append(fnNames, name)
+		}
+		repl.PrintSorted("Functions of package " + fullname, fnNames)
 		return
 	}
 	if v, ok := pkg.Vars[name]; ok {
@@ -80,13 +92,10 @@ func printMethodsOf(fullname string) {
 	}
 }
 
-********************/
 // MethodCommand implements the command:
 //    method [*name* [name*...]]
 // which shows information about a package or lists all packages.
 func MethodCommand(args []string) {
-	repl.Msg("Needs to be redone")
-	/****
 	if len(args) > 2 {
 		for _, name := range args[1:len(args)] {
 			printMethodsOf(name)
@@ -94,5 +103,4 @@ func MethodCommand(args []string) {
 	} else {
 		printMethodsOf(args[1])
 	}
-    ****/
 }

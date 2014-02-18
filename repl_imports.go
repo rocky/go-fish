@@ -339,7 +339,6 @@ func EvalEnvironment() *eval.SimpleEnv {
 	funcs["Interpret"] = reflect.ValueOf(eval.Interpret)
 	funcs["ParseStmt"] = reflect.ValueOf(eval.ParseStmt)
 	funcs["EvalExpr"] = reflect.ValueOf(eval.EvalExpr)
-	funcs["InspectPtr"] = reflect.ValueOf(eval.InspectPtr)
 	funcs["Inspect"] = reflect.ValueOf(eval.Inspect)
 	funcs["InspectShort"] = reflect.ValueOf(eval.InspectShort)
 	funcs["InterpStmt"] = reflect.ValueOf(eval.InterpStmt)
