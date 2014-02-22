@@ -17,7 +17,9 @@ func init() {
 		Help: `whatis expression
 
 Shows the type checker information for an expression. As a special
-case, if expression is a package name, we'll confirm that.
+cases
+   if expression is a package name, we'll confirm that.
+   if the expression is a type, we'll show reflect.Kind information
  `,
 
 		Min_args: 0,
