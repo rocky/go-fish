@@ -21,7 +21,7 @@ main.go: repl_imports.go
 
 #: Subsidiary program to import packages into go-fish
 make_env: make_env.go
-	go build make_env.go
+	@echo go build make_env.go
 
 # Note: we have to create the next repl_imports.go to a new place
 # either outside of this directory or to a non-go extension, otherwise

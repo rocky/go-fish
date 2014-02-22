@@ -11,7 +11,7 @@ type CmdInfo struct {
 	Max_args int
 	Fn CmdFunc
 	Aliases []string
-	// SubcmdMgr *SubcmdMgr
+	SubcmdMgr *SubcmdMgr
 }
 
 // Cmds contains a list of the top-level REPL commands we implement.

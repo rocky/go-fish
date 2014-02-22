@@ -4,6 +4,7 @@
 package fishcmd
 
 import (
+	"strings"
 	"go/parser"
 	"github.com/rocky/go-fish"
 	"github.com/0xfaded/eval"
@@ -27,9 +28,29 @@ case, if expression is a package name, we'll confirm that.
 
 func WhatisCommand(args []string) {
 	if len(args) == 2 {
-		if _, ok := repl.Env.Pkg(args[1]).(*eval.SimpleEnv); ok  {
-			repl.Msg("`%s' is a package", args[1])
+		arg := args[1]
+		if _, ok := repl.Env.Pkg(arg).(*eval.SimpleEnv); ok  {
+			repl.Msg("`%s' is a package", arg)
 			return
+		}
+		ids := strings.Split(arg, ".")
+		if len(ids) == 1 {
+			name := ids[0]
+			if typ := repl.Env.Type(name); typ != nil  {
+				repl.Msg("%s is a type: %s", typ.String())
+				return
+			}
+		}
+		if len(ids) == 2 {
+			pkgName  := ids[0]
+			name     := ids[1]
+			if pkg, ok := repl.Env.Pkg(pkgName).(*eval.SimpleEnv); ok  {
+				if typ := pkg.Type(name); typ != nil  {
+					repl.Msg("%s is a kind: %s", arg, typ.Kind())
+					repl.Msg("%s is a type: %v", arg, typ)
+					return
+				}
+			}
 		}
 	}
 	line := repl.CmdLine[len(args[0]):len(repl.CmdLine)]
