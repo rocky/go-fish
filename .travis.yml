@@ -12,7 +12,7 @@ script:
   - go get "github.com/rocky/go-importer"
   - go build
   - go build make_env.go
-  - go install make_env
+  - go install make_env.go
   - make_env > repl_imports.next && mv repl_imports.next repl_imports.go
 # need to work on not running out of source tree
 # - go test -v
