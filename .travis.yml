@@ -11,7 +11,8 @@ script:
   - go get "github.com/rocky/go-fish/cmd"
   - go get "github.com/rocky/go-importer"
   - go build
-  - make make_env
-  - make
+  - go build make_env.go
+  - go install make_env
+  - make_env > repl_imports.next && mv repl_imports.next repl_imports.go
 # need to work on not running out of source tree
 # - go test -v
