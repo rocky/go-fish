@@ -10,5 +10,6 @@ script:
   - go get "github.com/mgutz/ansi"
   - go get "github.com/rocky/go-fish/cmd"
   - go build
+  - make make_env
 # need to work on not running out of source tree
 # - go test -v
