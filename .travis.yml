@@ -9,7 +9,9 @@ script:
   - go get "github.com/0xfaded/eval"
   - go get "github.com/mgutz/ansi"
   - go get "github.com/rocky/go-fish/cmd"
+  - go get "github.com/rocky/go-importer"
   - go build
   - make make_env
+  - make
 # need to work on not running out of source tree
 # - go test -v
