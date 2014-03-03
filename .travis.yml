@@ -1,13 +1,12 @@
 language: go
 
 env:
-  - GOBIN=$HOME
-
 go:
   - tip
   - 1.2
 
 script:
+  - GOBIN=$HOME; export GOBIN
   - go get "code.google.com/p/go-columnize"
   - go get "github.com/0xfaded/eval"
   - go get "github.com/mgutz/ansi"
