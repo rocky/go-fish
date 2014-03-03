@@ -13,7 +13,7 @@ import (
 	"sort"
 	"strings"
 	"unicode"
-	// "code.google.com/p/go.tools/go/importer"
+	"github.com/rocky/go-importer"
 )
 
 // StartingImport is the import from which we start gathering
