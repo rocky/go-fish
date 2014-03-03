@@ -1,5 +1,8 @@
 language: go
 
+env:
+  - GOBIN=$HOME
+
 go:
   - tip
   - 1.2
@@ -13,6 +16,6 @@ script:
   - go build
   - go build make_env.go
   - go install make_env.go
-  - make_env > repl_imports.next && mv repl_imports.next repl_imports.go
+  - $HOME/make_env > repl_imports.next && mv repl_imports.next repl_imports.go
 # need to work on not running out of source tree
 # - go test -v
