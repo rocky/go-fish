@@ -194,7 +194,7 @@ func REPL(env *eval.SimpleEnv, readLineFn ReadLineFnType, inspectFn InspectFnTyp
 				for _, cerr := range errs {
 					Errmsg("%v", cerr)
 				}
-			} else if err := eval.InterpStmt(cstmt, env); err != nil {
+			} else if _, err := eval.InterpStmt(cstmt, env); err != nil {
 				Errmsg("panic: %s", err)
 			}
 		}
