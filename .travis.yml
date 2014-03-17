@@ -7,12 +7,7 @@ go:
 
 script:
   - GOBIN=$HOME; export GOBIN
-  - go get "code.google.com/p/go-columnize"
-  - go get "github.com/0xfaded/eval"
-  - go get "github.com/mgutz/ansi"
-  - go get "github.com/rocky/go-fish/cmd"
-  - go get "github.com/rocky/go-types"
-  - go get "github.com/rocky/go-importer"
+  - go get
   - go build
   - go build make_env.go
   - go install make_env.go
