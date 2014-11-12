@@ -10,6 +10,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/0xfaded/eval"
+	"github.com/0xfaded/reflectext"
 	"github.com/mgutz/ansi"
 	"go/ast"
 	"go/parser"
@@ -369,6 +370,8 @@ func EvalEnvironment() *eval.SimpleEnv {
 	types["InterfaceType"] = reflect.TypeOf(new(eval.InterfaceType)).Elem()
 	types["MapType"] = reflect.TypeOf(new(eval.MapType)).Elem()
 	types["ChanType"] = reflect.TypeOf(new(eval.ChanType)).Elem()
+	types["Field"] = reflect.TypeOf(new(eval.Field)).Elem()
+	types["FieldList"] = reflect.TypeOf(new(eval.FieldList)).Elem()
 	types["AssignStmt"] = reflect.TypeOf(new(eval.AssignStmt)).Elem()
 	types["CaseClause"] = reflect.TypeOf(new(eval.CaseClause)).Elem()
 	types["BlockStmt"] = reflect.TypeOf(new(eval.BlockStmt)).Elem()
@@ -376,6 +379,7 @@ func EvalEnvironment() *eval.SimpleEnv {
 	types["ExprStmt"] = reflect.TypeOf(new(eval.ExprStmt)).Elem()
 	types["IfStmt"] = reflect.TypeOf(new(eval.IfStmt)).Elem()
 	types["ForStmt"] = reflect.TypeOf(new(eval.ForStmt)).Elem()
+	types["ReturnStmt"] = reflect.TypeOf(new(eval.ReturnStmt)).Elem()
 	types["SwitchStmt"] = reflect.TypeOf(new(eval.SwitchStmt)).Elem()
 	types["TypeSwitchStmt"] = reflect.TypeOf(new(eval.TypeSwitchStmt)).Elem()
 	types["BigComplex"] = reflect.TypeOf(new(eval.BigComplex)).Elem()
@@ -397,6 +401,9 @@ func EvalEnvironment() *eval.SimpleEnv {
 	types["ErrInvalidIndirect"] = reflect.TypeOf(new(eval.ErrInvalidIndirect)).Elem()
 	types["ErrUndefinedFieldOrMethod"] = reflect.TypeOf(new(eval.ErrUndefinedFieldOrMethod)).Elem()
 	types["ErrCallNonFuncType"] = reflect.TypeOf(new(eval.ErrCallNonFuncType)).Elem()
+	types["ErrDuplicateArg"] = reflect.TypeOf(new(eval.ErrDuplicateArg)).Elem()
+	types["ErrBadReturnValue"] = reflect.TypeOf(new(eval.ErrBadReturnValue)).Elem()
+	types["ErrWrongNumberOfReturnValues"] = reflect.TypeOf(new(eval.ErrWrongNumberOfReturnValues)).Elem()
 	types["ErrWrongNumberOfArgs"] = reflect.TypeOf(new(eval.ErrWrongNumberOfArgs)).Elem()
 	types["ErrWrongArgType"] = reflect.TypeOf(new(eval.ErrWrongArgType)).Elem()
 	types["ErrInvalidEllipsisInCall"] = reflect.TypeOf(new(eval.ErrInvalidEllipsisInCall)).Elem()
@@ -462,6 +469,7 @@ func EvalEnvironment() *eval.SimpleEnv {
 	types["ErrInvalidCase"] = reflect.TypeOf(new(eval.ErrInvalidCase)).Elem()
 	types["ErrNonInterfaceTypeSwitch"] = reflect.TypeOf(new(eval.ErrNonInterfaceTypeSwitch)).Elem()
 	types["ErrImpossibleTypeCase"] = reflect.TypeOf(new(eval.ErrImpossibleTypeCase)).Elem()
+	types["State"] = reflect.TypeOf(new(eval.State)).Elem()
 	types["PanicUser"] = reflect.TypeOf(new(eval.PanicUser)).Elem()
 	types["PanicDivideByZero"] = reflect.TypeOf(new(eval.PanicDivideByZero)).Elem()
 	types["PanicInvalidDereference"] = reflect.TypeOf(new(eval.PanicInvalidDereference)).Elem()
@@ -491,6 +499,27 @@ func EvalEnvironment() *eval.SimpleEnv {
 		Vars:   vars,
 		Pkgs:   pkgs,
 		Path:   "github.com/0xfaded/eval",
+	}
+	consts = make(map[string] reflect.Value)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["FuncOf"] = reflect.ValueOf(reflectext.FuncOf)
+	funcs["InterfaceOf"] = reflect.ValueOf(reflectext.InterfaceOf)
+	funcs["StructOf"] = reflect.ValueOf(reflectext.StructOf)
+	funcs["ArrayOf"] = reflect.ValueOf(reflectext.ArrayOf)
+	funcs["Name"] = reflect.ValueOf(reflectext.Name)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	vars["Available"] = reflect.ValueOf(&reflectext.Available)
+	pkgs["reflectext"] = &eval.SimpleEnv {
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+		Path:   "github.com/0xfaded/reflectext",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["Reset"] = reflect.ValueOf(ansi.Reset)
@@ -1164,10 +1193,10 @@ func EvalEnvironment() *eval.SimpleEnv {
 	funcs["Chdir"] = reflect.ValueOf(os.Chdir)
 	funcs["Open"] = reflect.ValueOf(os.Open)
 	funcs["Create"] = reflect.ValueOf(os.Create)
+	funcs["Rename"] = reflect.ValueOf(os.Rename)
 	funcs["Link"] = reflect.ValueOf(os.Link)
 	funcs["Symlink"] = reflect.ValueOf(os.Symlink)
 	funcs["Readlink"] = reflect.ValueOf(os.Readlink)
-	funcs["Rename"] = reflect.ValueOf(os.Rename)
 	funcs["Chmod"] = reflect.ValueOf(os.Chmod)
 	funcs["Chown"] = reflect.ValueOf(os.Chown)
 	funcs["Lchown"] = reflect.ValueOf(os.Lchown)
@@ -1698,6 +1727,7 @@ func EvalEnvironment() *eval.SimpleEnv {
 	types["Mutex"] = reflect.TypeOf(new(sync.Mutex)).Elem()
 	types["Locker"] = reflect.TypeOf(new(sync.Locker)).Elem()
 	types["Once"] = reflect.TypeOf(new(sync.Once)).Elem()
+	types["Pool"] = reflect.TypeOf(new(sync.Pool)).Elem()
 	types["RWMutex"] = reflect.TypeOf(new(sync.RWMutex)).Elem()
 	types["WaitGroup"] = reflect.TypeOf(new(sync.WaitGroup)).Elem()
 
@@ -1769,6 +1799,7 @@ func EvalEnvironment() *eval.SimpleEnv {
 	funcs["ForkExec"] = reflect.ValueOf(syscall.ForkExec)
 	funcs["StartProcess"] = reflect.ValueOf(syscall.StartProcess)
 	funcs["Exec"] = reflect.ValueOf(syscall.Exec)
+	funcs["FcntlFlock"] = reflect.ValueOf(syscall.FcntlFlock)
 	funcs["LsfStmt"] = reflect.ValueOf(syscall.LsfStmt)
 	funcs["LsfJump"] = reflect.ValueOf(syscall.LsfJump)
 	funcs["LsfSocket"] = reflect.ValueOf(syscall.LsfSocket)
@@ -1815,6 +1846,7 @@ func EvalEnvironment() *eval.SimpleEnv {
 	funcs["SetsockoptIPMreqn"] = reflect.ValueOf(syscall.SetsockoptIPMreqn)
 	funcs["Recvmsg"] = reflect.ValueOf(syscall.Recvmsg)
 	funcs["Sendmsg"] = reflect.ValueOf(syscall.Sendmsg)
+	funcs["SendmsgN"] = reflect.ValueOf(syscall.SendmsgN)
 	funcs["BindToDevice"] = reflect.ValueOf(syscall.BindToDevice)
 	funcs["PtracePeekText"] = reflect.ValueOf(syscall.PtracePeekText)
 	funcs["PtracePeekData"] = reflect.ValueOf(syscall.PtracePeekData)
@@ -1836,17 +1868,12 @@ func EvalEnvironment() *eval.SimpleEnv {
 	funcs["Mmap"] = reflect.ValueOf(syscall.Mmap)
 	funcs["Munmap"] = reflect.ValueOf(syscall.Munmap)
 	funcs["Getpagesize"] = reflect.ValueOf(syscall.Getpagesize)
+	funcs["Gettimeofday"] = reflect.ValueOf(syscall.Gettimeofday)
+	funcs["Time"] = reflect.ValueOf(syscall.Time)
 	funcs["TimespecToNsec"] = reflect.ValueOf(syscall.TimespecToNsec)
 	funcs["NsecToTimespec"] = reflect.ValueOf(syscall.NsecToTimespec)
 	funcs["TimevalToNsec"] = reflect.ValueOf(syscall.TimevalToNsec)
 	funcs["NsecToTimeval"] = reflect.ValueOf(syscall.NsecToTimeval)
-	funcs["Getrlimit"] = reflect.ValueOf(syscall.Getrlimit)
-	funcs["Setrlimit"] = reflect.ValueOf(syscall.Setrlimit)
-	funcs["Seek"] = reflect.ValueOf(syscall.Seek)
-	funcs["Listen"] = reflect.ValueOf(syscall.Listen)
-	funcs["Shutdown"] = reflect.ValueOf(syscall.Shutdown)
-	funcs["Fstatfs"] = reflect.ValueOf(syscall.Fstatfs)
-	funcs["Statfs"] = reflect.ValueOf(syscall.Statfs)
 	funcs["Syscall"] = reflect.ValueOf(syscall.Syscall)
 	funcs["Syscall6"] = reflect.ValueOf(syscall.Syscall6)
 	funcs["RawSyscall"] = reflect.ValueOf(syscall.RawSyscall)
@@ -1957,31 +1984,36 @@ func EvalEnvironment() *eval.SimpleEnv {
 	funcs["Chown"] = reflect.ValueOf(syscall.Chown)
 	funcs["Fchown"] = reflect.ValueOf(syscall.Fchown)
 	funcs["Fstat"] = reflect.ValueOf(syscall.Fstat)
+	funcs["Fstatfs"] = reflect.ValueOf(syscall.Fstatfs)
 	funcs["Ftruncate"] = reflect.ValueOf(syscall.Ftruncate)
 	funcs["Getegid"] = reflect.ValueOf(syscall.Getegid)
 	funcs["Geteuid"] = reflect.ValueOf(syscall.Geteuid)
 	funcs["Getgid"] = reflect.ValueOf(syscall.Getgid)
+	funcs["Getrlimit"] = reflect.ValueOf(syscall.Getrlimit)
 	funcs["Getuid"] = reflect.ValueOf(syscall.Getuid)
 	funcs["Ioperm"] = reflect.ValueOf(syscall.Ioperm)
 	funcs["Iopl"] = reflect.ValueOf(syscall.Iopl)
 	funcs["Lchown"] = reflect.ValueOf(syscall.Lchown)
+	funcs["Listen"] = reflect.ValueOf(syscall.Listen)
 	funcs["Lstat"] = reflect.ValueOf(syscall.Lstat)
 	funcs["Pread"] = reflect.ValueOf(syscall.Pread)
 	funcs["Pwrite"] = reflect.ValueOf(syscall.Pwrite)
+	funcs["Seek"] = reflect.ValueOf(syscall.Seek)
+	funcs["Select"] = reflect.ValueOf(syscall.Select)
 	funcs["Setfsgid"] = reflect.ValueOf(syscall.Setfsgid)
 	funcs["Setfsuid"] = reflect.ValueOf(syscall.Setfsuid)
 	funcs["Setgid"] = reflect.ValueOf(syscall.Setgid)
 	funcs["Setregid"] = reflect.ValueOf(syscall.Setregid)
 	funcs["Setresgid"] = reflect.ValueOf(syscall.Setresgid)
 	funcs["Setresuid"] = reflect.ValueOf(syscall.Setresuid)
+	funcs["Setrlimit"] = reflect.ValueOf(syscall.Setrlimit)
 	funcs["Setreuid"] = reflect.ValueOf(syscall.Setreuid)
+	funcs["Shutdown"] = reflect.ValueOf(syscall.Shutdown)
 	funcs["Splice"] = reflect.ValueOf(syscall.Splice)
 	funcs["Stat"] = reflect.ValueOf(syscall.Stat)
+	funcs["Statfs"] = reflect.ValueOf(syscall.Statfs)
 	funcs["SyncFileRange"] = reflect.ValueOf(syscall.SyncFileRange)
 	funcs["Truncate"] = reflect.ValueOf(syscall.Truncate)
-	funcs["Select"] = reflect.ValueOf(syscall.Select)
-	funcs["Gettimeofday"] = reflect.ValueOf(syscall.Gettimeofday)
-	funcs["Time"] = reflect.ValueOf(syscall.Time)
 
 	types = make(map[string] reflect.Type)
 	types["SysProcAttr"] = reflect.TypeOf(new(syscall.SysProcAttr)).Elem()
@@ -2012,6 +2044,7 @@ func EvalEnvironment() *eval.SimpleEnv {
 	types["Statfs_t"] = reflect.TypeOf(new(syscall.Statfs_t)).Elem()
 	types["Dirent"] = reflect.TypeOf(new(syscall.Dirent)).Elem()
 	types["Fsid"] = reflect.TypeOf(new(syscall.Fsid)).Elem()
+	types["Flock_t"] = reflect.TypeOf(new(syscall.Flock_t)).Elem()
 	types["RawSockaddrInet4"] = reflect.TypeOf(new(syscall.RawSockaddrInet4)).Elem()
 	types["RawSockaddrInet6"] = reflect.TypeOf(new(syscall.RawSockaddrInet6)).Elem()
 	types["RawSockaddrUnix"] = reflect.TypeOf(new(syscall.RawSockaddrUnix)).Elem()
@@ -2083,6 +2116,7 @@ func EvalEnvironment() *eval.SimpleEnv {
 	types["InternalBenchmark"] = reflect.TypeOf(new(testing.InternalBenchmark)).Elem()
 	types["B"] = reflect.TypeOf(new(testing.B)).Elem()
 	types["BenchmarkResult"] = reflect.TypeOf(new(testing.BenchmarkResult)).Elem()
+	types["PB"] = reflect.TypeOf(new(testing.PB)).Elem()
 	types["CoverBlock"] = reflect.TypeOf(new(testing.CoverBlock)).Elem()
 	types["Cover"] = reflect.TypeOf(new(testing.Cover)).Elem()
 	types["InternalExample"] = reflect.TypeOf(new(testing.InternalExample)).Elem()

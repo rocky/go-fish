@@ -1,4 +1,6 @@
 // Copyright 2014 Rocky Bernstein.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
 package fishcmd
 
@@ -13,7 +15,7 @@ func init() {
 	name := "method"
 	repl.Cmds[name] = &repl.CmdInfo{
 		Fn: MethodCommand,
-		Help: `method [*package-type-or-value* [*package-type-or-value* ...] ]
+		Help: `method *package-type-or-value* [*package-type-or-value* ...]
 
 Show information about methods of a package, type, or value.
 
@@ -22,7 +24,7 @@ of that type. Likewise, if a value or package name is given, the methods
 of that value or package are given.
 `,
 
-		Min_args: 0,
+		Min_args: 1,
 		Max_args: -1,  // Max_args < 0 means an arbitrary number
 	}
 	repl.AddToCategory("support", name)
@@ -93,14 +95,10 @@ func printMethodsOf(fullname string) {
 }
 
 // MethodCommand implements the command:
-//    method [*name* [name*...]]
+//    method *name* [name*...]
 // which shows information about a package or lists all packages.
 func MethodCommand(args []string) {
-	if len(args) > 2 {
-		for _, name := range args[1:len(args)] {
-			printMethodsOf(name)
-		}
-	} else {
-		printMethodsOf(args[1])
+	for _, name := range args[1:len(args)] {
+		printMethodsOf(name)
 	}
 }

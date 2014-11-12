@@ -1,4 +1,6 @@
-// Copyright 2013-2014 Rocky Bernstein.
+// Copyright 2013-2014 Rocky Bernstein. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
 // Package repl is a simple REPL (read-eval-print loop) for GO using
 // http://github.com/0xfaded/eval to the heavy lifting to implement
