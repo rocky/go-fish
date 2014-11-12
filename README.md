@@ -14,7 +14,7 @@ Setup
 -----
 
 * Make sure our Go environment is setup, e.g. *$GOBIN*, *$GOPATH*, ...
-* Make sure you have a version 1.2ish Go installed.
+* Make sure you have a version 1.3ish Go installed.
 
 ```
    $ go get github.com/rocky/go-fish
@@ -81,10 +81,10 @@ All command names:
 help  packages  quit
 gofish> packages
 All imported packages:
-ansi    binary  eval      fmt     math    rand     scanner  sync       time   
-ast     bufio   exec      io      os      reflect  sort     syscall    token  
+ansi    binary  eval      fmt     math    rand     scanner  sync       time
+ast     bufio   exec      io      os      reflect  sort     syscall    token
 atomic  bytes   filepath  ioutil  parser  repl     strconv  tabwriter  unicode
-big     errors  flag      log     pprof   runtime  strings  testing    utf8  
+big     errors  flag      log     pprof   runtime  strings  testing    utf8
 gofish> pkg ansi
 === Package ansi ("github.com/mgutz/ansi"): ===
 Constants of ansi:
@@ -93,7 +93,7 @@ Functions of ansi:
   Color  ColorCode  ColorFunc  DisableColors
 gofish> quit
 go-fish: That's all folks...
-$ 
+$
 ```
 
 See Also
