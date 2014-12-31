@@ -16,12 +16,14 @@ import (
 	"sort"
 	"strings"
 	"unicode"
-	"github.com/rocky/go-importer"
+	"golang.org/x/tools/go/types"
+	"golang.org/x/tools/go/loader"
 )
 
 // StartingImport is the import from which we start gathering
 // package imports from.
 const DefaultStartingImport = "github.com/rocky/go-fish"
+const DefaultPackage = "repl"
 // const DefaultStartingImport = "github.com/0xfaded/eval"
 
 // MyImport is the import string name of this package that the output
@@ -47,7 +49,7 @@ func isExportedIdent(e ast.Expr) bool {
 	return !(ok && id.Name == "_") && unicode.IsUpper(rune(id.Name[0]))
 }
 
-func memberFromDecl(decl ast.Decl, imp *importer.Importer,
+func memberFromDecl(decl ast.Decl, program *loader.Program,
 	consts []*string, funcs []*string, types []*string, vars []*string) (
 	[]*string, []*string, []*string, []*string) {
 	switch decl := decl.(type) {
@@ -88,7 +90,7 @@ func memberFromDecl(decl ast.Decl, imp *importer.Importer,
 		if isExportedIdent(id) && !strings.HasPrefix(id.Name, "Test") {
 			// Can't handle receiver methods yet
 			if decl.Recv == nil {
-				filename := imp.Fset.File(decl.Pos()).Name()
+				filename := program.Fset.File(decl.Pos()).Name()
 				if ! strings.HasSuffix(filename, "_test.go") {
 					funcs = append(funcs, &id.Name)
 				}
@@ -107,9 +109,10 @@ func fullIdentName(path, pkg, ident string) (fullname string) {
 	return fullname
 }
 
-func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importer) {
+func extractPackageSymbols(pkg_info *loader.PackageInfo,
+	program *loader.Program) {
 
-	var typed_decls = map[string]string {
+	typed_decls := map[string]string {
 		"math.MaxInt64": "int64",
 		"math.MaxUint16": "uint16",
 		"math.MaxUint32": "uint32",
@@ -151,7 +154,7 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 		for _, file := range pkg_info.Files {
 			for _, decl := range file.Decls {
 				consts, funcs, types, vars =
-					memberFromDecl(decl, imp, consts, funcs, types, vars)
+					memberFromDecl(decl, program, consts, funcs, types, vars)
 			}
 		}
 		fmt.Println("\tconsts = make(map[string] reflect.Value)")
@@ -222,11 +225,11 @@ func extractPackageSymbols(pkg_info *importer.PackageInfo, imp *importer.Importe
 
 // By is the type of a "less" function that defines the ordering of
 // its Planet arguments.
-type By func(p1, p2 *importer.PackageInfo) bool
+type By func(p1, p2 *loader.PackageInfo) bool
 
 // Sort is a method on the function type, By, that sorts the argument
 // slice according to the function.
-func (by By) Sort(pkg_infos []*importer.PackageInfo) {
+func (by By) Sort(pkg_infos []*loader.PackageInfo) {
 	ps := &packageInfoSorter{
 		pkg_infos: pkg_infos,
 		by:      by, // The Sort method's receiver is the function (closure) that defines the sort order.
@@ -237,8 +240,8 @@ func (by By) Sort(pkg_infos []*importer.PackageInfo) {
 // packageInfoSorter joins a By function and a slice of
 // importer.PackageInfos to be sorted.
 type packageInfoSorter struct {
-	pkg_infos []*importer.PackageInfo
-	by      func(p1, p2 *importer.PackageInfo) bool // Closure used in the Less method.
+	pkg_infos []*loader.PackageInfo
+	by        func(p1, p2 *loader.PackageInfo) bool // Closure used in the Less method.
 }
 
 // Len is part of sort.Interface.
@@ -246,6 +249,7 @@ func (s *packageInfoSorter) Len() int {
 	return len(s.pkg_infos)
 }
 
+// Swap is part of sort.Interface.
 // Swap is part of sort.Interface.
 func (s *packageInfoSorter) Swap(i, j int) {
 	s.pkg_infos[i], s.pkg_infos[j] = s.pkg_infos[j], s.pkg_infos[i]
@@ -262,17 +266,22 @@ func (s *packageInfoSorter) Less(i, j int) bool {
 //     package repl; import (... )
 // Packages that end in _test are removed from the list of imported
 // packages and this stripped down list is returned.
-func writePreamble(pkg_infos []*importer.PackageInfo,
-	name string, startingImport string) []*importer.PackageInfo {
-	path := func(p1, p2 *importer.PackageInfo) bool {
+func writePreamble(pkg_infos map[*types.Package]*loader.PackageInfo,
+	name string, startingImport string, pkgName string) []*loader.PackageInfo {
+	path := func(p1, p2 *loader.PackageInfo) bool {
 		return p1.Pkg.Path() < p2.Pkg.Path()
 	}
-	By(path).Sort(pkg_infos)
-	fmt.Println(`package repl
+	pkg_infos2 := []*loader.PackageInfo {}
+	for _,pi := range(pkg_infos) {
+		pkg_infos2 = append(pkg_infos2, pi)
+	}
+	By(path).Sort(pkg_infos2)
+	fmt.Printf(`package %s
 
-import (`)
-	kept_pkgs := []*importer.PackageInfo {}
-	for _, pkg_info := range pkg_infos {
+import (
+`, pkgName)
+	kept_pkgs := []*loader.PackageInfo {}
+	for _, pkg_info := range pkg_infos2 {
 		path := pkg_info.Pkg.Path()
 		if !strings.HasSuffix(path, "_test") {
 			if	MyImport != path {
@@ -311,39 +320,43 @@ func writePostamble() {
 // for a given starting package. Here we use github.com/0xfaded/eval.
 func main() {
 	startingImport := DefaultStartingImport
-	if len(os.Args) == 2 {
+	pkgName := DefaultPackage
+	numArgs := len(os.Args)
+	if numArgs == 2 {
 		startingImport = os.Args[1]
-	} else if len(os.Args) > 2 {
-		fmt.Printf("usage: %s [starting-import]\n")
+	} else if numArgs == 3 {
+		startingImport = os.Args[1]
+		pkgName = os.Args[2]
+	} else if numArgs > 3 {
+		fmt.Printf("usage: %s [starting-import [package-name]]\n")
 		os.Exit(1)
 	}
 	fmt.Printf("// starting import: \"%s\"\n", startingImport)
 
-	impctx := importer.Config{Build: &build.Default}
+	importPkgs := map[string]bool{startingImport: false}
 
-	// Load, parse and type-check the program.
-	imp := importer.New(&impctx)
+
+	config := loader.Config{
+		Build: &build.Default,
+		SourceImports: true,
+		ImportPkgs: importPkgs,
+	}
 
 	var pkgs_string []string = make([] string, 0, 10)
 	pkgs_string = append(pkgs_string, startingImport)
-	//pkgs_string = append(pkgs_string, "fmt")
 
-	pkg_infos, _, err := imp.LoadInitialPackages(pkgs_string)
+	program, err := config.Load()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	pkg_infos = imp.AllPackages()
 	var errpkgs []string
 
-	pkg_infos = writePreamble(pkg_infos, "Eval", startingImport)
+	pkg_infos := writePreamble(program.AllPackages, "Eval",
+		startingImport, pkgName)
 
 	for _, pkg_info := range pkg_infos {
-		if pkg_info.Err != nil {
-			errpkgs = append(errpkgs, pkg_info.Pkg.Path())
-		} else {
-			extractPackageSymbols(pkg_info, imp)
-		}
+		extractPackageSymbols(pkg_info, program)
 	}
 	if errpkgs != nil {
 		log.Fatal("couldn't create these SSA packages due to type errors: %s",
