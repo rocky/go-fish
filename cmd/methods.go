@@ -1,4 +1,4 @@
-// Copyright 2014 Rocky Bernstein.
+// Copyright 2014-2015 Rocky Bernstein.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -7,7 +7,7 @@ package fishcmd
 import (
 	"reflect"
 	"strings"
-	"github.com/0xfaded/eval"
+	"github.com/rocky/eval"
 	"github.com/rocky/go-fish"
 )
 

@@ -1,4 +1,4 @@
-// Copyright 2013-2014 Rocky Bernstein.
+// Copyright 2013-2015 Rocky Bernstein.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -10,7 +10,7 @@ import (
 	"strings"
 	"go/parser"
 	"github.com/rocky/go-fish"
-	"github.com/0xfaded/eval"
+	"github.com/rocky/eval"
 )
 
 func init() {

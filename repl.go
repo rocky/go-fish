@@ -1,4 +1,4 @@
-// Copyright 2013-2014 Rocky Bernstein. All rights reserved.
+// Copyright 2013-2015 Rocky Bernstein. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -27,7 +27,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/0xfaded/eval"
+	"github.com/rocky/eval"
 )
 
 var Highlight = flag.Bool("highlight", true, `use syntax highlighting in output`)
