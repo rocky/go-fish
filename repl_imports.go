@@ -9,9 +9,9 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/rocky/eval"
 	"github.com/0xfaded/reflectext"
 	"github.com/mgutz/ansi"
+	"github.com/rocky/eval"
 	"go/ast"
 	"go/parser"
 	"go/scanner"
@@ -317,7 +317,57 @@ func EvalEnvironment() *eval.SimpleEnv {
 	consts = make(map[string] reflect.Value)
 
 	funcs = make(map[string] reflect.Value)
+	funcs["FuncOf"] = reflect.ValueOf(reflectext.FuncOf)
+	funcs["InterfaceOf"] = reflect.ValueOf(reflectext.InterfaceOf)
+	funcs["StructOf"] = reflect.ValueOf(reflectext.StructOf)
+	funcs["ArrayOf"] = reflect.ValueOf(reflectext.ArrayOf)
+	funcs["Name"] = reflect.ValueOf(reflectext.Name)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	vars["Available"] = reflect.ValueOf(&reflectext.Available)
+	pkgs["reflectext"] = &eval.SimpleEnv {
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["Reset"] = reflect.ValueOf(ansi.Reset)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["ColorCode"] = reflect.ValueOf(ansi.ColorCode)
+	funcs["Color"] = reflect.ValueOf(ansi.Color)
+	funcs["ColorFunc"] = reflect.ValueOf(ansi.ColorFunc)
+	funcs["DisableColors"] = reflect.ValueOf(ansi.DisableColors)
+
+	types = make(map[string] reflect.Type)
+
+	vars = make(map[string] reflect.Value)
+	pkgs["ansi"] = &eval.SimpleEnv {
+		Consts: consts,
+		Funcs:  funcs,
+		Types:  types,
+		Vars:   vars,
+		Pkgs:   pkgs,
+	}
+	consts = make(map[string] reflect.Value)
+	consts["EnvUnknown"] = reflect.ValueOf(eval.EnvUnknown)
+	consts["EnvVar"] = reflect.ValueOf(eval.EnvVar)
+	consts["EnvFunc"] = reflect.ValueOf(eval.EnvFunc)
+	consts["EnvConst"] = reflect.ValueOf(eval.EnvConst)
+
+	funcs = make(map[string] reflect.Value)
+	funcs["ConstValueOf"] = reflect.ValueOf(eval.ConstValueOf)
+	funcs["SetCheckIdent"] = reflect.ValueOf(eval.SetCheckIdent)
+	funcs["SetEvalIdent"] = reflect.ValueOf(eval.SetEvalIdent)
+	funcs["SetCheckSelectorExpr"] = reflect.ValueOf(eval.SetCheckSelectorExpr)
+	funcs["SetEvalSelectorExpr"] = reflect.ValueOf(eval.SetEvalSelectorExpr)
 	funcs["CheckExpr"] = reflect.ValueOf(eval.CheckExpr)
+	funcs["CheckIdent"] = reflect.ValueOf(eval.CheckIdent)
+	funcs["CheckSelectorExpr"] = reflect.ValueOf(eval.CheckSelectorExpr)
 	funcs["CheckStmt"] = reflect.ValueOf(eval.CheckStmt)
 	funcs["NewConstInteger"] = reflect.ValueOf(eval.NewConstInteger)
 	funcs["NewConstFloat"] = reflect.ValueOf(eval.NewConstFloat)
@@ -333,6 +383,8 @@ func EvalEnvironment() *eval.SimpleEnv {
 	funcs["Interpret"] = reflect.ValueOf(eval.Interpret)
 	funcs["ParseStmt"] = reflect.ValueOf(eval.ParseStmt)
 	funcs["EvalExpr"] = reflect.ValueOf(eval.EvalExpr)
+	funcs["EvalIdent"] = reflect.ValueOf(eval.EvalIdent)
+	funcs["EvalSelectorExpr"] = reflect.ValueOf(eval.EvalSelectorExpr)
 	funcs["Inspect"] = reflect.ValueOf(eval.Inspect)
 	funcs["InspectShort"] = reflect.ValueOf(eval.InspectShort)
 	funcs["InterpStmt"] = reflect.ValueOf(eval.InterpStmt)
@@ -379,6 +431,10 @@ func EvalEnvironment() *eval.SimpleEnv {
 	types["TypeSwitchStmt"] = reflect.TypeOf(new(eval.TypeSwitchStmt)).Elem()
 	types["BigComplex"] = reflect.TypeOf(new(eval.BigComplex)).Elem()
 	types["Byte"] = reflect.TypeOf(new(eval.Byte)).Elem()
+	types["CheckIdentFn"] = reflect.TypeOf(new(eval.CheckIdentFn)).Elem()
+	types["EvalIdentFn"] = reflect.TypeOf(new(eval.EvalIdentFn)).Elem()
+	types["CheckSelectorExprFn"] = reflect.TypeOf(new(eval.CheckSelectorExprFn)).Elem()
+	types["EvalSelectorExprFn"] = reflect.TypeOf(new(eval.EvalSelectorExprFn)).Elem()
 	types["ConstNumber"] = reflect.TypeOf(new(eval.ConstNumber)).Elem()
 	types["ConstType"] = reflect.TypeOf(new(eval.ConstType)).Elem()
 	types["ConstIntType"] = reflect.TypeOf(new(eval.ConstIntType)).Elem()
@@ -389,6 +445,7 @@ func EvalEnvironment() *eval.SimpleEnv {
 	types["ConstStringType"] = reflect.TypeOf(new(eval.ConstStringType)).Elem()
 	types["ConstNilType"] = reflect.TypeOf(new(eval.ConstNilType)).Elem()
 	types["ConstBoolType"] = reflect.TypeOf(new(eval.ConstBoolType)).Elem()
+	types["EnvSource"] = reflect.TypeOf(new(eval.EnvSource)).Elem()
 	types["Env"] = reflect.TypeOf(new(eval.Env)).Elem()
 	types["SimpleEnv"] = reflect.TypeOf(new(eval.SimpleEnv)).Elem()
 	types["ErrBadBasicLit"] = reflect.TypeOf(new(eval.ErrBadBasicLit)).Elem()
@@ -486,47 +543,9 @@ func EvalEnvironment() *eval.SimpleEnv {
 	vars["ConstString"] = reflect.ValueOf(&eval.ConstString)
 	vars["ConstNil"] = reflect.ValueOf(&eval.ConstNil)
 	vars["ConstBool"] = reflect.ValueOf(&eval.ConstBool)
+	vars["EvalNil"] = reflect.ValueOf(&eval.EvalNil)
 	vars["RuneType"] = reflect.ValueOf(&eval.RuneType)
 	pkgs["eval"] = &eval.SimpleEnv {
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["FuncOf"] = reflect.ValueOf(reflectext.FuncOf)
-	funcs["InterfaceOf"] = reflect.ValueOf(reflectext.InterfaceOf)
-	funcs["StructOf"] = reflect.ValueOf(reflectext.StructOf)
-	funcs["ArrayOf"] = reflect.ValueOf(reflectext.ArrayOf)
-	funcs["Name"] = reflect.ValueOf(reflectext.Name)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	vars["Available"] = reflect.ValueOf(&reflectext.Available)
-	pkgs["reflectext"] = &eval.SimpleEnv {
-		Consts: consts,
-		Funcs:  funcs,
-		Types:  types,
-		Vars:   vars,
-		Pkgs:   pkgs,
-	}
-	consts = make(map[string] reflect.Value)
-	consts["Reset"] = reflect.ValueOf(ansi.Reset)
-
-	funcs = make(map[string] reflect.Value)
-	funcs["ColorCode"] = reflect.ValueOf(ansi.ColorCode)
-	funcs["Color"] = reflect.ValueOf(ansi.Color)
-	funcs["ColorFunc"] = reflect.ValueOf(ansi.ColorFunc)
-	funcs["DisableColors"] = reflect.ValueOf(ansi.DisableColors)
-
-	types = make(map[string] reflect.Type)
-
-	vars = make(map[string] reflect.Value)
-	pkgs["ansi"] = &eval.SimpleEnv {
 		Consts: consts,
 		Funcs:  funcs,
 		Types:  types,

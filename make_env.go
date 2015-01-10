@@ -16,8 +16,8 @@ import (
 	"sort"
 	"strings"
 	"unicode"
-	"golang.org/x/tools/go/types"
-	"golang.org/x/tools/go/loader"
+	"github.com/rocky/go-types"
+	"github.com/rocky/go-loader"
 )
 
 // StartingImport is the import from which we start gathering

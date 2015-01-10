@@ -36,7 +36,6 @@ func EvalEnvironment() *eval.SimpleEnv {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
-		Path:   "errors",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -92,7 +91,6 @@ func EvalEnvironment() *eval.SimpleEnv {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
-		Path:   "io",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["Compiler"] = reflect.ValueOf(runtime.Compiler)
@@ -143,7 +141,6 @@ func EvalEnvironment() *eval.SimpleEnv {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
-		Path:   "runtime",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -203,7 +200,6 @@ func EvalEnvironment() *eval.SimpleEnv {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
-		Path:   "strings",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -226,7 +222,6 @@ func EvalEnvironment() *eval.SimpleEnv {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
-		Path:   "sync",
 	}
 	consts = make(map[string] reflect.Value)
 
@@ -271,7 +266,6 @@ func EvalEnvironment() *eval.SimpleEnv {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
-		Path:   "sync/atomic",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["MaxRune"] = reflect.ValueOf(unicode.MaxRune)
@@ -536,7 +530,6 @@ func EvalEnvironment() *eval.SimpleEnv {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
-		Path:   "unicode",
 	}
 	consts = make(map[string] reflect.Value)
 	consts["RuneError"] = reflect.ValueOf(utf8.RuneError)
@@ -569,7 +562,6 @@ func EvalEnvironment() *eval.SimpleEnv {
 		Types:  types,
 		Vars:   vars,
 		Pkgs:   pkgs,
-		Path:   "unicode/utf8",
 	}
 
 	mainEnv := eval.MakeSimpleEnv()
