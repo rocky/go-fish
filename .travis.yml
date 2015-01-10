@@ -11,8 +11,8 @@ script:
   - go get "github.com/0xfaded/eval"
   - go get "github.com/mgutz/ansi"
   - go get "github.com/rocky/go-fish/cmd"
-  - go get "golang.org/x/tools/go/types"
-  - go get "golang.org/x/tools/go/loader"
+  - go get "github.com/rocky/go-types"
+  - go get "github.com/rocky/go-loader"
   - go build
   - go build make_env.go
   - go install make_env.go
