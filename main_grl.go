@@ -1,6 +1,6 @@
 // +build ignore
 
-// Copyright 2013-2014 Rocky Bernstein
+// Copyright 2013-2015 Rocky Bernstein
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -13,7 +13,7 @@ import (
 	"os"
 	"reflect"
 
-	"code.google.com/p/go-gnureadline"
+	"github.com/rocky/go-gnureadline"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/rocky/go-fish"
 	"github.com/rocky/go-fish/cmd"
