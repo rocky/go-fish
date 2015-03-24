@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package repl is a simple REPL (read-eval-print loop) for GO using
+// Package go-fish is a simple REPL (read-eval-print loop) for GO using
 // http://github.com/0xfaded/eval to the heavy lifting to implement
 // the eval() part.
 //

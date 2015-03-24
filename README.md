@@ -1,7 +1,7 @@
 go-fish - Yet another Go REPL (read, eval, print loop)
 ============================================================================
 
-[![Build Status](https://travis-ci.org/rocky/go-fish.png)](https://travis-ci.org/rocky/go-fish)
+[![Build Status](https://travis-ci.org/rocky/go-fish.png)](https://travis-ci.org/rocky/go-fish) [![GoDoc](https://godoc.org/github.com/rocky/go-fish?status.svg)](https://godoc.org/github.com/rocky/go-fish)
 
 This project provides an interactive environment for evaluating go
 expressions.
